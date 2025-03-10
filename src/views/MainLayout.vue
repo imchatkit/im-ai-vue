@@ -9,12 +9,19 @@ import MessageInputPanel from '../components/chat/InputPanel.vue'
 import ChatToolsPanel from './components/ChatToolsPanel.vue'
 import FilePreviewPanel from './components/FilePreviewPanel.vue'
 import SystemStatusBar from './components/SystemStatusBar.vue'
+import ContactList from './ContactList.vue'
+import ChatWindow from './ChatWindow.vue'
 
 // 当前选中的联系人
 const currentContact = ref(null)
 
 // 消息列表
 const messages = ref([])
+
+// 处理选择联系人
+const handleSelectContact = (contact) => {
+  currentContact.value = contact
+}
 
 // 处理发送消息
 const handleSend = (message) => {
@@ -36,25 +43,35 @@ const handleSend = (message) => {
 <template>
   <!-- 三栏响应式布局 -->
   <div class="main-container">
-    <!-- 左侧导航 (宽度可折叠) -->
-    <div class="left-nav">
+    <!-- 左侧图标导航栏 -->
+    <div class="left-sidebar">
+      <div class="nav-icons">
+        <div class="nav-icon active">
+          <i class="icon-chat">💬</i>
+        </div>
+        <div class="nav-icon">
+          <i class="icon-contacts">👥</i>
+        </div>
+        <div class="nav-icon">
+          <i class="icon-discover">🔍</i>
+        </div>
+        <div class="nav-icon">
+          <i class="icon-me">👤</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 中间联系人列表区 -->
+    <div class="middle-panel">
       <UserProfile />
       <ContactSearch />
-      <ContactCategoryTabs />
+      <ContactList @select="handleSelectContact" />
     </div>
 
-    <!-- 中间主聊天区 -->
+    <!-- 右侧聊天主区域 -->
     <div class="main-chat">
       <ChatHeader :current-contact="currentContact" />
-      <MessageList :messages="messages" />
-      <MessageInputPanel @send="handleSend" />
-    </div>
-
-    <!-- 右侧信息面板 (Electron下可独立窗口) -->
-    <div class="right-panel">
-      <ChatToolsPanel />
-      <FilePreviewPanel />
-      <SystemStatusBar />
+      <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
     </div>
   </div>
 </template>
@@ -68,7 +85,51 @@ const handleSend = (message) => {
   background-color: var(--bg-color);
 }
 
-.left-nav {
+.left-sidebar {
+  width: 60px;
+  background-color: #2e2e2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.nav-icon {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #999;
+  font-size: 24px;
+  position: relative;
+}
+
+.nav-icon.active {
+  color: #fff;
+}
+
+.nav-icon.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background-color: #07c160;
+}
+
+.middle-panel {
   width: 280px;
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -87,25 +148,20 @@ const handleSend = (message) => {
   position: relative;
 }
 
-.right-panel {
-  width: 280px;
-  border-left: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  background-color: var(--bg-secondary);
-  flex-shrink: 0;
-}
-
 /* 响应式布局 */
 @media screen and (max-width: 1200px) {
-  .right-panel {
+  .middle-panel {
     width: 240px;
   }
 }
 
 @media screen and (max-width: 992px) {
-  .left-nav {
-    width: 240px;
+  .left-sidebar {
+    width: 50px;
+  }
+  
+  .middle-panel {
+    width: 220px;
   }
 }
 
@@ -114,16 +170,36 @@ const handleSend = (message) => {
     flex-direction: column;
   }
   
-  .left-nav {
+  .left-sidebar {
+    width: 100%;
+    height: 50px;
+    flex-direction: row;
+  }
+  
+  .nav-icons {
+    flex-direction: row;
+    padding-top: 0;
+  }
+  
+  .nav-icon {
+    height: 50px;
+    width: 25%;
+  }
+  
+  .nav-icon.active::after {
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+  }
+  
+  .middle-panel {
     width: 100%;
     height: 60px;
     flex-direction: row;
     border-right: none;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .right-panel {
-    display: none;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 

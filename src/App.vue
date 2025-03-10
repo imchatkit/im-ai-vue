@@ -6,6 +6,13 @@ import { isWeb } from './modules/web-adapter'
 
 // 检测运行环境
 const runningEnvironment = ref('web')
+// 主题设置
+const isDarkTheme = ref(false)
+
+// 切换主题
+const toggleTheme = () => {
+  isDarkTheme.value = !isDarkTheme.value
+}
 
 onMounted(() => {
   // 根据运行环境设置相应的配置
@@ -36,7 +43,7 @@ const initWebFeatures = () => {
 </script>
 
 <template>
-  <div class="app-container" :class="runningEnvironment">
+  <div class="app-container" :class="[runningEnvironment, { 'dark-theme': isDarkTheme }]">
     <MainLayout />
   </div>
 </template>
