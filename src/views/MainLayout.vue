@@ -90,7 +90,7 @@ const handleSend = (message) => {
 
 .left-sidebar {
   width: var(--sidebar-width);
-  background-color: var(--bg-secondary);
+  background-color: #2F2F2F; /* 企业微信侧边栏颜色 */
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
@@ -124,6 +124,21 @@ const handleSend = (message) => {
 .nav-icon.active {
   background-color: var(--primary-color);
   color: white;
+}
+
+.middle-panel {
+  width: var(--contact-list-width);
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.main-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
 }
 
 .contact-section {

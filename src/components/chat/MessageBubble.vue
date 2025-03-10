@@ -183,12 +183,14 @@ const formatTime = (timestamp) => {
 }
 
 .sender .content {
-  background-color: #e1f3ff;
+  background-color: var(--primary-color);
+  color: white;
   border-top-right-radius: 2px;
 }
 
 .receiver .content {
   background-color: #f1f1f1;
+  color: var(--text-primary);
   border-top-left-radius: 2px;
 }
 
