@@ -64,7 +64,7 @@ const openInNewWindow = () => {
   <div class="chat-header">
     <!-- 返回按钮（移动端显示） -->
     <button class="back-btn mobile-only" @click="goBack">
-      <i class="icon-back"></i>
+      <i class="icon-back">←</i>
     </button>
     
     <!-- 联系人信息 -->
@@ -97,11 +97,11 @@ const openInNewWindow = () => {
         @click="openInNewWindow"
         title="在新窗口打开"
       >
-        <i class="icon-new-window"></i>
+        <i class="icon-new-window">⊞</i>
       </button>
       
       <button class="action-btn more-btn" @click="openMoreOptions">
-        <i class="icon-more"></i>
+        <i class="icon-more">⋮</i>
       </button>
     </div>
   </div>
@@ -114,6 +114,8 @@ const openInNewWindow = () => {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--bg-color);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
 }
 
 .back-btn {
@@ -124,6 +126,13 @@ const openInNewWindow = () => {
   margin-right: 8px;
   cursor: pointer;
   color: var(--text-color);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+  background-color: var(--hover-color);
 }
 
 .contact-info {
@@ -131,6 +140,13 @@ const openInNewWindow = () => {
   align-items: center;
   flex: 1;
   cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s;
+}
+
+.contact-info:hover {
+  background-color: var(--hover-color);
 }
 
 .avatar-container {
@@ -141,8 +157,10 @@ const openInNewWindow = () => {
 .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   object-fit: cover;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--bg-secondary);
 }
 
 .status-indicator {
@@ -151,24 +169,24 @@ const openInNewWindow = () => {
   right: 0;
   width: 10px;
   height: 10px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   border: 2px solid var(--bg-color);
 }
 
 .status-indicator.online {
-  background-color: #4caf50;
+  background-color: var(--success-color);
 }
 
 .status-indicator.offline {
-  background-color: #9e9e9e;
+  background-color: var(--text-tertiary);
 }
 
 .status-indicator.away {
-  background-color: #ff9800;
+  background-color: var(--warning-color);
 }
 
 .status-indicator.busy {
-  background-color: #f44336;
+  background-color: var(--error-color);
 }
 
 .contact-details {
@@ -180,18 +198,20 @@ const openInNewWindow = () => {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .contact-status {
   margin: 0;
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .no-contact {
   flex: 1;
   text-align: center;
-  color: #999;
+  color: var(--text-tertiary);
+  font-size: 14px;
 }
 
 .actions {
@@ -204,20 +224,28 @@ const openInNewWindow = () => {
   font-size: 18px;
   margin-left: 8px;
   cursor: pointer;
-  color: #666;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  color: var(--text-secondary);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-btn:hover {
   background-color: var(--hover-color);
+  color: var(--primary-color);
 }
 
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .back-btn.mobile-only {
     display: block;
+  }
+  
+  .chat-header {
+    padding: 8px 12px;
   }
   
   .avatar {

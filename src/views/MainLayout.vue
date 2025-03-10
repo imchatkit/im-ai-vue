@@ -77,147 +77,111 @@ const handleSend = (message) => {
 </template>
 
 <style scoped>
+:root {
+  --sidebar-width: 64px;
+  --contact-list-width: 300px;
+}
+
 .main-container {
   display: flex;
   height: 100vh;
-  width: 100%;
-  overflow: hidden;
   background-color: var(--bg-color);
 }
 
 .left-sidebar {
-  width: 60px;
-  background-color: #fcfcfc;
+  width: var(--sidebar-width);
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0;
+  padding: 16px 0;
 }
 
 .nav-icons {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  width: 100%;
+  gap: 8px;
 }
 
 .nav-icon {
-  width: 100%;
-  height: 60px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
   cursor: pointer;
-  color: #999;
-  font-size: 24px;
-  position: relative;
+  transition: var(--transition-base);
+}
+
+.nav-icon:hover {
+  background-color: var(--hover-color);
+  color: var(--primary-color);
 }
 
 .nav-icon.active {
-  color: #fff;
+  background-color: var(--primary-color);
+  color: white;
 }
 
-.nav-icon.active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 20px;
-  background-color: #07c160;
-}
-
-.middle-panel {
-  width: 280px;
+.contact-section {
+  width: var(--contact-list-width);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-secondary);
-  transition: width 0.3s;
-  flex-shrink: 0;
+  background-color: var(--bg-color);
 }
 
-.main-chat {
+.chat-section {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-primary);
-  min-width: 320px;
-  position: relative;
+  background-color: var(--bg-color);
 }
 
-/* 响应式布局 */
-@media screen and (max-width: 1200px) {
-  .middle-panel {
-    width: 240px;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .left-sidebar {
-    width: 50px;
-  }
-  
-  .middle-panel {
-    width: 220px;
-  }
-}
-
+/* 响应式适配 */
 @media screen and (max-width: 768px) {
   .main-container {
-    flex-direction: column;
+    position: relative;
   }
-  
+
   .left-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 50px;
+    height: 56px;
     flex-direction: row;
+    justify-content: space-around;
+    padding: 0;
+    z-index: 100;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .nav-icons {
     flex-direction: row;
-    padding-top: 0;
+    padding: 8px;
   }
-  
-  .nav-icon {
-    height: 50px;
-    width: 25%;
-  }
-  
-  .nav-icon.active::after {
-    left: 50%;
+
+  .contact-section {
+    position: absolute;
+    left: 0;
     top: 0;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 3px;
-  }
-  
-  .middle-panel {
+    height: calc(100% - 56px);
     width: 100%;
-    height: 60px;
-    flex-direction: row;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
-}
 
-/* 暗色主题变量 */
-:root {
-  --primary-color: #4a8af4;
-  --text-color: #333;
-  --bg-color: #fff;
-  --border-color: #e0e0e0;
-  --hover-color: #f0f0f0;
-}
+  .contact-section.active {
+    transform: translateX(0);
+  }
 
-/* 暗色主题 */
-.dark-theme {
-  --primary-color: #5c9aff;
-  --text-color: #e0e0e0;
-  --bg-color: #1e1e1e;
-  --border-color: #444;
-  --hover-color: #333;
+  .chat-section {
+    margin-bottom: 56px;
+  }
 }
 </style>

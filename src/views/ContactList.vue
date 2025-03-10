@@ -202,16 +202,34 @@ const emit = defineEmits(['select'])
 </template>
 
 <style scoped>
+:root {
+  --primary-color: #4a8af4;
+  --text-color: #333;
+  --text-secondary: #666;
+  --text-light: #999;
+  --border-color: #e5e7eb;
+  --bg-color: #fff;
+  --bg-secondary: #f9fafb;
+  --hover-color: #f3f4f6;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --transition-base: all 0.3s ease;
+}
+
 .contact-list {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  background-color: var(--bg-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .category-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  padding: 0 8px;
 }
 
 .tab {
@@ -220,51 +238,72 @@ const emit = defineEmits(['select'])
   padding: 12px 0;
   cursor: pointer;
   font-size: 14px;
-  color: var(--text-color);
-  transition: all 0.3s;
+  color: var(--text-secondary);
+  transition: var(--transition-base);
+  position: relative;
 }
 
 .tab.active {
   color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
+  font-weight: 500;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: var(--transition-base);
 }
 
 .search-box {
   padding: 12px;
   position: relative;
+  background-color: var(--bg-secondary);
 }
 
 .search-input {
   width: 100%;
-  padding: 8px 12px 8px 32px;
-  border-radius: 16px;
+  padding: 10px 12px 10px 36px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
   background-color: var(--bg-color);
   font-size: 14px;
+  color: var(--text-color);
   outline: none;
+  transition: var(--transition-base);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 138, 244, 0.1);
 }
 
 .search-icon {
   position: absolute;
-  left: 20px;
+  left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--text-light);
+  font-size: 16px;
 }
 
 .contacts {
   flex: 1;
   overflow-y: auto;
-  padding: 0 8px;
+  padding: 8px;
 }
 
 .contact-item {
   display: flex;
-  padding: 12px 8px;
+  padding: 12px;
   border-radius: 8px;
   margin-bottom: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: var(--transition-base);
 }
 
 .contact-item:hover {
@@ -285,35 +324,40 @@ const emit = defineEmits(['select'])
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--bg-color);
+  transition: var(--transition-base);
 }
 
 .status-indicator {
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid var(--bg-color);
+  transition: var(--transition-base);
 }
 
 .status-indicator.online {
-  background-color: #4caf50;
+  background-color: #22c55e;
 }
 
 .status-indicator.offline {
-  background-color: #9e9e9e;
+  background-color: var(--text-light);
 }
 
 .group-indicator {
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
-  font-size: 10px;
-  padding: 2px 4px;
+  font-size: 11px;
+  padding: 2px 6px;
   border-radius: 10px;
+  border: 2px solid var(--bg-color);
 }
 
 .contact-info {
@@ -330,14 +374,14 @@ const emit = defineEmits(['select'])
 
 .contact-name {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-color);
 }
 
 .last-time {
   font-size: 12px;
-  color: #999;
+  color: var(--text-light);
 }
 
 .contact-footer {
@@ -349,7 +393,7 @@ const emit = defineEmits(['select'])
 .last-message {
   margin: 0;
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -360,13 +404,14 @@ const emit = defineEmits(['select'])
   background-color: var(--primary-color);
   color: #fff;
   font-size: 12px;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
+  padding: 0 6px;
+  font-weight: 500;
 }
 
 .contact-item.unread .last-message {
@@ -380,28 +425,46 @@ const emit = defineEmits(['select'])
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #999;
-  padding: 20px;
+  color: var(--text-light);
+  padding: 32px;
 }
 
 .empty-icon {
   font-size: 48px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  opacity: 0.5;
 }
 
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .category-tabs {
-    display: none;
+    overflow-x: auto;
+    white-space: nowrap;
+    justify-content: flex-start;
+    padding: 0 4px;
+  }
+  
+  .tab {
+    flex: none;
+    padding: 10px 16px;
+    font-size: 13px;
   }
   
   .contact-item {
-    padding: 8px 4px;
+    padding: 8px;
   }
   
   .avatar {
     width: 40px;
     height: 40px;
+  }
+  
+  .contact-name {
+    font-size: 14px;
+  }
+  
+  .last-message {
+    font-size: 12px;
   }
 }
 </style>
