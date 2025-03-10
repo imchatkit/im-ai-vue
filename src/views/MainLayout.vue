@@ -87,7 +87,7 @@ const handleSend = (message) => {
 
 .left-sidebar {
   width: 60px;
-  background-color: #2e2e2e;
+  background-color: #fcfcfc;
   display: flex;
   flex-direction: column;
   align-items: center;
