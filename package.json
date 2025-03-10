@@ -1,0 +1,25 @@
+{
+  "name": "im-ai-vue",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron:serve": "concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\""
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@electron/remote": "^2.1.2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "concurrently": "^9.1.2",
+    "electron": "^35.0.1",
+    "electron-builder": "^25.1.8",
+    "vite": "^6.2.0",
+    "wait-on": "^8.0.2"
+  }
+}
