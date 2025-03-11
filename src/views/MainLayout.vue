@@ -90,7 +90,7 @@ const handleSend = (message) => {
 
 .left-sidebar {
   width: var(--sidebar-width);
-  background-color: #2F2F2F; /* 企业微信侧边栏颜色 */
+  background-color: #808080; /* 浅色模式下的灰色背景 */
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
@@ -111,7 +111,7 @@ const handleSend = (message) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
+  color: #000000; /* 浅色模式下的黑色字体 */
   cursor: pointer;
   transition: var(--transition-base);
 }

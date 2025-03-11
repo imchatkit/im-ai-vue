@@ -76,10 +76,10 @@ body {
 /* 暗色主题 */
 .dark-theme {
   --primary-color: #5c9aff;
-  --text-color: #e0e0e0;
-  --bg-color: #1e1e1e;
-  --border-color: #444;
-  --hover-color: #333;
+  --text-color: #ffffff;
+  --bg-color: #000000;
+  --border-color: #333333;
+  --hover-color: #374151;
 }
 
 .app-container {

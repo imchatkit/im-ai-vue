@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { isElectron } from '../../modules/electron-bridge'
+import ThemeToggle from '../../components/ThemeToggle.vue'
 
 // 用户信息
 const userInfo = ref({
@@ -82,6 +83,7 @@ const openSettings = () => {
     
     <!-- 用户操作按钮 -->
     <div class="user-actions">
+      <ThemeToggle class="theme-toggle-component" />
       <button class="action-btn settings-btn" @click="openSettings">
         <i class="icon-settings"></i>
       </button>
@@ -220,6 +222,10 @@ const openSettings = () => {
 
 .action-btn:hover {
   background-color: var(--hover-color);
+}
+
+.theme-toggle-component {
+  margin-right: 8px;
 }
 
 /* 响应式适配 */

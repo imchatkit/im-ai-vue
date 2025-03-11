@@ -105,12 +105,13 @@ button:focus-visible {
     --success-color: #34D399;
     --warning-color: #FBBF24;
     --error-color: #F87171;
-    --text-primary: #F9FAFB;
+    --text-primary: #FFFFFF;
     --text-secondary: #E5E7EB;
     --text-tertiary: #9CA3AF;
-    --bg-primary: #111827;
-    --bg-tertiary: #374151;
-    --border-color: #4B5563;
+    --bg-primary: #000000;
+    --bg-secondary: #111111;
+    --bg-tertiary: #222222;
+    --border-color: #333333;
     --hover-color: #374151;
   }
 }
@@ -136,3 +137,103 @@ button:focus-visible {
 .rounded-md { border-radius: var(--radius-md); }
 .rounded-lg { border-radius: var(--radius-lg); }
 .rounded-full { border-radius: var(--radius-full); }
+
+/* 主题切换按钮样式 */
+.theme-toggle {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 26px;
+  margin: 0 8px;
+  vertical-align: middle;
+}
+
+.theme-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: .4s;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23F59E0B"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>');
+  background-size: 14px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .theme-toggle-slider {
+  background-color: var(--bg-tertiary);
+}
+
+input:checked + .theme-toggle-slider:before {
+  transform: translateX(26px);
+  background-color: var(--bg-primary);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%239CA3AF"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>');
+}
+
+input:focus + .theme-toggle-slider {
+  box-shadow: 0 0 1px var(--primary-color);
+}
+
+/* 主题切换按钮的标签样式 */
+.theme-toggle-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.theme-toggle-label .light-icon,
+.theme-toggle-label .dark-icon {
+  margin: 0 4px;
+  font-size: 16px;
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+  .theme-toggle {
+    width: 44px;
+    height: 22px;
+  }
+  
+  .theme-toggle-slider:before {
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 2px;
+    background-size: 10px;
+  }
+  
+  input:checked + .theme-toggle-slider:before {
+    transform: translateX(22px);
+  }
+  
+  .theme-toggle-label {
+    font-size: 12px;
+  }
+}
