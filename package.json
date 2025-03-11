@@ -15,10 +15,14 @@
   },
   "devDependencies": {
     "@electron/remote": "^2.1.2",
+    "@tailwindcss/postcss": "^4.0.12",
     "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
     "electron": "^35.0.1",
     "electron-builder": "^25.1.8",
+    "postcss": "^8.5.3",
+    "tailwindcss": "latest",
     "vite": "^6.2.0",
     "wait-on": "^8.0.2"
   }
