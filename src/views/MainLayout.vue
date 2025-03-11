@@ -64,7 +64,7 @@ const handleSend = (message) => {
     <!-- 中间联系人列表区 -->
     <div class="middle-panel">
       <UserProfile />
-      <ContactSearch />
+      <!-- 移除了重复的ContactSearch组件 -->
       <ContactList @select="handleSelectContact" />
     </div>
 

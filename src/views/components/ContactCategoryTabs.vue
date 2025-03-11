@@ -40,7 +40,8 @@ const changeCategory = (categoryId) => {
 .category-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-color);
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .tab {
@@ -51,11 +52,20 @@ const changeCategory = (categoryId) => {
   font-size: 14px;
   color: var(--text-color);
   transition: all 0.3s;
+  position: relative;
+  background-color: transparent;
+}
+
+.tab:hover {
+  color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .tab.active {
   color: var(--primary-color);
   border-bottom: 2px solid var(--primary-color);
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 
 /* 响应式适配 */

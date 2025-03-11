@@ -94,6 +94,7 @@ const openSettings = () => {
   padding: 16px;
   border-bottom: 1px solid var(--border-color);
   position: relative;
+  background-color: #ffffff;
 }
 
 .user-info {

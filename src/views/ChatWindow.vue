@@ -144,8 +144,71 @@ onMounted(() => {
   // 设置消息已读
   if (props.contact) {
     emit('read', props.contact.id)
+    
+    // 加载示例历史消息
+    loadExampleMessages()
   }
 })
+
+// 加载示例历史消息
+const loadExampleMessages = () => {
+  if (!props.contact) return
+  
+  // 清空现有消息
+  emit('update:messages', [])
+  
+  // 根据联系人ID加载不同的示例消息
+  const exampleMessages = [
+    {
+      id: '1',
+      senderId: props.contact.id,
+      receiverId: currentUserId,
+      content: `你好，我是${props.contact.name}`,
+      type: MessageType.TEXT,
+      timestamp: Date.now() - 1000 * 60 * 60 * 24, // 1天前
+      status: MessageStatus.READ
+    },
+    {
+      id: '2',
+      senderId: currentUserId,
+      receiverId: props.contact.id,
+      content: `你好，${props.contact.name}，最近工作怎么样？`,
+      type: MessageType.TEXT,
+      timestamp: Date.now() - 1000 * 60 * 60 * 23, // 23小时前
+      status: MessageStatus.READ
+    },
+    {
+      id: '3',
+      senderId: props.contact.id,
+      receiverId: currentUserId,
+      content: '工作还不错，正在处理一些项目文档',
+      type: MessageType.TEXT,
+      timestamp: Date.now() - 1000 * 60 * 60 * 22, // 22小时前
+      status: MessageStatus.READ
+    },
+    {
+      id: '4',
+      senderId: currentUserId,
+      receiverId: props.contact.id,
+      content: '好的，有需要帮忙的地方随时告诉我',
+      type: MessageType.TEXT,
+      timestamp: Date.now() - 1000 * 60 * 60 * 2, // 2小时前
+      status: MessageStatus.READ
+    },
+    {
+      id: '5',
+      senderId: props.contact.id,
+      receiverId: currentUserId,
+      content: '谢谢，明天我们讨论一下项目进度吧',
+      type: MessageType.TEXT,
+      timestamp: Date.now() - 1000 * 60 * 30, // 30分钟前
+      status: MessageStatus.READ
+    }
+  ]
+  
+  // 更新消息列表
+  emit('update:messages', exampleMessages)
+}
 
 // 监听联系人变化
 watch(() => props.contact, (newContact) => {
@@ -156,6 +219,9 @@ watch(() => props.contact, (newContact) => {
     // 重置历史消息加载状态
     hasMoreHistory.value = true
     loadingHistory.value = false
+    
+    // 加载示例历史消息
+    loadExampleMessages()
     
     // 滚动到底部
     setTimeout(() => {

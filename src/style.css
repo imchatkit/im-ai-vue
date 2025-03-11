@@ -95,28 +95,6 @@ button:focus-visible {
   padding: 0;
 }
 
-/* 暗色主题 */
-.dark-theme, :root.dark-mode {
-  --primary-color: #818CF8; /* 亮一点的靛蓝色 */
-  --primary-light: #A5B4FC;
-  --primary-dark: #6366F1;
-  --accent-color: #22D3EE; /* 亮青色 */
-  --success-color: #34D399; /* 亮绿色 */
-  --warning-color: #FBBF24; /* 亮橙色 */
-  --error-color: #F87171; /* 亮红色 */
-  --text-primary: #F9FAFB;
-  --text-secondary: #E5E7EB;
-  --text-tertiary: #9CA3AF;
-  --bg-primary: #111827;
-  --bg-secondary: #1F2937;
-  --bg-tertiary: #374151;
-  --border-color: #4B5563;
-  --hover-color: #374151;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-}
-
 /* 系统颜色方案自动切换 */
 @media (prefers-color-scheme: dark) {
   :root:not(.light-mode) {
@@ -131,7 +109,6 @@ button:focus-visible {
     --text-secondary: #E5E7EB;
     --text-tertiary: #9CA3AF;
     --bg-primary: #111827;
-    --bg-secondary: #1F2937;
     --bg-tertiary: #374151;
     --border-color: #4B5563;
     --hover-color: #374151;

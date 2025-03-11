@@ -70,7 +70,7 @@ const clearSearch = () => {
   padding: 8px 12px 8px 32px;
   border-radius: 16px;
   border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
+  background-color: #fff;
   font-size: 14px;
   outline: none;
   transition: border-color 0.3s;
@@ -80,11 +80,9 @@ const clearSearch = () => {
   border-color: var(--primary-color);
 }
 
+.icon-search,
 .icon-clear {
-  position: absolute;
-  right: 10px;
-  color: #999;
-  cursor: pointer;
+  color: #666;
 }
 
 /* 响应式适配 */

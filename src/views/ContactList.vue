@@ -33,6 +33,58 @@ const contacts = ref([
     lastMessageTime: Date.now() - 1000 * 60 * 60 * 2, // 2小时前
     unreadCount: 0,
     category: 'colleague'
+  },
+  {
+    id: '4',
+    name: '李四',
+    avatar: '/avatars/user3.png',
+    status: 'busy',
+    lastMessage: '我正在开会，稍后回复',
+    lastMessageTime: Date.now() - 1000 * 60 * 15, // 15分钟前
+    unreadCount: 0,
+    category: 'friend'
+  },
+  {
+    id: '5',
+    name: '市场部',
+    avatar: '/avatars/group2.png',
+    status: 'group',
+    lastMessage: '赵六: 新的营销方案已经上传',
+    lastMessageTime: Date.now() - 1000 * 60 * 60, // 1小时前
+    unreadCount: 3,
+    category: 'group',
+    members: 12
+  },
+  {
+    id: '6',
+    name: '赵六',
+    avatar: '/avatars/user4.png',
+    status: 'away',
+    lastMessage: '请查看我发送的文档',
+    lastMessageTime: Date.now() - 1000 * 60 * 45, // 45分钟前
+    unreadCount: 1,
+    category: 'colleague'
+  },
+  {
+    id: '7',
+    name: '产品讨论组',
+    avatar: '/avatars/group3.png',
+    status: 'group',
+    lastMessage: '王五: 已更新最新原型设计',
+    lastMessageTime: Date.now() - 1000 * 60 * 120, // 2小时前
+    unreadCount: 0,
+    category: 'group',
+    members: 5
+  },
+  {
+    id: '8',
+    name: '孙七',
+    avatar: '/avatars/user5.png',
+    status: 'online',
+    lastMessage: '下午3点开会讨论项目进度',
+    lastMessageTime: Date.now() - 1000 * 60 * 180, // 3小时前
+    unreadCount: 0,
+    category: 'colleague'
   }
 ])
 
@@ -220,27 +272,28 @@ const emit = defineEmits(['select'])
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
-  background-color: var(--bg-color);
-  box-shadow: var(--shadow-sm);
+  background-color: #fff;
 }
 
 .category-tabs {
   display: flex;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
   padding: 0 8px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: #fff;
 }
 
 .tab {
-  flex: 1;
-  text-align: center;
-  padding: 12px 0;
-  cursor: pointer;
+  padding: 12px 16px;
   font-size: 14px;
-  color: var(--text-secondary);
-  transition: var(--transition-base);
+  color: var(--text-color-secondary);
+  cursor: pointer;
   position: relative;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .tab.active {
@@ -256,39 +309,53 @@ const emit = defineEmits(['select'])
   width: 100%;
   height: 2px;
   background-color: var(--primary-color);
-  transition: var(--transition-base);
 }
 
 .search-box {
-  padding: 12px;
-  position: relative;
-  background-color: var(--bg-secondary);
+  padding: 12px 16px;
+  background-color: #fff;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 12px 10px 36px;
-  border-radius: 8px;
+  padding: 8px 12px 8px 32px;
+  border-radius: 4px;
   border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
   font-size: 14px;
   color: var(--text-color);
-  outline: none;
-  transition: var(--transition-base);
+  transition: all 0.2s ease;
+  background-color: var(--bg-secondary);
 }
 
 .search-input:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(74, 138, 244, 0.1);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
 }
 
-.search-icon {
-  position: absolute;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-  font-size: 16px;
+.contacts {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 4px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contact-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.contact-item.selected {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
 }
 
 .contacts {
@@ -307,11 +374,12 @@ const emit = defineEmits(['select'])
 }
 
 .contact-item:hover {
-  background-color: var(--hover-color);
+  background-color: #f0f0f0;
 }
 
 .contact-item.selected {
-  background-color: rgba(74, 138, 244, 0.1);
+  background-color: rgba(74, 138, 244, 0.2);
+  border-left: 3px solid var(--primary-color);
 }
 
 .avatar-container {
