@@ -97,17 +97,57 @@ const emit = defineEmits(['select'])
 /* 响应式适配 */
 @media screen and (max-width: 1200px) {
   .tools-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tool-item {
+    padding: 10px 6px;
+  }
+  
+  .tool-item i {
+    font-size: 20px;
+  }
+  
+  .tool-name {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .tools-list {
+    grid-template-columns: repeat(4, 1fr);
   }
   
   .tool-item {
     flex-direction: row;
     padding: 8px;
+    justify-content: flex-start;
   }
   
   .tool-item i {
     margin-bottom: 0;
     margin-right: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .tools-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .panel-header {
+    padding: 10px;
+  }
+  
+  .panel-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tools-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>

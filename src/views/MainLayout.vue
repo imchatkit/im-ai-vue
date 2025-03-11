@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import UserProfile from './components/UserProfile.vue'
 import ContactSearch from './components/ContactSearch.vue'
 import ContactCategoryTabs from './components/ContactCategoryTabs.vue'
@@ -18,9 +18,19 @@ const currentContact = ref(null)
 // 消息列表
 const messages = ref([])
 
+// 侧边栏是否激活（用于移动端）
+const isSidebarActive = ref(false)
+
+// 当前屏幕宽度
+const screenWidth = ref(window.innerWidth)
+
 // 处理选择联系人
 const handleSelectContact = (contact) => {
   currentContact.value = contact
+  // 在移动端选择联系人后自动关闭侧边栏
+  if (screenWidth.value < 768) {
+    isSidebarActive.value = false
+  }
 }
 
 // 处理发送消息
@@ -38,11 +48,38 @@ const handleSend = (message) => {
     status: 'sending'
   })
 }
+
+// 切换侧边栏显示状态
+const toggleSidebar = () => {
+  isSidebarActive.value = !isSidebarActive.value
+}
+
+// 监听窗口大小变化
+const handleResize = () => {
+  screenWidth.value = window.innerWidth
+  // 如果屏幕宽度大于768px，自动关闭移动端侧边栏
+  if (screenWidth.value >= 768) {
+    isSidebarActive.value = false
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <template>
   <!-- 三栏响应式布局 -->
   <div class="main-container">
+    <!-- 移动端汉堡菜单 -->
+    <div v-if="screenWidth < 768" class="hamburger-menu" @click="toggleSidebar">
+      <i class="icon-menu">☰</i>
+    </div>
+    
     <!-- 左侧图标导航栏 -->
     <div class="left-sidebar">
       <div class="nav-icons">
@@ -62,40 +99,41 @@ const handleSend = (message) => {
     </div>
 
     <!-- 中间联系人列表区 -->
-    <div class="middle-panel">
+    <div class="middle-panel" :class="{ 'active': isSidebarActive }">
       <UserProfile />
-      <!-- 移除了重复的ContactSearch组件 -->
       <ContactList @select="handleSelectContact" />
     </div>
 
     <!-- 右侧聊天主区域 -->
     <div class="main-chat">
-      <ChatHeader :current-contact="currentContact" />
+      <ChatHeader :current-contact="currentContact" @toggle-sidebar="toggleSidebar" />
       <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
     </div>
   </div>
 </template>
 
 <style scoped>
-:root {
-  --sidebar-width: 64px;
-  --contact-list-width: 300px;
-}
-
 .main-container {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - var(--header-height));
   background-color: var(--bg-color);
+  position: relative;
+  margin-top: var(--header-height);
 }
 
 .left-sidebar {
   width: var(--sidebar-width);
-  background-color: #808080; /* 浅色模式下的灰色背景 */
+  background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1000;
 }
 
 .nav-icons {
@@ -111,7 +149,7 @@ const handleSend = (message) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000000; /* 浅色模式下的黑色字体 */
+  color: var(--text-secondary);
   cursor: pointer;
   transition: var(--transition-base);
 }
@@ -132,6 +170,9 @@ const handleSend = (message) => {
   background-color: var(--bg-primary);
   display: flex;
   flex-direction: column;
+  margin-left: var(--sidebar-width);
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .main-chat {
@@ -139,6 +180,9 @@ const handleSend = (message) => {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
+  margin-left: calc(var(--sidebar-width) + var(--contact-list-width));
+  height: 100vh;
+  overflow: hidden;
 }
 
 .contact-section {
@@ -157,6 +201,22 @@ const handleSend = (message) => {
 }
 
 /* 响应式适配 */
+/* 平板设备 (768px-1199px) */
+@media screen and (max-width: 1199px) and (min-width: 769px) {
+  .left-sidebar {
+    width: 64px;
+  }
+  
+  .middle-panel {
+    width: 240px;
+  }
+  
+  .main-chat {
+    margin-left: calc(64px + 240px);
+  }
+}
+
+/* 移动设备 (<768px) */
 @media screen and (max-width: 768px) {
   .main-container {
     position: relative;
@@ -179,24 +239,45 @@ const handleSend = (message) => {
     flex-direction: row;
     padding: 8px;
   }
-
-  .contact-section {
+  
+  .middle-panel {
     position: absolute;
     left: 0;
     top: 0;
     height: calc(100% - 56px);
     width: 100%;
+    margin-left: 0;
     z-index: 50;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-
-  .contact-section.active {
+  
+  .middle-panel.active {
     transform: translateX(0);
   }
 
-  .chat-section {
+  .main-chat {
+    margin-left: 0;
     margin-bottom: 56px;
   }
+  
+  /* 添加汉堡菜单按钮样式 */
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
 }
+
 </style>

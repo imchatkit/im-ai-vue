@@ -309,6 +309,8 @@ watch(() => props.contact, (newContact) => {
   overflow-y: auto;
   padding: 20px;
   scroll-behavior: smooth;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .message-group {
@@ -352,10 +354,17 @@ watch(() => props.contact, (newContact) => {
   display: flex;
   margin-bottom: 16px;
   animation: message-fade-in 0.3s ease;
+  max-width: 100%;
 }
 
 .message-item.self {
   flex-direction: row-reverse;
+}
+
+.message-content {
+  max-width: 70%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .avatar {
@@ -439,7 +448,7 @@ watch(() => props.contact, (newContact) => {
   }
 
   .message-content {
-    max-width: 75%;
+    max-width: 85%;
   }
 
   .avatar {
@@ -450,6 +459,27 @@ watch(() => props.contact, (newContact) => {
 
   .message-bubble {
     padding: 8px 12px;
+  }
+  
+  .message-time {
+    font-size: 10px;
+    opacity: 0.7;
+    display: none;
+  }
+  
+  .message-item:hover .message-time {
+    display: block;
+  }
+  
+  .date-divider {
+    margin: 12px 0;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .message-content {
+    max-width: 90%;
   }
 }
 </style>

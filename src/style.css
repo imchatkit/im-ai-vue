@@ -32,6 +32,16 @@
   --radius-lg: 12px;
   --radius-full: 9999px;
   
+  /* 布局变量 */
+  --sidebar-width: 64px;
+  --contact-list-width: 240px;
+  --header-height: 64px;
+  --footer-height: 64px;
+  --transition-base: all 0.3s ease-in-out;
+  --safe-area-inset: 5%;
+  --grid-gap: 24px;
+  --grid-columns: 12;
+  
   /* 系统颜色方案 */
   color-scheme: light dark;
   color: var(--text-primary);

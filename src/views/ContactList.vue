@@ -273,6 +273,7 @@ const emit = defineEmits(['select'])
   flex-direction: column;
   height: 100%;
   background-color: #fff;
+  max-height: calc(100vh - 120px);
 }
 
 .category-tabs {
@@ -280,6 +281,9 @@ const emit = defineEmits(['select'])
   padding: 0 8px;
   border-bottom: 1px solid var(--border-color);
   background-color: #fff;
+  position: sticky;
+  top: 56px; /* 搜索框高度 */
+  z-index: 10;
 }
 
 .tab {
@@ -315,6 +319,9 @@ const emit = defineEmits(['select'])
   padding: 12px 16px;
   background-color: #fff;
   border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .search-input {
@@ -371,6 +378,7 @@ const emit = defineEmits(['select'])
   margin-bottom: 4px;
   cursor: pointer;
   transition: var(--transition-base);
+  position: relative;
 }
 
 .contact-item:hover {
@@ -504,12 +512,31 @@ const emit = defineEmits(['select'])
 }
 
 /* 响应式适配 */
+@media screen and (max-width: 1199px) {
+  .contact-info {
+    max-width: 160px;
+  }
+  
+  .contact-name {
+    font-size: 14px;
+  }
+  
+  .last-message {
+    font-size: 12px;
+  }
+}
+
 @media screen and (max-width: 768px) {
+  .contact-list {
+    max-height: calc(100vh - 112px);
+  }
+  
   .category-tabs {
     overflow-x: auto;
     white-space: nowrap;
     justify-content: flex-start;
     padding: 0 4px;
+    top: 52px;
   }
   
   .tab {
@@ -533,6 +560,10 @@ const emit = defineEmits(['select'])
   
   .last-message {
     font-size: 12px;
+  }
+  
+  .contact-info {
+    max-width: calc(100% - 100px);
   }
 }
 </style>

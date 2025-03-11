@@ -12,7 +12,7 @@ const props = defineProps({
 })
 
 // 定义事件
-const emit = defineEmits(['back', 'info', 'more'])
+const emit = defineEmits(['back', 'info', 'more', 'toggle-sidebar'])
 
 // 计算联系人状态文本
 const statusText = computed(() => {
@@ -35,7 +35,7 @@ const statusText = computed(() => {
 
 // 返回上一页（移动端）
 const goBack = () => {
-  emit('back')
+  emit('toggle-sidebar')
 }
 
 // 查看联系人信息
@@ -233,6 +233,19 @@ const openInNewWindow = () => {
   justify-content: center;
 }
 
+.back-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 18px;
+  margin-right: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+}
+
 .action-btn:hover {
   background-color: var(--hover-color);
   color: var(--primary-color);
@@ -240,12 +253,20 @@ const openInNewWindow = () => {
 
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
-  .back-btn.mobile-only {
+  .back-btn {
     display: block;
   }
   
+  .contact-name {
+    font-size: 16px;
+  }
+  
+  .contact-status {
+    font-size: 12px;
+  }
+  
   .chat-header {
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
   
   .avatar {
@@ -253,12 +274,8 @@ const openInNewWindow = () => {
     height: 36px;
   }
   
-  .contact-name {
-    font-size: 15px;
-  }
-  
-  .contact-status {
-    font-size: 12px;
+  .mobile-only {
+    display: block;
   }
 }
 </style>
