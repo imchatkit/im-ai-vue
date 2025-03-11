@@ -224,111 +224,49 @@ let typingTimeout
 
 <template>
   <div class="input-panel">
-    <!-- 工具栏 -->
-    <div class="toolbar">
-      <button 
-        class="tool-btn emoji-btn" 
-        @click="showEmojiPicker = !showEmojiPicker"
-        title="表情"
-      >
-        <i class="icon-emoji"></i>
-      </button>
-      
-      <button 
-        class="tool-btn image-btn" 
-        @click="selectImage"
-        title="图片"
-      >
-        <i class="icon-image"></i>
-      </button>
-      
-      <button 
-        class="tool-btn file-btn" 
-        @click="selectFile"
-        title="文件"
-      >
-        <i class="icon-file"></i>
-      </button>
-      
-      <button 
-        class="tool-btn voice-btn" 
-        @click="recordVoice"
-        title="语音"
-      >
-        <i class="icon-microphone"></i>
-      </button>
-      
-      <button 
-        class="tool-btn more-btn" 
-        @click="showMorePanel = !showMorePanel"
-        title="更多"
-      >
-        <i class="icon-more"></i>
-      </button>
-    </div>
-    
-    <!-- 表情选择器 -->
-    <div v-if="showEmojiPicker" class="emoji-picker">
-      <!-- 表情列表 -->
-      <div class="emoji-list">
-        <span 
-          v-for="emoji in ['😀', '😂', '😊', '😍', '🤔', '😎', '👍', '❤️', '🎉']"
-          :key="emoji"
-          class="emoji-item"
-          @click="addEmoji(emoji)"
-        >
-          {{ emoji }}
-        </span>
-      </div>
-    </div>
-    
-    <!-- 更多功能面板 -->
-    <div v-if="showMorePanel" class="more-panel">
-      <!-- 更多功能列表 -->
-      <div class="more-list">
-        <div class="more-item">
-          <i class="icon-screen-share"></i>
-          <span>屏幕共享</span>
-        </div>
-        <div class="more-item">
-          <i class="icon-whiteboard"></i>
-          <span>白板</span>
-        </div>
-        <div class="more-item">
-          <i class="icon-translate"></i>
-          <span>翻译</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 输入区域 -->
     <div class="input-area">
       <textarea
         v-model="messageText"
+        class="message-textarea"
         :placeholder="placeholder"
         :maxlength="maxLength"
         :disabled="disabled"
-        class="message-input"
         @input="handleInput"
         @keydown="handleKeydown"
       ></textarea>
-      
-      <!-- 字符计数 -->
-      <div v-if="messageText.length > 0" class="char-counter">
-        {{ remainingChars }}
-      </div>
     </div>
     
-    <!-- 发送按钮 -->
-    <div class="send-area">
-      <button 
-        class="send-btn" 
-        :class="{ 'active': canSend }"
-        :disabled="!canSend"
-        @click="sendTextMessage"
-      >
-        发送
-      </button>
+    <div class="input-toolbar">
+      <div class="toolbar-left">
+        <button class="toolbar-btn" @click="selectImage" :disabled="disabled">
+          <i class="icon-image"></i>
+        </button>
+        <button class="toolbar-btn" @click="selectFile" :disabled="disabled">
+          <i class="icon-file"></i>
+        </button>
+        <button class="toolbar-btn" @click="recordVoice" :disabled="disabled">
+          <i class="icon-voice"></i>
+        </button>
+        <button class="toolbar-btn" @click="showEmojiPicker = !showEmojiPicker" :disabled="disabled">
+          <i class="icon-emoji"></i>
+        </button>
+      </div>
+      
+      <div class="toolbar-right">
+        <span class="char-counter" :class="{
+          'warning': remainingChars < 100,
+          'danger': remainingChars < 20
+        }">
+          {{ remainingChars }}
+        </span>
+        <button 
+          class="send-btn" 
+          @click="sendTextMessage" 
+          :disabled="!canSend"
+        >
+          发送
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -337,123 +275,109 @@ let typingTimeout
 .input-panel {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #e0e0e0;
-  background-color: #fff;
-  position: relative;
-}
-
-.toolbar {
-  display: flex;
-  padding: 8px 12px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.tool-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #666;
-  margin-right: 12px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.tool-btn:hover {
-  background-color: #f0f0f0;
-}
-
-.emoji-picker {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  z-index: 10;
-}
-
-.emoji-list {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-}
-
-.emoji-item {
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.emoji-item:hover {
-  background-color: #f0f0f0;
-}
-
-.more-panel {
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  z-index: 10;
-}
-
-.more-list {
-  display: flex;
-  flex-direction: column;
-  min-width: 150px;
-}
-
-.more-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.more-item:hover {
-  background-color: #f0f0f0;
-}
-
-.more-item i {
-  margin-right: 8px;
-  font-size: 18px;
-  color: #666;
+  background-color: #F8F9FA;
+  border-top: 1px solid #CED4DA;
+  padding: 12px;
+  font-family: 微软雅黑, Arial, sans-serif;
 }
 
 .input-area {
-  position: relative;
-  flex: 1;
-  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
 }
 
-.message-input {
-  width: 100%;
-  height: 80px;
+.message-textarea {
   resize: none;
-  border: none;
-  outline: none;
+  border: 1px solid #CED4DA;
+  border-radius: 4px;
+  padding: 8px;
+  min-height: 80px;
+  font-family: 微软雅黑, Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.5;
-  font-family: inherit;
+  color: #343A40;
+  background-color: #FFFFFF;
+  transition: border-color 0.2s ease;
+}
+
+.message-textarea:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+.input-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 12px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-btn {
+  background: none;
+  border: none;
+  color: #6C757D;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #007BFF;
+}
+
+.send-btn {
+  background-color: #007BFF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.send-btn:disabled {
+  background-color: #CED4DA;
+  cursor: not-allowed;
+}
+
+.send-btn:not(:disabled):hover {
+  background-color: #0069D9;
 }
 
 .char-counter {
-  position: absolute;
-  right: 16px;
-  bottom: 8px;
   font-size: 12px;
-  color: #999;
+  color: #86909c;
+  margin-right: 8px;
+}
+
+.char-counter.warning {
+  color: #F59E0B;
+}
+
+.char-counter.danger {
+  color: #EF4444;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 768px) {
+  .input-panel {
+    padding: 8px;
+  }
+  
+  .message-textarea {
+    min-height: 60px;
+  }
 }
 </style>

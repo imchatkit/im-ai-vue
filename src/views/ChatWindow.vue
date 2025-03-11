@@ -291,10 +291,10 @@ watch(() => props.contact, (newContact) => {
 
 <style scoped>
 :root {
-  --message-bg-self: #2B7BF2; /* 企业微信发送者消息背景色 */
-  --message-bg-other: #f3f4f6; /* 企业微信接收者消息背景色 */
-  --message-text-self: #fff;
-  --message-text-other: #222222;
+  --message-bg-self: #e2f5fd; /* 发送者消息背景色 */
+  --message-bg-other: #ffffff; /* 接收者消息背景色 */
+  --message-text-self: #343A40;
+  --message-text-other: #343A40;
 }
 
 .chat-window {

@@ -151,6 +151,7 @@ const formatTime = (timestamp) => {
   margin-bottom: 16px;
   position: relative;
   max-width: 70%;
+  font-family: 微软雅黑, Arial, sans-serif;
 }
 
 .sender {
@@ -180,16 +181,17 @@ const formatTime = (timestamp) => {
   padding: 10px 12px;
   border-radius: 12px;
   position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .sender .content {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: #e2f5fd;
+  color: var(--text-primary);
   border-top-right-radius: 2px;
 }
 
 .receiver .content {
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   color: var(--text-primary);
   border-top-left-radius: 2px;
 }
@@ -203,6 +205,13 @@ const formatTime = (timestamp) => {
   max-width: 100%;
   max-height: 200px;
   border-radius: 8px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.image-content img:hover {
+  transform: scale(1.02);
 }
 
 .file-content {
@@ -242,9 +251,10 @@ const formatTime = (timestamp) => {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  font-size: 11px;
-  color: #999;
+  font-size: 12px;
+  color: #86909c;
   margin-top: 4px;
+  font-weight: normal;
 }
 
 .time {
@@ -285,6 +295,11 @@ const formatTime = (timestamp) => {
   padding: 2px 4px;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.revoke-btn:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 /* 响应式适配 */
@@ -296,6 +311,24 @@ const formatTime = (timestamp) => {
   .avatar {
     width: 32px;
     height: 32px;
+  }
+  
+  .content {
+    padding: 8px 10px;
+  }
+  
+  .message-meta {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .message-bubble {
+    max-width: 90%;
+  }
+  
+  .image-content img {
+    max-height: 150px;
   }
 }
 </style>
