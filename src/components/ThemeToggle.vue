@@ -18,10 +18,11 @@ export default {
     };
   },
   mounted() {
-    // 初始化主题状态
-    this.isDarkMode = this.getCurrentTheme() === 'dark';
-    // 监听系统主题变化
-    this.setupSystemThemeListener();
+    // 初始化为浅色主题
+    this.isDarkMode = false;
+    document.documentElement.classList.remove('dark-mode');
+    document.documentElement.classList.add('light-mode');
+    localStorage.setItem('theme-preference', 'light');
   },
   methods: {
     toggleTheme() {
@@ -29,25 +30,6 @@ export default {
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.add(`${newTheme}-mode`);
       localStorage.setItem('theme-preference', newTheme);
-    },
-    getCurrentTheme() {
-      // 优先使用用户保存的偏好
-      const savedTheme = localStorage.getItem('theme-preference');
-      if (savedTheme) {
-        return savedTheme;
-      }
-      
-      // 否则使用系统偏好
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    },
-    setupSystemThemeListener() {
-      // 监听系统主题变化
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme-preference')) {
-          this.isDarkMode = e.matches;
-          this.toggleTheme();
-        }
-      });
     }
   }
 };
