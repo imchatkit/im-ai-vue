@@ -1,12 +1,33 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+// 生成默认头像的函数
+const getDefaultAvatar = (name, id) => {
+  if (!name) return `https://api.dicebear.com/7.x/initials/svg?seed=${id}&backgroundColor=0071e3,34c759,ff9f0a,ff3b30,5ac8fa,007aff,5856d6`
+  
+  // 提取姓名首字母
+  const initial = name.charAt(0).toUpperCase()
+  
+  // 基于id或姓名为每个联系人生成不同的背景色
+  const colors = ['0071e3', '34c759', 'ff9f0a', 'ff3b30', '5ac8fa', '007aff', '5856d6']
+  const colorIndex = id ? parseInt(id) % colors.length : name.length % colors.length
+  const bgColor = colors[colorIndex]
+  
+  // 使用DiceBear API生成头像
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${initial}&text=${initial}&backgroundColor=${bgColor}`
+}
+
+// 为群组生成特殊头像
+const getGroupAvatar = (name, id) => {
+  // 群组使用特殊的图标样式
+  return `https://api.dicebear.com/7.x/icons/svg?seed=${id}&icon=users&backgroundColor=0071e3,34c759,ff9f0a,ff3b30,5ac8fa,007aff,5856d6`
+}
+
 // 联系人数据
 const contacts = ref([
   {
     id: '1',
     name: '张三',
-    avatar: 'https://via.placeholder.com/48',
     status: 'online',
     lastMessage: '你好，最近怎么样？',
     lastMessageTime: Date.now() - 1000 * 60 * 5, // 5分钟前
@@ -16,7 +37,6 @@ const contacts = ref([
   {
     id: '2',
     name: '研发部',
-    avatar: 'https://via.placeholder.com/48?text=RD',
     status: 'group',
     lastMessage: '李四: 明天开会讨论新功能',
     lastMessageTime: Date.now() - 1000 * 60 * 30, // 30分钟前
@@ -27,7 +47,6 @@ const contacts = ref([
   {
     id: '3',
     name: '王五',
-    avatar: 'https://via.placeholder.com/48',
     status: 'offline',
     lastMessage: '文件已发送',
     lastMessageTime: Date.now() - 1000 * 60 * 60 * 2, // 2小时前
@@ -37,7 +56,6 @@ const contacts = ref([
   {
     id: '4',
     name: '李四',
-    avatar: 'https://via.placeholder.com/48',
     status: 'busy',
     lastMessage: '我正在开会，稍后回复',
     lastMessageTime: Date.now() - 1000 * 60 * 15, // 15分钟前
@@ -47,7 +65,6 @@ const contacts = ref([
   {
     id: '5',
     name: '市场部',
-    avatar: 'https://via.placeholder.com/48?text=MK',
     status: 'group',
     lastMessage: '赵六: 新的营销方案已经上传',
     lastMessageTime: Date.now() - 1000 * 60 * 60, // 1小时前
@@ -56,6 +73,14 @@ const contacts = ref([
     members: 12
   }
 ])
+
+// 为联系人获取头像
+const getContactAvatar = (contact) => {
+  if (contact.status === 'group') {
+    return getGroupAvatar(contact.name, contact.id)
+  }
+  return getDefaultAvatar(contact.name, contact.id)
+}
 
 // 格式化最后消息时间
 const formatLastTime = (timestamp) => {
@@ -98,7 +123,7 @@ const formatLastTime = (timestamp) => {
            class="contact-item"
            @click="$emit('select', contact)">
         <div class="avatar-wrapper">
-          <img :src="contact.avatar" :alt="contact.name" class="avatar" />
+          <img :src="getContactAvatar(contact)" :alt="contact.name" class="avatar" />
           <span class="status-indicator" 
                 :class="contact.status"
                 :title="contact.status">

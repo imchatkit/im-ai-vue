@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import UserProfile from './components/UserProfile.vue'
 import ContactSearch from './components/ContactSearch.vue'
 import ContactCategoryTabs from './components/ContactCategoryTabs.vue'
@@ -11,6 +11,24 @@ import FilePreviewPanel from './components/FilePreviewPanel.vue'
 import SystemStatusBar from './components/SystemStatusBar.vue'
 import ContactList from './ContactList.vue'
 import ChatWindow from './ChatWindow.vue'
+
+// 生成默认头像
+const getDefaultAvatar = (name = 'User', id = '') => {
+  // 使用DiceBear API生成头像
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${id || name}`
+}
+
+// 当前用户
+const currentUser = ref({
+  id: 'current-user-id',
+  name: '当前用户',
+  avatar: ''
+})
+
+// 设置默认头像
+onMounted(() => {
+  currentUser.value.avatar = getDefaultAvatar(currentUser.value.name, currentUser.value.id)
+})
 
 // 当前选中的联系人
 const currentContact = ref(null)
@@ -125,8 +143,8 @@ onUnmounted(() => {
         </button>
       </div>
       
-      <div class="user-avatar">
-        <img src="https://via.placeholder.com/36" alt="用户头像" class="avatar-img" />
+      <div class="user-avatar" title="个人资料">
+        <img :src="currentUser.avatar" alt="用户头像" class="avatar-img" />
       </div>
     </div>
 

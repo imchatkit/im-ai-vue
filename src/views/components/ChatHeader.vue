@@ -3,6 +3,28 @@ import { computed } from 'vue'
 import { isElectron } from '../../modules/electron-bridge'
 import { WindowManager } from '../../modules/electron-bridge'
 
+// 生成默认头像的函数
+const getDefaultAvatar = (name = '', id = '', isGroup = false) => {
+  // 如果是群组，使用特殊的图标样式
+  if (isGroup) {
+    return `https://api.dicebear.com/7.x/icons/svg?seed=${id || name}&icon=users&backgroundColor=0071e3`
+  }
+  
+  // 如果没有名称，返回一个随机头像
+  if (!name) return `https://api.dicebear.com/7.x/avataaars/svg?seed=${id || 'contact'}`
+  
+  // 提取姓名首字母
+  const initial = name.charAt(0).toUpperCase()
+  
+  // 根据ID或名称选择背景色
+  const colors = ['0071e3', '34c759', 'ff9f0a', 'ff3b30', '5ac8fa', '007aff', '5856d6']
+  const colorIndex = id ? parseInt(id.replace(/\D/g, '')) % colors.length || 0 : name.length % colors.length
+  const bgColor = colors[colorIndex]
+  
+  // 使用DiceBear API生成头像
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${initial}&text=${initial}&backgroundColor=${bgColor}`
+}
+
 // 定义组件属性
 const props = defineProps({
   currentContact: {
@@ -13,6 +35,18 @@ const props = defineProps({
 
 // 定义事件
 const emit = defineEmits(['back', 'info', 'more', 'toggle-sidebar'])
+
+// 计算联系人头像
+const contactAvatar = computed(() => {
+  if (!props.currentContact) return '';
+  
+  // 如果联系人有自定义头像，优先使用
+  if (props.currentContact.avatar) return props.currentContact.avatar;
+  
+  // 否则生成默认头像
+  const isGroup = props.currentContact.status === 'group';
+  return getDefaultAvatar(props.currentContact.name, props.currentContact.id, isGroup);
+})
 
 // 计算联系人状态文本
 const statusText = computed(() => {
@@ -69,7 +103,7 @@ const openInNewWindow = () => {
     
     <div class="contact-info" @click="viewContactInfo">
       <div class="avatar-wrapper">
-        <img :src="currentContact.avatar" :alt="currentContact.name" class="avatar" />
+        <img :src="contactAvatar" :alt="currentContact.name" class="avatar" />
         <span class="status-indicator" :class="currentContact.status"></span>
       </div>
       <div class="contact-details">

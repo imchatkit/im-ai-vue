@@ -2,6 +2,17 @@
 import { ref, computed } from 'vue'
 import { MessageType, MessageStatus } from '../../modules/im-core'
 
+// 生成默认头像的函数
+const getDefaultAvatar = (senderId, isSender) => {
+  // 当前用户头像
+  if (isSender) {
+    return `https://api.dicebear.com/7.x/avataaars/svg?seed=user-${senderId}`
+  }
+  
+  // 其他用户头像，使用initials样式
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${senderId}&backgroundColor=0071e3,34c759,ff9f0a,ff3b30,5ac8fa`
+}
+
 // 定义组件属性
 const props = defineProps({
   message: {
@@ -85,7 +96,7 @@ const formatTime = (timestamp) => {
     <!-- 头像 -->
     <div v-if="showAvatar" class="avatar-container">
       <div class="avatar">
-        <img :src="isSender ? 'https://via.placeholder.com/36' : 'https://via.placeholder.com/36'" alt="Avatar" />
+        <img :src="getDefaultAvatar(message.senderId, isSender)" alt="Avatar" />
       </div>
     </div>
     <div v-else class="avatar-placeholder"></div>

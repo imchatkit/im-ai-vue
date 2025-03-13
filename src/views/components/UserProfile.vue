@@ -1,15 +1,37 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { isElectron } from '../../modules/electron-bridge'
 import ThemeToggle from '../../components/ThemeToggle.vue'
 
-// 用户数据
+// 生成默认头像的函数
+const getDefaultAvatar = (name = '', id = '') => {
+  // 如果没有名称，返回一个随机头像
+  if (!name) return `https://api.dicebear.com/7.x/avataaars/svg?seed=${id || 'user'}`
+  
+  // 提取姓名首字母
+  const initial = name.charAt(0).toUpperCase()
+  
+  // 根据用户ID或名称选择背景色
+  const colors = ['0071e3', '34c759', 'ff9f0a', 'ff3b30', '5ac8fa', '007aff', '5856d6']
+  const colorIndex = id ? parseInt(id.replace(/\D/g, '')) % colors.length || 0 : name.length % colors.length
+  const bgColor = colors[colorIndex]
+  
+  // 使用DiceBear API生成头像
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${initial}&text=${initial}&backgroundColor=${bgColor}`
+}
+
+// 用户信息
 const user = ref({
-  id: 'current-user-id',
+  id: 'u10001',
   name: '当前用户',
-  avatar: 'https://via.placeholder.com/48',
   status: 'online',
   statusText: '在线'
+})
+
+// 动态设置用户头像
+onMounted(() => {
+  // 设置默认头像
+  user.value.avatar = getDefaultAvatar(user.value.name, user.value.id)
 })
 
 // 状态选项
@@ -35,10 +57,9 @@ const setStatus = (status) => {
   showStatusSelector.value = false
 }
 
-// 打开设置页面
+// 打开设置
 const openSettings = () => {
-  // 这里应该使用路由导航到设置页面
-  // router.push('/settings')
+  console.log('打开设置')
 }
 </script>
 
