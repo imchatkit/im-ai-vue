@@ -87,7 +87,7 @@ const openSettings = () => {
 
 <style scoped>
 .user-profile {
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--border-color);
   background-color: rgba(250, 250, 252, var(--blur-opacity));
   backdrop-filter: blur(var(--blur-md));
@@ -97,7 +97,7 @@ const openSettings = () => {
 .profile-header {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .avatar-container {
@@ -249,7 +249,7 @@ const openSettings = () => {
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .user-profile {
-    padding: 10px 12px;
+    padding: 8px 12px;
   }
   
   .avatar {

@@ -348,10 +348,10 @@ onMounted(() => {
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   scrollbar-width: thin;
   scrollbar-color: var(--text-quaternary) transparent;
 }
@@ -373,7 +373,7 @@ onMounted(() => {
 .load-more-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .load-more-btn {
@@ -413,7 +413,7 @@ onMounted(() => {
 .date-divider {
   display: flex;
   align-items: center;
-  margin: 16px 0;
+  margin: 12px 0;
   color: var(--text-tertiary);
 }
 
@@ -436,7 +436,7 @@ onMounted(() => {
 
 /* 输入面板容器 */
 .input-container {
-  padding: 8px 16px 16px;
+  padding: 6px 12px 12px;
   border-top: 1px solid var(--border-color-light);
   background-color: var(--bg-primary);
 }
@@ -450,7 +450,7 @@ onMounted(() => {
   height: 100%;
   color: var(--text-tertiary);
   text-align: center;
-  padding: 32px;
+  padding: 24px;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -488,11 +488,11 @@ onMounted(() => {
   align-items: center;
   text-align: center;
   max-width: 300px;
-  padding: 32px;
+  padding: 24px;
 }
 
 .no-contact-icon {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   opacity: 0.5;
 }
 
@@ -511,19 +511,19 @@ onMounted(() => {
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .message-list {
-    padding: 12px;
+    padding: 8px;
   }
   
   .input-container {
-    padding: 8px 12px 12px;
+    padding: 4px 8px 8px;
   }
   
   .empty-state {
-    padding: 24px;
+    padding: 16px;
   }
   
   .no-contact-content {
-    padding: 24px;
+    padding: 16px;
   }
 }
 </style>

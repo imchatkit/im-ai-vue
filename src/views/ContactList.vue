@@ -134,7 +134,7 @@ const formatLastTime = (timestamp) => {
 .contacts-wrapper {
   flex: 1;
   overflow-y: auto;
-  padding: 8px 16px;
+  padding: 4px 12px;
   scrollbar-width: thin;
   scrollbar-color: var(--text-quaternary) transparent;
 }
@@ -155,7 +155,7 @@ const formatLastTime = (timestamp) => {
 .contact-item {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 8px;
   margin: 2px 0;
   border-radius: var(--radius-lg);
   cursor: pointer;
@@ -173,8 +173,8 @@ const formatLastTime = (timestamp) => {
 }
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--border-color);
@@ -270,16 +270,16 @@ const formatLastTime = (timestamp) => {
 /* 响应式适配 */
 @media (max-width: 768px) {
   .contacts-wrapper {
-    padding: 8px 12px;
+    padding: 4px 8px;
   }
   
   .contact-item {
-    padding: 8px;
+    padding: 6px;
   }
   
   .avatar {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
   
   .contact-name {

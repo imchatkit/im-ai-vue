@@ -160,7 +160,7 @@ onUnmounted(() => {
   height: 100vh;
   background-color: var(--bg-primary);
   position: relative;
-  padding-top: var(--header-height);
+  padding-top: 0;
 }
 
 /* 左侧导航栏 - macOS风格 */
@@ -177,8 +177,8 @@ onUnmounted(() => {
   padding: 16px 0;
   position: fixed;
   left: 0;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
+  top: 0;
+  height: 100vh;
   z-index: 100;
 }
 
@@ -254,7 +254,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   margin-left: var(--sidebar-width);
-  height: calc(100vh - var(--header-height));
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -281,7 +281,7 @@ onUnmounted(() => {
   flex-direction: column;
   background-color: var(--bg-primary);
   margin-left: calc(var(--sidebar-width) + var(--contact-list-width));
-  height: calc(100vh - var(--header-height));
+  height: 100vh;
   overflow: hidden;
   border-left: none;
 }
@@ -290,7 +290,7 @@ onUnmounted(() => {
 .hamburger-menu {
   display: none;
   position: fixed;
-  top: calc(var(--header-height) + 8px);
+  top: 8px;
   left: 8px;
   z-index: 1001;
   width: 36px;
@@ -378,8 +378,8 @@ onUnmounted(() => {
   .middle-panel {
     position: fixed;
     left: 0;
-    top: var(--header-height);
-    height: calc(100% - var(--header-height) - 60px);
+    top: 0;
+    height: calc(100% - 60px);
     width: 100%;
     margin-left: 0;
     z-index: 50;
