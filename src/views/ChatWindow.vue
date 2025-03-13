@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 // 定义事件
-const emit = defineEmits(['send', 'retry', 'revoke', 'read'])
+const emit = defineEmits(['send', 'retry', 'revoke', 'read', 'update:messages'])
 
 // 消息列表容器引用
 const messageListRef = ref(null)
@@ -37,6 +37,30 @@ const currentUserId = 'current-user-id'
 // 计算消息是否由当前用户发送
 const isSender = (message) => {
   return message.senderId === currentUserId
+}
+
+// 判断消息是否是序列中的第一条
+const isFirstInSequence = (message) => {
+  const index = props.messages.findIndex(m => m.id === message.id)
+  if (index === 0) return true
+  const prevMessage = props.messages[index - 1]
+  return prevMessage.senderId !== message.senderId
+}
+
+// 判断消息是否是序列中的最后一条
+const isLastInSequence = (message) => {
+  const index = props.messages.findIndex(m => m.id === message.id)
+  if (index === props.messages.length - 1) return true
+  const nextMessage = props.messages[index + 1]
+  return nextMessage.senderId !== message.senderId
+}
+
+// 格式化时间
+const formatTime = (timestamp) => {
+  return new Date(timestamp).toLocaleTimeString('zh-CN', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 // 按日期分组消息
@@ -125,31 +149,6 @@ const handleSend = (content, type = MessageType.TEXT) => {
   })
 }
 
-// 监听消息列表变化，自动滚动到底部
-watch(() => props.messages, () => {
-  setTimeout(() => {
-    if (messageListRef.value) {
-      messageListRef.value.scrollTop = messageListRef.value.scrollHeight
-    }
-  }, 100)
-}, { deep: true })
-
-// 组件挂载后初始化
-onMounted(() => {
-  // 初始化滚动到底部
-  if (messageListRef.value) {
-    messageListRef.value.scrollTop = messageListRef.value.scrollHeight
-  }
-  
-  // 设置消息已读
-  if (props.contact) {
-    emit('read', props.contact.id)
-    
-    // 加载示例历史消息
-    loadExampleMessages()
-  }
-})
-
 // 加载示例历史消息
 const loadExampleMessages = () => {
   if (!props.contact) return
@@ -210,6 +209,15 @@ const loadExampleMessages = () => {
   emit('update:messages', exampleMessages)
 }
 
+// 监听消息列表变化，自动滚动到底部
+watch(() => props.messages, () => {
+  setTimeout(() => {
+    if (messageListRef.value) {
+      messageListRef.value.scrollTop = messageListRef.value.scrollHeight
+    }
+  }, 100)
+}, { deep: true })
+
 // 监听联系人变化
 watch(() => props.contact, (newContact) => {
   if (newContact) {
@@ -231,77 +239,63 @@ watch(() => props.contact, (newContact) => {
     }, 100)
   }
 })
+
+// 组件挂载后初始化
+onMounted(() => {
+  // 初始化滚动到底部
+  if (messageListRef.value) {
+    messageListRef.value.scrollTop = messageListRef.value.scrollHeight
+  }
+  
+  // 设置消息已读
+  if (props.contact) {
+    emit('read', props.contact.id)
+    
+    // 加载示例历史消息
+    loadExampleMessages()
+  }
+})
 </script>
 
 <template>
   <div class="chat-window">
-    <!-- 消息列表区域 -->
-    <div class="message-list" ref="messageListRef" @scroll="onScroll">
-      <!-- 加载更多历史消息 -->
-      <div v-if="hasMoreHistory" class="loading-history">
-        <button 
-          class="load-more-btn" 
-          @click="loadMoreHistory" 
-          :disabled="loadingHistory"
-        >
-          {{ loadingHistory ? '加载中...' : '加载更多' }}
-        </button>
-      </div>
-      <div v-else class="no-more-history">
-        <span>没有更多消息了</span>
+    <div class="message-list" ref="messageListRef">
+      <div v-if="loadingHistory" class="loading-history">
+        <div class="loading-spinner"></div>
       </div>
       
-      <!-- 无消息提示 -->
-      <div v-if="!props.messages || props.messages.length === 0" class="empty-state">
-        <p>暂无消息，发送一条消息开始聊天吧</p>
-      </div>
-      
-      <!-- 消息列表内容 -->
-      <template v-else>
-        <div v-for="group in groupedMessages" :key="group.date" class="message-group">
-          <!-- 日期分隔线 -->
-          <div v-if="showDateDivider" class="date-divider">
-            <span class="date-text">{{ formatDate(group.date) }}</span>
-          </div>
-          
-          <!-- 消息气泡 -->
-          <div v-for="(message, index) in group.messages" :key="message.id" class="message-item">
-            <MessageBubble 
-              :message="message"
-              :is-sender="isSender(message)"
-              :show-avatar="index === 0 || isSender(message) !== isSender(group.messages[index - 1])"
-              @retry="handleRetry"
-              @revoke="handleRevoke"
-            />
-          </div>
+      <div v-for="group in groupedMessages" :key="group.date" class="message-group">
+        <div v-if="showDateDivider" class="date-divider">
+          <span>{{ formatDate(group.date) }}</span>
         </div>
-      </template>
+        
+        <div v-for="message in group.messages" 
+             :key="message.id" 
+             class="message-wrapper"
+             :class="{ 'sender': isSender(message) }">
+          <MessageBubble
+            :message="message"
+            :is-sender="isSender(message)"
+            :is-first="isFirstInSequence(message)"
+            :is-last="isLastInSequence(message)"
+            @retry="handleRetry"
+            @revoke="handleRevoke"
+          />
+        </div>
+      </div>
     </div>
     
-    <!-- 输入面板 -->
-    <div class="input-container">
-      <InputPanel 
-        :placeholder="contact ? `发送给 ${contact.name}` : '请选择联系人'"
-        :disabled="!contact"
-        @send="handleSend"
-      />
-    </div>
+    <InputPanel @send="handleSend" />
   </div>
 </template>
 
 <style scoped>
-:root {
-  --message-bg-self: #e2f5fd; /* 发送者消息背景色 */
-  --message-bg-other: #ffffff; /* 接收者消息背景色 */
-  --message-text-self: #343A40;
-  --message-text-other: #343A40;
-}
-
 .chat-window {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--bg-color);
+  background-color: var(--bg-primary);
+  position: relative;
 }
 
 .message-list {
@@ -309,128 +303,62 @@ watch(() => props.contact, (newContact) => {
   overflow-y: auto;
   padding: 20px;
   scroll-behavior: smooth;
-  max-width: 100%;
-  margin: 0 auto;
 }
 
-.message-group {
-  margin-bottom: 24px;
+.loading-history {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .date-divider {
   text-align: center;
-  margin: 16px 0;
+  margin: 24px 0;
   position: relative;
 }
 
-.date-divider::before,
-.date-divider::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: calc(50% - 50px);
-  height: 1px;
-  background-color: var(--border-color);
+.date-divider span {
+  background-color: var(--bg-primary);
+  padding: 0 12px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
 }
 
 .date-divider::before {
+  content: '';
+  position: absolute;
   left: 0;
-}
-
-.date-divider::after {
   right: 0;
+  top: 50%;
+  height: 1px;
+  background-color: var(--border-color);
+  z-index: 0;
 }
 
-.date-text {
-  display: inline-block;
-  padding: 4px 12px;
-  background-color: var(--bg-secondary);
-  border-radius: 12px;
-  font-size: 12px;
-  color: var(--text-light);
-}
-
-.message-item {
+.message-wrapper {
   display: flex;
-  margin-bottom: 16px;
-  animation: message-fade-in 0.3s ease;
-  max-width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 2px 0;
+  animation: message-appear 0.3s ease-out;
 }
 
-.message-item.self {
-  flex-direction: row-reverse;
+.message-wrapper.sender {
+  align-items: flex-end;
 }
 
-.message-content {
-  max-width: 70%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin: 0 12px;
-  object-fit: cover;
-  box-shadow: var(--shadow-sm);
-  border: 2px solid var(--bg-color);
-}
-
-.message-content {
-  max-width: 60%;
-}
-
-.message-bubble {
-  padding: 12px 16px;
-  border-radius: 16px;
-  position: relative;
-  transition: var(--transition-base);
-}
-
-.message-item.self .message-bubble {
-  background-color: var(--message-bg-self);
-  color: var(--message-text-self);
-  border-bottom-right-radius: 4px;
-}
-
-.message-item:not(.self) .message-bubble {
-  background-color: var(--message-bg-other);
-  color: var(--message-text-other);
-  border-bottom-left-radius: 4px;
-}
-
-.message-time {
-  font-size: 12px;
-  color: var(--text-light);
-  margin-top: 4px;
-  opacity: 0.8;
-}
-
-.message-status {
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-.status-sending {
-  color: var(--text-light);
-}
-
-.status-sent {
-  color: var(--text-secondary);
-}
-
-.status-error {
-  color: #ef4444;
-}
-
-.loading-history {
-  text-align: center;
-  padding: 16px;
-  color: var(--text-light);
-}
-
-@keyframes message-fade-in {
+@keyframes message-appear {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -441,45 +369,19 @@ watch(() => props.contact, (newContact) => {
   }
 }
 
-/* 响应式适配 */
-@media screen and (max-width: 768px) {
-  .message-list {
-    padding: 12px;
-  }
-
-  .message-content {
-    max-width: 85%;
-  }
-
-  .avatar {
-    width: 32px;
-    height: 32px;
-    margin: 0 8px;
-  }
-
-  .message-bubble {
-    padding: 8px 12px;
-  }
-  
-  .message-time {
-    font-size: 10px;
-    opacity: 0.7;
-    display: none;
-  }
-  
-  .message-item:hover .message-time {
-    display: block;
-  }
-  
-  .date-divider {
-    margin: 12px 0;
-    font-size: 12px;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media screen and (max-width: 480px) {
-  .message-content {
-    max-width: 90%;
+@media (prefers-color-scheme: dark) {
+  .message-bubble {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .message-bubble.sender {
+    background-color: var(--primary-color);
   }
 }
 </style>
