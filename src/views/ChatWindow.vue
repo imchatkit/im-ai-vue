@@ -301,7 +301,7 @@ onMounted(() => {
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 0;
   scroll-behavior: smooth;
 }
 
@@ -322,35 +322,15 @@ onMounted(() => {
 
 .date-divider {
   text-align: center;
-  margin: 24px 0;
+  margin: 12px 0;
   position: relative;
-}
-
-.date-divider span {
-  background-color: var(--bg-primary);
-  padding: 0 12px;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  position: relative;
-  z-index: 1;
-}
-
-.date-divider::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 1px;
-  background-color: var(--border-color);
-  z-index: 0;
 }
 
 .message-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 2px 0;
+  margin: 1px 0;
   animation: message-appear 0.3s ease-out;
 }
 

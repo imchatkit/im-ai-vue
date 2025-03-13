@@ -31,6 +31,20 @@ const handleSelectContact = (contact) => {
   if (screenWidth.value < 768) {
     isSidebarActive.value = false
   }
+  // 清空当前消息列表
+  messages.value = []
+  // 模拟添加示例消息
+  messages.value = [
+    {
+      id: Date.now().toString(),
+      senderId: contact.id,
+      receiverId: 'current-user-id',
+      content: `你好，我是${contact.name}`,
+      type: 'text',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24,
+      status: 'read'
+    }
+  ]
 }
 
 // 处理发送消息
@@ -208,8 +222,6 @@ onUnmounted(() => {
   margin-left: var(--sidebar-width);
   height: 100vh;
   overflow-y: auto;
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  box-shadow: var(--shadow-md);
 }
 
 .main-chat {
@@ -217,11 +229,9 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
-  margin-left: calc(var(--sidebar-width) + var(--contact-list-width));
+  margin-left: 0;
   height: 100vh;
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
 }
 
 /* 响应式适配 */

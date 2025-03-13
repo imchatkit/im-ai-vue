@@ -50,12 +50,7 @@ const initWebFeatures = () => {
         <img src="/public/vite.svg" alt="Logo" class="logo" />
         <h1 class="brand-name">IM-AI</h1>
       </div>
-      <div class="navbar-menu">
-        <div class="nav-item active">消息</div>
-        <div class="nav-item">联系人</div>
-        <div class="nav-item">发现</div>
-        <div class="nav-item">我的</div>
-      </div>
+
       <div class="navbar-actions">
         <button class="action-btn">
           <i class="icon-search">🔍</i>
@@ -145,26 +140,7 @@ body {
   color: var(--text-primary);
 }
 
-.navbar-menu {
-  display: flex;
-  gap: 24px;
-}
 
-.nav-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-base);
-  font-weight: 500;
-}
-
-.nav-item:hover {
-  background-color: var(--hover-color);
-}
-
-.nav-item.active {
-  color: var(--primary-color);
-}
 
 .navbar-actions {
   display: flex;
@@ -192,9 +168,6 @@ body {
 
 /* 响应式适配 */
 @media (max-width: 992px) {
-  .navbar-menu {
-    display: none;
-  }
   
   .brand-name {
     font-size: 16px;
