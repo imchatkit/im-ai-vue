@@ -3,21 +3,21 @@ import { ref } from 'vue'
 import { isElectron } from '../../modules/electron-bridge'
 import ThemeToggle from '../../components/ThemeToggle.vue'
 
-// 用户信息
-const userInfo = ref({
+// 用户数据
+const user = ref({
   id: 'current-user-id',
   name: '当前用户',
-  avatar: '/avatars/default-avatar.png',
+  avatar: 'https://via.placeholder.com/48',
   status: 'online',
-  statusMessage: '在线'
+  statusText: '在线'
 })
 
 // 状态选项
 const statusOptions = [
-  { value: 'online', label: '在线', icon: 'icon-online' },
-  { value: 'away', label: '离开', icon: 'icon-away' },
-  { value: 'busy', label: '忙碌', icon: 'icon-busy' },
-  { value: 'offline', label: '隐身', icon: 'icon-offline' }
+  { value: 'online', label: '在线', color: 'var(--success-color)' },
+  { value: 'busy', label: '忙碌', color: 'var(--error-color)' },
+  { value: 'away', label: '离开', color: 'var(--warning-color)' },
+  { value: 'offline', label: '隐身', color: 'var(--text-quaternary)' }
 ]
 
 // 是否显示状态选择器
@@ -28,14 +28,11 @@ const toggleStatusSelector = () => {
   showStatusSelector.value = !showStatusSelector.value
 }
 
-// 更改状态
-const changeStatus = (status) => {
-  userInfo.value.status = status.value
-  userInfo.value.statusMessage = status.label
+// 设置用户状态
+const setStatus = (status) => {
+  user.value.status = status.value
+  user.value.statusText = status.label
   showStatusSelector.value = false
-  
-  // 这里应该调用API更新用户状态
-  // userService.updateStatus(status.value)
 }
 
 // 打开设置页面
@@ -46,47 +43,41 @@ const openSettings = () => {
 </script>
 
 <template>
-  <div class="user-profile">
-    <!-- 用户头像和信息 -->
-    <div class="user-info">
+  <div class="user-profile glass-container">
+    <div class="profile-header">
       <div class="avatar-container">
-        <img :src="userInfo.avatar" alt="Avatar" class="avatar" />
-        <span class="status-indicator" :class="userInfo.status"></span>
-      </div>
-      
-      <div class="user-details">
-        <h3 class="user-name">{{ userInfo.name }}</h3>
-        <div 
-          class="user-status" 
-          @click="toggleStatusSelector"
-        >
-          <i :class="`${statusOptions.find(s => s.value === userInfo.status)?.icon}`"></i>
-          <span>{{ userInfo.statusMessage }}</span>
-          <i class="icon-dropdown"></i>
+        <img :src="user.avatar" :alt="user.name" class="avatar" />
+        <div class="status-indicator" 
+             :style="{ backgroundColor: statusOptions.find(s => s.value === user.status)?.color }"
+             @click="toggleStatusSelector">
+        </div>
+        
+        <!-- 状态选择器 -->
+        <div v-if="showStatusSelector" class="status-selector glass-container">
+          <div v-for="status in statusOptions" 
+               :key="status.value" 
+               class="status-option"
+               @click="setStatus(status)">
+            <div class="status-dot" :style="{ backgroundColor: status.color }"></div>
+            <span class="status-label">{{ status.label }}</span>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- 状态选择器 -->
-    <div v-if="showStatusSelector" class="status-selector">
-      <div 
-        v-for="status in statusOptions" 
-        :key="status.value"
-        class="status-option"
-        :class="{ active: userInfo.status === status.value }"
-        @click="changeStatus(status)"
-      >
-        <i :class="status.icon"></i>
-        <span>{{ status.label }}</span>
+      
+      <div class="user-info">
+        <h3 class="user-name">{{ user.name }}</h3>
+        <p class="user-status">{{ user.statusText }}</p>
       </div>
+      
+      <button class="settings-btn">
+        <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+      </button>
     </div>
     
-    <!-- 用户操作按钮 -->
-    <div class="user-actions">
-      <ThemeToggle class="theme-toggle-component" />
-      <button class="action-btn settings-btn" @click="openSettings">
-        <i class="icon-settings"></i>
-      </button>
+    <div class="search-container">
+      <input type="search" placeholder="搜索" class="search-input" />
     </div>
   </div>
 </template>
@@ -95,13 +86,15 @@ const openSettings = () => {
 .user-profile {
   padding: 16px;
   border-bottom: 1px solid var(--border-color);
-  position: relative;
-  background-color: #ffffff;
+  background-color: rgba(250, 250, 252, var(--blur-opacity));
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
 }
 
-.user-info {
+.profile-header {
   display: flex;
   align-items: center;
+  margin-bottom: 12px;
 }
 
 .avatar-container {
@@ -110,128 +103,140 @@ const openSettings = () => {
 }
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid var(--border-color-light);
+  box-shadow: var(--shadow-xs);
 }
 
 .status-indicator {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 10px;
-  height: 10px;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid #fff;
-}
-
-.status-indicator.online {
-  background-color: #4caf50;
-}
-
-.status-indicator.away {
-  background-color: #ff9800;
-}
-
-.status-indicator.busy {
-  background-color: #f44336;
-}
-
-.status-indicator.offline {
-  background-color: #9e9e9e;
-}
-
-.user-details {
-  flex: 1;
-  overflow: hidden;
-}
-
-.user-name {
-  margin: 0 0 4px 0;
-  font-size: 16px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-status {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  color: #666;
+  border: 2px solid var(--bg-primary);
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.user-status i {
-  margin-right: 4px;
-}
-
-.icon-dropdown {
-  margin-left: 4px;
-  font-size: 10px;
+.status-indicator:hover {
+  transform: scale(1.2);
 }
 
 .status-selector {
   position: absolute;
-  top: 70px;
-  left: 16px;
-  right: 16px;
-  background-color: var(--bg-color);
+  top: 100%;
+  left: 0;
+  width: 120px;
+  background-color: rgba(255, 255, 255, var(--blur-opacity));
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  padding: 8px 0;
+  margin-top: 8px;
+  z-index: 100;
 }
 
 .status-option {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: 6px 12px;
   cursor: pointer;
+  transition: var(--transition-base);
 }
 
 .status-option:hover {
   background-color: var(--hover-color);
 }
 
-.status-option.active {
-  background-color: rgba(74, 138, 244, 0.1);
-}
-
-.status-option i {
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   margin-right: 8px;
 }
 
-.user-actions {
+.status-label {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-status {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.settings-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
-}
-
-.action-btn {
-  background: none;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--text-secondary);
   border: none;
-  font-size: 18px;
-  color: #666;
+  padding: 0;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  transition: var(--transition-base);
 }
 
-.action-btn:hover {
+.settings-btn:hover {
   background-color: var(--hover-color);
+  color: var(--text-primary);
 }
 
-.theme-toggle-component {
-  margin-right: 8px;
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--bg-tertiary);
+  padding: 0 12px 0 32px;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: var(--transition-base);
+}
+
+.search-input:focus {
+  background-color: var(--bg-quaternary);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
 }
 
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .user-profile {
-    padding: 8px;
+    padding: 12px;
   }
   
   .avatar {
@@ -240,10 +245,20 @@ const openSettings = () => {
   }
   
   .user-name {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .user-status {
+    font-size: 11px;
+  }
+  
+  .settings-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .search-input {
+    height: 30px;
     font-size: 12px;
   }
 }

@@ -30,15 +30,15 @@ const messageTypeClass = computed(() => {
 const statusIcon = computed(() => {
   switch(props.message.status) {
     case MessageStatus.SENDING:
-      return 'loading'
+      return 'sending'
     case MessageStatus.SENT:
-      return 'check'
+      return 'sent'
     case MessageStatus.DELIVERED:
-      return 'double-check'
+      return 'delivered'
     case MessageStatus.READ:
-      return 'check-all'
+      return 'read'
     case MessageStatus.FAILED:
-      return 'error'
+      return 'failed'
     default:
       return ''
   }
@@ -83,15 +83,20 @@ const formatTime = (timestamp) => {
     }"
   >
     <!-- 头像 -->
-    <div v-if="showAvatar" class="avatar">
-      <img :src="isSender ? 'path/to/user-avatar.png' : 'path/to/contact-avatar.png'" alt="Avatar" />
+    <div v-if="showAvatar" class="avatar-container">
+      <div class="avatar">
+        <img :src="isSender ? 'https://via.placeholder.com/36' : 'https://via.placeholder.com/36'" alt="Avatar" />
+      </div>
     </div>
+    <div v-else class="avatar-placeholder"></div>
     
     <!-- 消息内容 -->
     <div class="content">
       <!-- 已撤回消息 -->
       <div v-if="message.isRevoked" class="revoked-message">
-        <i class="icon-revoked"></i>
+        <svg class="icon-revoked" viewBox="0 0 24 24" width="14" height="14">
+          <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+        </svg>
         <span>{{ isSender ? '你' : '对方' }}撤回了一条消息</span>
       </div>
       
@@ -107,17 +112,28 @@ const formatTime = (timestamp) => {
       
       <!-- 文件消息 -->
       <div v-else-if="message.type === 'file'" class="file-content">
-        <i class="icon-file"></i>
+        <svg class="icon-file" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="currentColor" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+        </svg>
         <div class="file-info">
           <div class="file-name">{{ message.content.name }}</div>
           <div class="file-size">{{ message.content.size }}</div>
         </div>
-        <button class="download-btn">下载</button>
+        <button class="download-btn">
+          <svg class="icon-download" viewBox="0 0 24 24" width="16" height="16">
+            <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+        </button>
       </div>
       
       <!-- 语音消息 -->
       <div v-else-if="message.type === 'voice'" class="voice-content">
-        <i class="icon-voice"></i>
+        <svg class="icon-voice" viewBox="0 0 24 24" width="18" height="18">
+          <path fill="currentColor" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+        </svg>
+        <div class="voice-waveform">
+          <div class="waveform-bar" v-for="i in 6" :key="i" :style="{ height: `${Math.random() * 12 + 4}px` }"></div>
+        </div>
         <div class="voice-duration">{{ message.content.duration }}"</div>
       </div>
       
@@ -127,19 +143,54 @@ const formatTime = (timestamp) => {
         
         <!-- 发送者才显示消息状态 -->
         <span v-if="isSender" class="status">
-          <i v-if="message.status === 'failed'" 
-             class="icon-error" 
-             @click="retryMessage"
-             title="发送失败，点击重试"></i>
-          <i v-else :class="`icon-${statusIcon}`"></i>
+          <svg v-if="message.status === 'failed'" 
+               class="icon-status icon-failed" 
+               viewBox="0 0 24 24" 
+               width="14" 
+               height="14"
+               @click="retryMessage"
+               title="发送失败，点击重试">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <svg v-else-if="message.status === 'sending'" 
+               class="icon-status icon-sending" 
+               viewBox="0 0 24 24" 
+               width="14" 
+               height="14">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2zm0-10h2v8h-2z"/>
+          </svg>
+          <svg v-else-if="message.status === 'sent'" 
+               class="icon-status icon-sent" 
+               viewBox="0 0 24 24" 
+               width="14" 
+               height="14">
+            <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+          <svg v-else-if="message.status === 'delivered'" 
+               class="icon-status icon-delivered" 
+               viewBox="0 0 24 24" 
+               width="14" 
+               height="14">
+            <path fill="currentColor" d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+          </svg>
+          <svg v-else-if="message.status === 'read'" 
+               class="icon-status icon-read" 
+               viewBox="0 0 24 24" 
+               width="14" 
+               height="14">
+            <path fill="currentColor" d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+          </svg>
         </span>
       </div>
     </div>
     
     <!-- 消息操作菜单 -->
-    <div class="message-actions">
-      <button v-if="canRevoke" @click="revokeMessage" class="revoke-btn">
-        撤回
+    <div v-if="canRevoke" class="message-actions">
+      <button @click="revokeMessage" class="action-btn">
+        <svg class="icon-revoke" viewBox="0 0 24 24" width="14" height="14">
+          <path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+        </svg>
+        <span>撤回</span>
       </button>
     </div>
   </div>
@@ -148,10 +199,10 @@ const formatTime = (timestamp) => {
 <style scoped>
 .message-bubble {
   display: flex;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   position: relative;
-  max-width: 70%;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  max-width: 80%;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
 }
 
 .sender {
@@ -163,14 +214,27 @@ const formatTime = (timestamp) => {
   margin-right: auto;
 }
 
+.avatar-container {
+  width: 36px;
+  height: 36px;
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--border-color-light);
   transition: transform 0.2s ease;
 }
 
@@ -185,107 +249,168 @@ const formatTime = (timestamp) => {
 }
 
 .content {
-  padding: 8px 12px;
-  border-radius: 14px;
   position: relative;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s ease;
-}
-
-.content:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.sender .content {
-  background-color: #007AFF;
-  color: #ffffff;
-  border-top-right-radius: 4px;
-}
-
-.receiver .content {
-  background-color: #F2F2F7;
-  color: #000000;
-  border-top-left-radius: 4px;
+  max-width: calc(100% - 52px);
 }
 
 .text-content {
+  padding: 8px 12px;
+  border-radius: var(--radius-lg);
+  position: relative;
   word-break: break-word;
   line-height: 1.4;
   font-size: 14px;
   letter-spacing: -0.01em;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+}
+
+.sender .text-content {
+  background-color: var(--primary-color);
+  color: white;
+  border-top-right-radius: var(--radius-xs);
+}
+
+.receiver .text-content {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-top-left-radius: var(--radius-xs);
+}
+
+.image-content {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .image-content img {
-  max-width: 100%;
-  border-radius: 8px;
+  max-width: 240px;
+  max-height: 320px;
+  display: block;
+  border-radius: var(--radius-lg);
 }
 
 .file-content {
   display: flex;
   align-items: center;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
+  padding: 10px 12px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.icon-file {
+  margin-right: 8px;
+  color: var(--primary-color);
 }
 
 .file-info {
-  margin: 0 10px;
   flex: 1;
+  min-width: 0;
+  margin-right: 8px;
 }
 
 .file-name {
   font-size: 14px;
   font-weight: 500;
-  color: #000000;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-bottom: 2px;
 }
 
 .file-size {
   font-size: 12px;
-  color: #8E8E93;
+  color: var(--text-tertiary);
 }
 
 .download-btn {
-  padding: 4px 12px;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-quaternary);
+  color: var(--primary-color);
   border: none;
-  background-color: #007AFF;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 0;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: var(--transition-base);
 }
 
 .download-btn:hover {
-  background-color: #0066DB;
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .voice-content {
   display: flex;
   align-items: center;
+  padding: 10px 12px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  min-width: 120px;
+  box-shadow: var(--shadow-xs);
+}
+
+.sender .voice-content {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.icon-voice {
+  margin-right: 8px;
+}
+
+.voice-waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  height: 16px;
+}
+
+.waveform-bar {
+  width: 3px;
+  background-color: currentColor;
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+.voice-duration {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.revoked-message {
+  display: flex;
+  align-items: center;
   padding: 8px 12px;
-  min-width: 80px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  color: var(--text-tertiary);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.icon-revoked {
+  margin-right: 6px;
 }
 
 .message-meta {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   margin-top: 4px;
-  font-size: 11px;
-}
-
-.sender .message-meta {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.receiver .message-meta {
-  color: #8E8E93;
+  padding: 0 4px;
+  gap: 4px;
 }
 
 .time {
-  margin-right: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary);
 }
 
 .status {
@@ -293,52 +418,87 @@ const formatTime = (timestamp) => {
   align-items: center;
 }
 
-.status i {
-  font-size: 12px;
-  margin-left: 2px;
+.icon-status {
+  opacity: 0.7;
+}
+
+.icon-failed {
+  color: var(--error-color);
+  cursor: pointer;
+}
+
+.icon-sending {
+  color: var(--text-tertiary);
+}
+
+.icon-sent, .icon-delivered, .icon-read {
+  color: var(--text-tertiary);
+}
+
+.sender .icon-sent, .sender .icon-delivered, .sender .icon-read {
+  color: white;
+  opacity: 0.9;
 }
 
 .message-actions {
   position: absolute;
   top: -24px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(8px);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: all 0.2s ease;
+  right: 0;
+  display: none;
 }
 
-.message-bubble:hover .message-actions {
-  opacity: 1;
-  transform: translateY(0);
+.sender:hover .message-actions {
+  display: flex;
 }
 
-.revoke-btn {
-  border: none;
-  background: none;
-  color: #007AFF;
-  font-size: 12px;
-  padding: 2px 6px;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.revoke-btn:hover {
-  color: #0066DB;
-}
-
-.revoked-message {
+.action-btn {
   display: flex;
   align-items: center;
-  color: #8E8E93;
-  font-size: 13px;
+  padding: 4px 8px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
 }
 
-.icon-revoked {
+.action-btn:hover {
+  background-color: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.icon-revoke {
   margin-right: 4px;
-  font-size: 14px;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 768px) {
+  .message-bubble {
+    max-width: 85%;
+  }
+  
+  .avatar-container, .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    margin: 0 6px;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .text-content {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  
+  .image-content img {
+    max-width: 200px;
+    max-height: 280px;
+  }
 }
 </style>

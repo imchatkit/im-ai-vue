@@ -259,33 +259,91 @@ onMounted(() => {
 
 <template>
   <div class="chat-window">
-    <div class="message-list" ref="messageListRef">
-      <div v-if="loadingHistory" class="loading-history">
-        <div class="loading-spinner"></div>
+    <!-- 聊天头部 -->
+    <div class="chat-header glass-container" v-if="contact">
+      <div class="contact-info">
+        <div class="avatar-wrapper">
+          <img :src="contact.avatar" :alt="contact.name" class="avatar" />
+          <span class="status-indicator" :class="contact.status"></span>
+        </div>
+        <div class="contact-details">
+          <h2 class="contact-name">{{ contact.name }}</h2>
+          <p class="contact-status">
+            <span v-if="contact.status === 'online'">在线</span>
+            <span v-else-if="contact.status === 'offline'">离线</span>
+            <span v-else-if="contact.status === 'busy'">忙碌</span>
+            <span v-else-if="contact.status === 'group'">{{ contact.members }}人</span>
+          </p>
+        </div>
       </div>
       
-      <div v-for="group in groupedMessages" :key="group.date" class="message-group">
-        <div v-if="showDateDivider" class="date-divider">
-          <span>{{ formatDate(group.date) }}</span>
-        </div>
-        
-        <div v-for="message in group.messages" 
-             :key="message.id" 
-             class="message-wrapper"
-             :class="{ 'sender': isSender(message) }">
-          <MessageBubble
-            :message="message"
-            :is-sender="isSender(message)"
-            :is-first="isFirstInSequence(message)"
-            :is-last="isLastInSequence(message)"
-            @retry="handleRetry"
-            @revoke="handleRevoke"
-          />
-        </div>
+      <div class="header-actions">
+        <button class="icon-button">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+            <path fill="currentColor" d="M20 5.41L18.59 4 12 10.59 5.41 4 4 5.41 10.59 12 4 18.59 5.41 20 12 13.41 18.59 20 20 18.59 13.41 12z"/>
+          </svg>
+        </button>
       </div>
     </div>
     
-    <InputPanel @send="handleSend" />
+    <!-- 空状态 -->
+    <div v-if="!contact" class="empty-state">
+      <div class="empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">选择一个联系人开始聊天</h3>
+      <p class="empty-desc">您的消息将在这里显示</p>
+    </div>
+    
+    <!-- 消息列表 -->
+    <div v-else class="message-list-container">
+      <!-- 加载更多按钮 -->
+      <div v-if="hasMoreHistory" class="load-more-container">
+        <button 
+          class="load-more-btn"
+          @click="loadMoreHistory"
+          :disabled="loadingHistory"
+        >
+          <span v-if="loadingHistory">加载中...</span>
+          <span v-else>加载更多</span>
+        </button>
+      </div>
+      
+      <!-- 消息列表 -->
+      <div class="message-list" ref="messageListRef">
+        <div v-for="group in groupedMessages" :key="group.date" class="message-group">
+          <!-- 日期分隔线 -->
+          <div v-if="showDateDivider" class="date-divider">
+            <span class="date-text">{{ formatDate(group.date) }}</span>
+          </div>
+          
+          <!-- 消息气泡 -->
+          <div 
+            v-for="message in group.messages" 
+            :key="message.id"
+            class="message-container"
+          >
+            <MessageBubble
+              :message="message"
+              :isSender="isSender(message)"
+              :showAvatar="isFirstInSequence(message)"
+              @retry="handleRetry"
+              @revoke="handleRevoke"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <!-- 输入面板 -->
+      <div class="input-container glass-container">
+        <InputPanel
+          :placeholder="'发送给 ' + contact.name"
+          @send="handleSend"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -294,74 +352,214 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--bg-primary);
+  position: relative;
+  background-color: var(--bg-secondary);
+}
+
+/* 聊天头部 */
+.chat-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  margin-right: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-color-light);
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+.status-indicator.online {
+  background-color: var(--success-color);
+}
+
+.status-indicator.offline {
+  background-color: var(--text-quaternary);
+}
+
+.status-indicator.busy {
+  background-color: var(--error-color);
+}
+
+.status-indicator.group {
+  background-color: var(--primary-color);
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.contact-status {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 空状态 */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--text-tertiary);
+}
+
+.empty-icon {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+/* 消息列表容器 */
+.message-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   position: relative;
 }
 
+/* 加载更多按钮 */
+.load-more-container {
+  padding: 8px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.load-more-btn {
+  font-size: 12px;
+  padding: 4px 12px;
+  background-color: transparent;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background-color: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 消息列表 */
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 0;
-  scroll-behavior: smooth;
-}
-
-.loading-history {
+  padding: 16px;
   display: flex;
-  justify-content: center;
-  padding: 20px;
+  flex-direction: column;
 }
 
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--border-color);
-  border-top-color: var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
+/* 日期分隔线 */
 .date-divider {
-  text-align: center;
-  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
   position: relative;
 }
 
-.message-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 1px 0;
-  animation: message-appear 0.3s ease-out;
+.date-divider::before,
+.date-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-color);
 }
 
-.message-wrapper.sender {
-  align-items: flex-end;
+.date-text {
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  background-color: var(--bg-secondary);
+  position: relative;
 }
 
-@keyframes message-appear {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 消息容器 */
+.message-container {
+  margin-bottom: 4px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* 输入容器 */
+.input-container {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(255, 255, 255, var(--blur-opacity));
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  z-index: 10;
 }
 
-@media (prefers-color-scheme: dark) {
-  .message-bubble {
-    background-color: rgba(255, 255, 255, 0.1);
+/* 响应式适配 */
+@media screen and (max-width: 768px) {
+  .chat-header {
+    height: 50px;
   }
   
-  .message-bubble.sender {
-    background-color: var(--primary-color);
+  .message-list {
+    padding: 12px;
+  }
+  
+  .input-container {
+    padding: 8px;
   }
 }
 </style>

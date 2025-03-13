@@ -6,7 +6,7 @@ const contacts = ref([
   {
     id: '1',
     name: '张三',
-    avatar: '/avatars/user1.png',
+    avatar: 'https://via.placeholder.com/48',
     status: 'online',
     lastMessage: '你好，最近怎么样？',
     lastMessageTime: Date.now() - 1000 * 60 * 5, // 5分钟前
@@ -16,7 +16,7 @@ const contacts = ref([
   {
     id: '2',
     name: '研发部',
-    avatar: '/avatars/group1.png',
+    avatar: 'https://via.placeholder.com/48?text=RD',
     status: 'group',
     lastMessage: '李四: 明天开会讨论新功能',
     lastMessageTime: Date.now() - 1000 * 60 * 30, // 30分钟前
@@ -27,7 +27,7 @@ const contacts = ref([
   {
     id: '3',
     name: '王五',
-    avatar: '/avatars/user2.png',
+    avatar: 'https://via.placeholder.com/48',
     status: 'offline',
     lastMessage: '文件已发送',
     lastMessageTime: Date.now() - 1000 * 60 * 60 * 2, // 2小时前
@@ -37,7 +37,7 @@ const contacts = ref([
   {
     id: '4',
     name: '李四',
-    avatar: '/avatars/user3.png',
+    avatar: 'https://via.placeholder.com/48',
     status: 'busy',
     lastMessage: '我正在开会，稍后回复',
     lastMessageTime: Date.now() - 1000 * 60 * 15, // 15分钟前
@@ -47,7 +47,7 @@ const contacts = ref([
   {
     id: '5',
     name: '市场部',
-    avatar: '/avatars/group2.png',
+    avatar: 'https://via.placeholder.com/48?text=MK',
     status: 'group',
     lastMessage: '赵六: 新的营销方案已经上传',
     lastMessageTime: Date.now() - 1000 * 60 * 60, // 1小时前
@@ -56,6 +56,38 @@ const contacts = ref([
     members: 12
   }
 ])
+
+// 格式化最后消息时间
+const formatLastTime = (timestamp) => {
+  const now = Date.now()
+  const diff = now - timestamp
+  
+  // 一分钟内
+  if (diff < 60 * 1000) {
+    return '刚刚'
+  }
+  
+  // 一小时内
+  if (diff < 60 * 60 * 1000) {
+    return Math.floor(diff / (60 * 1000)) + '分钟前'
+  }
+  
+  // 今天内
+  if (diff < 24 * 60 * 60 * 1000) {
+    const date = new Date(timestamp)
+    return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0')
+  }
+  
+  // 一周内
+  if (diff < 7 * 24 * 60 * 60 * 1000) {
+    const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    return days[new Date(timestamp).getDay()]
+  }
+  
+  // 更早
+  const date = new Date(timestamp)
+  return (date.getMonth() + 1) + '月' + date.getDate() + '日'
+}
 </script>
 
 <template>
@@ -85,11 +117,11 @@ const contacts = ref([
         <div class="contact-info">
           <div class="contact-header">
             <h3 class="contact-name">{{ contact.name }}</h3>
-            <span class="last-time">{{ contact.lastMessageTime }}</span>
+            <span class="last-time">{{ formatLastTime(contact.lastMessageTime) }}</span>
           </div>
           <div class="contact-footer">
             <p class="last-message">{{ contact.lastMessage }}</p>
-            <div v-if="contact.unreadCount > 0" class="unread-badge">
+            <div v-if="contact.unreadCount > 0" class="badge">
               {{ contact.unreadCount }}
             </div>
           </div>
@@ -245,7 +277,7 @@ const contacts = ref([
   max-width: 70%;
 }
 
-.unread-badge {
+.badge {
   background-color: var(--primary-color);
   color: white;
   font-size: 0.75rem;
