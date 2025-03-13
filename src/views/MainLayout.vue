@@ -130,26 +130,29 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- 中间联系人列表区 -->
-    <div class="middle-panel glass-container" :class="{ 'active': isSidebarActive }">
-      <UserProfile />
-      
-      <div class="panel-header">
-        <h2 class="panel-title">消息</h2>
-        <button class="icon-button">
-          <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
-            <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-          </svg>
-        </button>
+    <!-- 内容区域包装器 -->
+    <div class="content-wrapper">
+      <!-- 中间联系人列表区 -->
+      <div class="middle-panel glass-container" :class="{ 'active': isSidebarActive }">
+        <UserProfile />
+        
+        <div class="panel-header">
+          <h2 class="panel-title">消息</h2>
+          <button class="icon-button">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <ContactList @select="handleSelectContact" />
       </div>
-      
-      <ContactList @select="handleSelectContact" />
-    </div>
 
-    <!-- 右侧聊天主区域 -->
-    <div class="main-chat">
-      <ChatHeader :current-contact="currentContact" @toggle-sidebar="toggleSidebar" />
-      <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
+      <!-- 右侧聊天主区域 -->
+      <div class="main-chat">
+        <ChatHeader :current-contact="currentContact" @toggle-sidebar="toggleSidebar" />
+        <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
+      </div>
     </div>
   </div>
 </template>
@@ -161,6 +164,13 @@ onUnmounted(() => {
   background-color: var(--bg-primary);
   position: relative;
   padding-top: 0;
+}
+
+/* 内容区域包装器 */
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  margin-left: var(--sidebar-width);
 }
 
 /* 左侧导航栏 - macOS风格 */
@@ -253,9 +263,9 @@ onUnmounted(() => {
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  margin-left: var(--sidebar-width);
   height: 100vh;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .panel-header {
@@ -280,7 +290,6 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
-  margin-left: calc(var(--sidebar-width) + var(--contact-list-width));
   height: 100vh;
   overflow: hidden;
   border-left: none;
@@ -314,11 +323,11 @@ onUnmounted(() => {
   }
   
   .middle-panel {
-    margin-left: 160px;
+    margin-left: 0;
   }
   
-  .main-chat {
-    margin-left: calc(160px + var(--contact-list-width));
+  .content-wrapper {
+    margin-left: 160px;
   }
 }
 
@@ -326,10 +335,6 @@ onUnmounted(() => {
 @media screen and (max-width: 1199px) and (min-width: 769px) {
   .middle-panel {
     width: 240px;
-  }
-  
-  .main-chat {
-    margin-left: calc(var(--sidebar-width) + 240px);
   }
 }
 
@@ -373,6 +378,10 @@ onUnmounted(() => {
   
   .user-avatar {
     display: none;
+  }
+  
+  .content-wrapper {
+    margin-left: 0;
   }
   
   .middle-panel {
