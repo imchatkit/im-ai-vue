@@ -132,6 +132,8 @@ onUnmounted(() => {
 
     <!-- 中间联系人列表区 -->
     <div class="middle-panel glass-container" :class="{ 'active': isSidebarActive }">
+      <UserProfile />
+      
       <div class="panel-header">
         <h2 class="panel-title">消息</h2>
         <button class="icon-button">
@@ -139,10 +141,6 @@ onUnmounted(() => {
             <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
           </svg>
         </button>
-      </div>
-      
-      <div class="search-container">
-        <input type="search" placeholder="搜索" class="search-input" />
       </div>
       
       <ContactList @select="handleSelectContact" />
@@ -273,28 +271,7 @@ onUnmounted(() => {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
-}
-
-.search-container {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color-light);
-}
-
-.search-input {
-  width: 100%;
-  height: 32px;
-  border-radius: var(--radius-full);
-  border: none;
-  background-color: var(--bg-tertiary);
-  padding: 0 12px 0 32px;
-  font-size: 13px;
-  color: var(--text-primary);
-  transition: var(--transition-base);
-}
-
-.search-input:focus {
-  background-color: var(--bg-quaternary);
-  outline: none;
+  margin: 0;
 }
 
 /* 右侧聊天主区域 */
@@ -306,6 +283,7 @@ onUnmounted(() => {
   margin-left: calc(var(--sidebar-width) + var(--contact-list-width));
   height: calc(100vh - var(--header-height));
   overflow: hidden;
+  border-left: none;
 }
 
 /* 移动端汉堡菜单 */

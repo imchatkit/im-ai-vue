@@ -297,6 +297,9 @@ let typingTimeout
   display: flex;
   flex-direction: column;
   position: relative;
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: 4px;
 }
 
 .toolbar {
@@ -403,6 +406,7 @@ let typingTimeout
 
 .send-btn.active:hover {
   background-color: var(--primary-dark);
+  transform: scale(1.05);
 }
 
 .send-btn:disabled {

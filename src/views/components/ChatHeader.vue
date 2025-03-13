@@ -89,7 +89,7 @@ const openInNewWindow = () => {
           <path fill="currentColor" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
         </svg>
       </button>
-      <button class="icon-button">
+      <button class="icon-button" @click="openMoreOptions">
         <svg class="icon" viewBox="0 0 24 24" width="18" height="18">
           <path fill="currentColor" d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
         </svg>
@@ -108,6 +108,7 @@ const openInNewWindow = () => {
   background-color: rgba(255, 255, 255, var(--blur-opacity));
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
+  z-index: 10;
 }
 
 .back-btn {
@@ -135,6 +136,14 @@ const openInNewWindow = () => {
   display: flex;
   align-items: center;
   flex: 1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+}
+
+.contact-info:hover {
+  background-color: var(--hover-color);
 }
 
 .avatar-wrapper {
@@ -148,6 +157,7 @@ const openInNewWindow = () => {
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--border-color-light);
+  box-shadow: var(--shadow-xs);
 }
 
 .status-indicator {
@@ -179,6 +189,7 @@ const openInNewWindow = () => {
 .contact-details {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .contact-name {
@@ -186,6 +197,9 @@ const openInNewWindow = () => {
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contact-status {
