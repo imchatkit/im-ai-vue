@@ -151,7 +151,7 @@ const formatTime = (timestamp) => {
   margin-bottom: 16px;
   position: relative;
   max-width: 70%;
-  font-family: 微软雅黑, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
 }
 
 .sender {
@@ -164,11 +164,18 @@ const formatTime = (timestamp) => {
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 8px;
+  margin: 0 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
 }
 
 .avatar img {
@@ -178,157 +185,160 @@ const formatTime = (timestamp) => {
 }
 
 .content {
-  padding: 10px 12px;
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: 14px;
   position: relative;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.content:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .sender .content {
-  background-color: #e2f5fd;
-  color: var(--text-primary);
-  border-top-right-radius: 2px;
+  background-color: #007AFF;
+  color: #ffffff;
+  border-top-right-radius: 4px;
 }
 
 .receiver .content {
-  background-color: #ffffff;
-  color: var(--text-primary);
-  border-top-left-radius: 2px;
+  background-color: #F2F2F7;
+  color: #000000;
+  border-top-left-radius: 4px;
 }
 
 .text-content {
   word-break: break-word;
-  white-space: pre-wrap;
+  line-height: 1.4;
+  font-size: 14px;
+  letter-spacing: -0.01em;
 }
 
 .image-content img {
   max-width: 100%;
-  max-height: 200px;
   border-radius: 8px;
-  object-fit: contain;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.image-content img:hover {
-  transform: scale(1.02);
 }
 
 .file-content {
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
   padding: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
 }
 
 .file-info {
-  margin-left: 8px;
+  margin: 0 10px;
   flex: 1;
 }
 
 .file-name {
+  font-size: 14px;
   font-weight: 500;
+  color: #000000;
   margin-bottom: 2px;
 }
 
 .file-size {
   font-size: 12px;
-  color: #666;
+  color: #8E8E93;
+}
+
+.download-btn {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #007AFF;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #0066DB;
 }
 
 .voice-content {
   display: flex;
   align-items: center;
+  padding: 8px 12px;
   min-width: 80px;
-}
-
-.voice-duration {
-  margin-left: 8px;
 }
 
 .message-meta {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  font-size: 12px;
-  color: #86909c;
   margin-top: 4px;
-  font-weight: normal;
+  font-size: 11px;
+}
+
+.sender .message-meta {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.receiver .message-meta {
+  color: #8E8E93;
 }
 
 .time {
   margin-right: 4px;
 }
 
-.revoked-message {
-  font-style: italic;
-  color: #999;
+.status {
   display: flex;
   align-items: center;
 }
 
+.status i {
+  font-size: 12px;
+  margin-left: 2px;
+}
+
 .message-actions {
   position: absolute;
-  top: -20px;
-  display: none;
-}
-
-.sender .message-actions {
-  right: 0;
-}
-
-.receiver .message-actions {
-  left: 0;
+  top: -24px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.2s ease;
 }
 
 .message-bubble:hover .message-actions {
-  display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .revoke-btn {
-  background: none;
   border: none;
+  background: none;
+  color: #007AFF;
   font-size: 12px;
-  color: #666;
+  padding: 2px 6px;
   cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .revoke-btn:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  color: #0066DB;
 }
 
-/* 响应式适配 */
-@media screen and (max-width: 768px) {
-  .message-bubble {
-    max-width: 85%;
-  }
-  
-  .avatar {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .content {
-    padding: 8px 10px;
-  }
-  
-  .message-meta {
-    font-size: 10px;
-  }
+.revoked-message {
+  display: flex;
+  align-items: center;
+  color: #8E8E93;
+  font-size: 13px;
 }
 
-@media screen and (max-width: 480px) {
-  .message-bubble {
-    max-width: 90%;
-  }
-  
-  .image-content img {
-    max-height: 150px;
-  }
+.icon-revoked {
+  margin-right: 4px;
+  font-size: 14px;
 }
 </style>

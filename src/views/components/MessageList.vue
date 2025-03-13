@@ -123,6 +123,7 @@ const scrollToBottom = () => {
   padding: 16px;
   background-color: var(--bg-color);
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .empty-messages {
@@ -131,27 +132,34 @@ const scrollToBottom = () => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #999;
+  color: #8E8E93;
   padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
 }
 
 .empty-icon {
   width: 64px;
   height: 64px;
   margin-bottom: 16px;
-  background-color: #f0f0f0;
+  background-color: #F2F2F7;
   border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.empty-messages:hover .empty-icon {
+  transform: scale(1.05);
 }
 
 .message-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s ease;
 }
 
 .date-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px 0;
+  margin: 24px 0;
   position: relative;
 }
 
@@ -160,18 +168,42 @@ const scrollToBottom = () => {
   content: '';
   flex: 1;
   height: 1px;
-  background-color: #e0e0e0;
+  background: linear-gradient(to var(--direction, right), transparent, #E5E5EA);
+}
+
+.date-divider::after {
+  --direction: left;
 }
 
 .date-text {
   padding: 0 12px;
   font-size: 12px;
-  color: #999;
+  color: #8E8E93;
   background-color: var(--bg-color);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .message-item {
   margin-bottom: 8px;
+  opacity: 0;
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 响应式适配 */
@@ -179,5 +211,27 @@ const scrollToBottom = () => {
   .message-list {
     padding: 12px 8px;
   }
+  
+  .date-divider {
+    margin: 16px 0;
+  }
+}
+
+/* 滚动条样式 */
+.message-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.message-list::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.message-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 </style>

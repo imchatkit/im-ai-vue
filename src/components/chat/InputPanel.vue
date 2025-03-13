@@ -275,10 +275,10 @@ let typingTimeout
 .input-panel {
   display: flex;
   flex-direction: column;
-  background-color: #F8F9FA;
-  border-top: 1px solid #CED4DA;
+  border-top: 1px solid #E5E5EA;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
   padding: 12px;
-  font-family: 微软雅黑, Arial, sans-serif;
 }
 
 .input-area {
