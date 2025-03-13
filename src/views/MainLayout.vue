@@ -176,7 +176,7 @@ onUnmounted(() => {
 /* 左侧导航栏 - macOS风格 */
 .left-sidebar {
   width: var(--sidebar-width);
-  background-color: rgba(245, 245, 247, var(--blur-opacity));
+  background-color: var(--bg-glass-secondary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
   border-right: 1px solid var(--border-color);
@@ -190,6 +190,8 @@ onUnmounted(() => {
   top: 0;
   height: 100vh;
   z-index: 100;
+  box-shadow: 1px 0 0 0 var(--border-color-light);
+  transition: width var(--transition-smooth);
 }
 
 .nav-icons {
@@ -216,11 +218,18 @@ onUnmounted(() => {
   box-shadow: none;
   font-size: 12px;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-button:hover {
   background-color: var(--hover-color);
   color: var(--text-primary);
+  transform: translateZ(0);
+}
+
+.nav-button:active {
+  transform: scale(0.98);
 }
 
 .nav-button.active {
@@ -228,15 +237,35 @@ onUnmounted(() => {
   color: white;
 }
 
+.nav-button.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 .nav-button .icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  transition: transform 0.2s var(--easing-standard);
+}
+
+.nav-button:hover .icon {
+  transform: scale(1.1);
 }
 
 .nav-label {
   display: none;
   font-weight: 500;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s var(--easing-decelerate);
 }
 
 .user-avatar {
@@ -257,7 +286,7 @@ onUnmounted(() => {
 /* 中间联系人列表区 */
 .middle-panel {
   width: var(--contact-list-width);
-  background-color: rgba(250, 250, 252, var(--blur-opacity));
+  background-color: var(--bg-glass-primary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
   border-right: 1px solid var(--border-color);
@@ -266,6 +295,9 @@ onUnmounted(() => {
   height: 100vh;
   overflow: hidden;
   flex-shrink: 0;
+  transition: transform 0.3s var(--easing-standard), 
+              width 0.3s var(--easing-standard),
+              box-shadow 0.3s var(--easing-standard);
 }
 
 .panel-header {
@@ -275,6 +307,9 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 0 16px;
   border-bottom: 1px solid var(--border-color);
+  background-color: rgba(250, 250, 252, 0.8);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
 }
 
 .panel-title {
@@ -293,6 +328,9 @@ onUnmounted(() => {
   height: 100vh;
   overflow: hidden;
   border-left: none;
+  position: relative;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.3s var(--easing-standard);
 }
 
 /* 移动端汉堡菜单 */
@@ -310,12 +348,33 @@ onUnmounted(() => {
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   color: var(--text-primary);
+  background-color: var(--bg-glass-primary);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border: 1px solid var(--border-color-light);
+  transition: background-color 0.2s var(--easing-standard), 
+              transform 0.2s var(--easing-standard);
+}
+
+.hamburger-menu:hover {
+  background-color: var(--bg-glass-secondary);
+  transform: scale(1.05);
+}
+
+.hamburger-menu:active {
+  transform: scale(0.95);
+}
+
+.hamburger-menu .icon {
+  transition: transform 0.3s var(--easing-standard);
 }
 
 /* 响应式适配 */
 @media screen and (min-width: 1400px) {
   .nav-label {
     display: block;
+    opacity: 1;
+    transform: translateX(0);
   }
   
   .left-sidebar {
@@ -328,6 +387,10 @@ onUnmounted(() => {
   
   .content-wrapper {
     margin-left: 160px;
+  }
+  
+  .nav-button {
+    padding: 0 16px;
   }
 }
 
@@ -346,6 +409,10 @@ onUnmounted(() => {
 
   .hamburger-menu {
     display: flex;
+  }
+  
+  .hamburger-menu.active .icon {
+    transform: rotate(180deg);
   }
 
   .left-sidebar {
@@ -393,8 +460,9 @@ onUnmounted(() => {
     margin-left: 0;
     z-index: 50;
     transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s var(--easing-decelerate);
     border-radius: 0;
+    box-shadow: var(--shadow-lg);
   }
   
   .middle-panel.active {

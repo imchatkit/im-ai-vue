@@ -105,10 +105,11 @@ const openInNewWindow = () => {
   align-items: center;
   padding: 0 16px;
   border-bottom: 1px solid var(--border-color);
-  background-color: rgba(255, 255, 255, var(--blur-opacity));
+  background-color: var(--bg-glass-primary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
   z-index: 10;
+  position: relative;
 }
 
 .back-btn {
@@ -130,6 +131,11 @@ const openInNewWindow = () => {
 .back-btn:hover {
   background-color: var(--hover-color);
   color: var(--text-primary);
+  transform: translateZ(0);
+}
+
+.back-btn:active {
+  transform: scale(0.95);
 }
 
 .contact-info {
@@ -146,6 +152,11 @@ const openInNewWindow = () => {
   background-color: var(--hover-color);
 }
 
+.contact-info:active {
+  background-color: var(--active-color);
+  transform: scale(0.99);
+}
+
 .avatar-wrapper {
   position: relative;
   margin-right: 12px;
@@ -158,6 +169,11 @@ const openInNewWindow = () => {
   object-fit: cover;
   border: 1px solid var(--border-color-light);
   box-shadow: var(--shadow-xs);
+  transition: transform 0.3s var(--easing-standard);
+}
+
+.contact-info:hover .avatar {
+  transform: scale(1.05);
 }
 
 .status-indicator {
@@ -168,6 +184,11 @@ const openInNewWindow = () => {
   height: 10px;
   border-radius: 50%;
   border: 2px solid var(--bg-primary);
+  transition: transform 0.2s var(--easing-standard);
+}
+
+.contact-info:hover .status-indicator {
+  transform: scale(1.1);
 }
 
 .status-indicator.online {
@@ -200,12 +221,22 @@ const openInNewWindow = () => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s var(--easing-standard);
+}
+
+.contact-info:hover .contact-name {
+  color: var(--primary-color);
 }
 
 .contact-status {
   font-size: 12px;
   color: var(--text-tertiary);
   margin: 0;
+  transition: opacity 0.2s var(--easing-standard);
+}
+
+.contact-info:hover .contact-status {
+  opacity: 0.8;
 }
 
 .header-actions {
@@ -225,17 +256,51 @@ const openInNewWindow = () => {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: all 0.2s var(--easing-standard);
+  position: relative;
+  overflow: hidden;
 }
 
 .icon-button:hover {
   background-color: var(--hover-color);
   color: var(--text-primary);
+  transform: translateZ(0);
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+.icon-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: var(--hover-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+}
+
+.icon-button:hover::before {
+  width: 120%;
+  height: 120%;
+  opacity: 0.1;
 }
 
 .icon {
   width: 18px;
   height: 18px;
+  transition: transform 0.2s var(--easing-standard);
+  position: relative;
+  z-index: 1;
+}
+
+.icon-button:hover .icon {
+  transform: scale(1.1);
 }
 
 /* 响应式适配 */

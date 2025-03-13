@@ -342,6 +342,7 @@ onMounted(() => {
   width: 100%;
   position: relative;
   background-color: var(--bg-primary);
+  transition: background-color 0.3s var(--easing-standard);
 }
 
 /* 消息列表 */
@@ -354,6 +355,7 @@ onMounted(() => {
   gap: 6px;
   scrollbar-width: thin;
   scrollbar-color: var(--text-quaternary) transparent;
+  scroll-behavior: smooth;
 }
 
 .message-list::-webkit-scrollbar {
@@ -388,12 +390,20 @@ onMounted(() => {
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: all 0.3s var(--easing-standard);
+  position: relative;
+  overflow: hidden;
 }
 
 .load-more-btn:hover {
   background-color: var(--bg-quaternary);
   color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-xs);
+}
+
+.load-more-btn:active {
+  transform: translateY(0);
 }
 
 .load-more-btn.loading {
@@ -415,6 +425,7 @@ onMounted(() => {
   align-items: center;
   margin: 12px 0;
   color: var(--text-tertiary);
+  animation: fadeIn 0.5s var(--easing-decelerate);
 }
 
 .date-line {
@@ -427,18 +438,29 @@ onMounted(() => {
   padding: 0 12px;
   font-size: 12px;
   font-weight: 500;
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  padding: 4px 12px;
 }
 
 /* 消息容器 */
 .message-container {
   margin-bottom: 2px;
+  animation: slideUp 0.3s var(--easing-decelerate);
+  transform-origin: center bottom;
 }
 
 /* 输入面板容器 */
 .input-container {
   padding: 6px 12px 12px;
   border-top: 1px solid var(--border-color-light);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-glass-primary);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.02);
 }
 
 /* 空状态 */
@@ -453,11 +475,14 @@ onMounted(() => {
   padding: 24px;
   margin-top: auto;
   margin-bottom: auto;
+  animation: scaleIn 0.5s var(--easing-standard) forwards;
 }
 
 .empty-icon {
   margin-bottom: 16px;
   opacity: 0.5;
+  transform: scale(0);
+  animation: popIn 0.5s var(--easing-standard) forwards 0.2s;
 }
 
 .empty-title {
@@ -465,11 +490,15 @@ onMounted(() => {
   font-weight: 600;
   margin-bottom: 8px;
   color: var(--text-secondary);
+  opacity: 0;
+  animation: fadeIn 0.5s var(--easing-decelerate) forwards 0.3s;
 }
 
 .empty-desc {
   font-size: 14px;
   color: var(--text-tertiary);
+  opacity: 0;
+  animation: fadeIn 0.5s var(--easing-decelerate) forwards 0.4s;
 }
 
 /* 未选择联系人 */
@@ -480,6 +509,7 @@ onMounted(() => {
   height: 100%;
   background-color: var(--bg-secondary);
   color: var(--text-tertiary);
+  animation: fadeIn 0.5s var(--easing-decelerate);
 }
 
 .no-contact-content {
@@ -489,11 +519,20 @@ onMounted(() => {
   text-align: center;
   max-width: 300px;
   padding: 24px;
+  background-color: var(--bg-glass-primary);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+  animation: slideUp 0.5s var(--easing-decelerate);
 }
 
 .no-contact-icon {
   margin-bottom: 20px;
   opacity: 0.5;
+  transform: scale(0);
+  animation: popIn 0.5s var(--easing-standard) forwards 0.2s;
 }
 
 .no-contact-title {
@@ -501,11 +540,21 @@ onMounted(() => {
   font-weight: 600;
   margin-bottom: 8px;
   color: var(--text-secondary);
+  opacity: 0;
+  animation: fadeIn 0.5s var(--easing-decelerate) forwards 0.3s;
 }
 
 .no-contact-desc {
   font-size: 14px;
   color: var(--text-tertiary);
+  opacity: 0;
+  animation: fadeIn 0.5s var(--easing-decelerate) forwards 0.4s;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 0.5; }
 }
 
 /* 响应式适配 */
