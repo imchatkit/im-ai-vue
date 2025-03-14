@@ -1,0 +1,33 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆圈 -->
+  <circle cx="100" cy="100" r="90" fill="#f0f4ff" />
+  
+  <!-- 左侧聊天气泡 -->
+  <rect x="30" y="70" width="70" height="35" rx="16" fill="#e4e9ff" stroke="#6477db" stroke-width="2"/>
+  <rect x="30" y="115" width="60" height="35" rx="16" fill="#e4e9ff" stroke="#6477db" stroke-width="2"/>
+  
+  <!-- 右侧聊天气泡 -->
+  <rect x="100" y="90" width="70" height="35" rx="16" fill="#d8e3ff" stroke="#4a61d8" stroke-width="2"/>
+  
+  <!-- 装饰圆点 -->
+  <circle cx="50" cy="87" r="4" fill="#6477db" />
+  <circle cx="65" cy="87" r="4" fill="#6477db" />
+  <circle cx="80" cy="87" r="4" fill="#6477db" />
+  
+  <circle cx="50" cy="132" r="4" fill="#6477db" />
+  <circle cx="65" cy="132" r="4" fill="#6477db" />
+  
+  <circle cx="120" cy="107" r="4" fill="#4a61d8" />
+  <circle cx="135" cy="107" r="4" fill="#4a61d8" />
+  <circle cx="150" cy="107" r="4" fill="#4a61d8" />
+  
+  <!-- 图标装饰 -->
+  <path d="M100 40 C115 40, 125 30, 130 25 C135 40, 140 45, 160 45" stroke="#6c7ae0" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="160" cy="45" r="5" fill="#6c7ae0" />
+  
+  <path d="M30 160 C40 155, 45 150, 55 155 C65 162, 75 160, 85 155" stroke="#6c7ae0" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="30" cy="160" r="5" fill="#6c7ae0" />
+  
+  <path d="M170 140 C160 145, 155 155, 150 160" stroke="#6c7ae0" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="170" cy="140" r="5" fill="#6c7ae0" />
+</svg> 
