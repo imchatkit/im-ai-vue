@@ -408,7 +408,7 @@ const handleAvatarClick = () => {
 .main-container {
   display: flex;
   height: 100vh;
-  background-color: #FFFFFF;
+  background-color: var(--ios-bg-primary);
   position: relative;
   overflow: hidden;
 }
@@ -423,8 +423,8 @@ const handleAvatarClick = () => {
 /* 中间联系人列表区 */
 .middle-panel {
   width: 300px;
-  background-color: #FFFFFF;
-  border-right: 0.5px solid #E5E5EA;
+  background-color: var(--ios-bg-primary);
+  border-right: 0.5px solid var(--ios-border-color);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -439,7 +439,7 @@ const handleAvatarClick = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
+  background-color: var(--ios-bg-primary);
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -451,7 +451,7 @@ const handleAvatarClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFFFFF;
+  background-color: var(--ios-bg-primary);
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -463,9 +463,9 @@ const handleAvatarClick = () => {
   max-width: 460px;
   padding: 40px 30px;
   border-radius: 16px;
-  background-color: #F9F9F9;
+  background-color: var(--ios-bg-secondary);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-  border: 0.5px solid #E5E5EA;
+  border: 0.5px solid var(--ios-border-color);
   animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -479,14 +479,14 @@ const handleAvatarClick = () => {
 .welcome-content h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #000000;
+  color: var(--ios-text-primary);
   margin-bottom: 12px;
   letter-spacing: -0.4px;
 }
 
 .welcome-content p {
   font-size: 15px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   line-height: 1.5;
   letter-spacing: -0.2px;
 }
@@ -535,7 +535,7 @@ const handleAvatarClick = () => {
 .settings-container {
   width: 100%;
   height: 100%;
-  background-color: #FFFFFF;
+  background-color: var(--ios-bg-primary);
   overflow-y: auto;
   padding: 20px;
 }

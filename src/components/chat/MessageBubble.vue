@@ -211,23 +211,24 @@ const formatTime = (timestamp) => {
 .message-bubble {
   display: flex;
   margin-bottom: 8px;
+  max-width: 75%;
   position: relative;
-  max-width: 80%;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
-}
-
-.sender {
-  margin-left: auto;
-  flex-direction: row-reverse;
 }
 
 .receiver {
-  margin-right: auto;
+  align-self: flex-start;
+}
+
+.sender {
+  align-self: flex-end;
+  flex-direction: row-reverse;
 }
 
 .avatar-container {
   width: 36px;
   height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
   margin: 0 8px;
   flex-shrink: 0;
 }
@@ -242,166 +243,163 @@ const formatTime = (timestamp) => {
 .avatar {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: var(--shadow-xs);
-  border: 1px solid var(--border-color-light);
-  transition: transform 0.2s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+  border: 0.5px solid var(--ios-border-color);
 }
 
-.content {
+.message-content {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  max-width: calc(100% - 52px);
 }
 
 .text-content {
   padding: 8px 12px;
-  border-radius: var(--radius-lg);
-  position: relative;
-  word-break: break-word;
-  line-height: 1.4;
+  border-radius: 18px;
   font-size: 14px;
-  letter-spacing: -0.01em;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.2s ease;
-}
-
-.sender .text-content {
-  background-color: var(--primary-color);
-  color: white;
-  border-top-right-radius: var(--radius-xs);
+  line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .receiver .text-content {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border-top-left-radius: var(--radius-xs);
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-primary);
+  border-bottom-left-radius: 4px;
+}
+
+.sender .text-content {
+  background-color: var(--ios-accent-color);
+  color: white;
+  border-bottom-right-radius: 4px;
 }
 
 .image-content {
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  position: relative;
 }
 
 .image-content img {
   max-width: 240px;
   max-height: 320px;
   display: block;
-  border-radius: var(--radius-lg);
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .file-content {
   display: flex;
   align-items: center;
   padding: 10px 12px;
-  background-color: var(--bg-tertiary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
+  border-radius: 12px;
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-primary);
 }
 
-.icon-file {
+.sender .file-content {
+  background-color: var(--ios-accent-color-light);
+  color: var(--ios-accent-color);
+}
+
+.file-icon {
   margin-right: 8px;
-  color: var(--primary-color);
+  font-size: 24px;
 }
 
 .file-info {
-  flex: 1;
-  min-width: 0;
-  margin-right: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 .file-name {
-  font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 2px;
+  font-size: 14px;
 }
 
 .file-size {
   font-size: 12px;
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
 }
 
-.download-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bg-quaternary);
-  color: var(--primary-color);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: var(--transition-base);
+.sender .file-size {
+  color: var(--ios-accent-color);
+  opacity: 0.8;
 }
 
-.download-btn:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.voice-content {
+.audio-content {
   display: flex;
   align-items: center;
   padding: 10px 12px;
-  background-color: var(--bg-tertiary);
-  border-radius: var(--radius-lg);
-  min-width: 120px;
-  box-shadow: var(--shadow-xs);
+  border-radius: 18px;
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-primary);
+  min-width: 160px;
 }
 
-.sender .voice-content {
-  background-color: var(--primary-color);
+.sender .audio-content {
+  background-color: var(--ios-accent-color);
   color: white;
 }
 
-.icon-voice {
-  margin-right: 8px;
-}
-
-.voice-waveform {
+.audio-controls {
   display: flex;
   align-items: center;
-  gap: 2px;
-  flex: 1;
-  height: 16px;
+  gap: 8px;
 }
 
-.waveform-bar {
-  width: 3px;
-  background-color: currentColor;
-  border-radius: 1px;
-  opacity: 0.7;
+.audio-play {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--ios-bg-primary);
+  color: var(--ios-accent-color);
 }
 
-.voice-duration {
+.sender .audio-play {
+  background-color: white;
+  color: var(--ios-accent-color);
+}
+
+.audio-duration {
   font-size: 12px;
-  margin-left: 8px;
+  color: var(--ios-text-tertiary);
 }
 
-.revoked-message {
+.sender .audio-duration {
+  color: white;
+  opacity: 0.9;
+}
+
+.audio-waveform {
+  flex: 1;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 8px;
+}
+
+.sender .audio-waveform {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.system-content {
+  align-self: center;
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  background-color: var(--bg-tertiary);
-  border-radius: var(--radius-lg);
-  color: var(--text-tertiary);
+  background-color: var(--ios-bg-tertiary);
+  border-radius: 16px;
+  color: var(--ios-text-tertiary);
   font-size: 13px;
   font-style: italic;
 }
@@ -421,7 +419,7 @@ const formatTime = (timestamp) => {
 
 .time {
   font-size: 11px;
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
 }
 
 .status {
@@ -434,16 +432,16 @@ const formatTime = (timestamp) => {
 }
 
 .icon-failed {
-  color: var(--error-color);
+  color: #FF3B30;
   cursor: pointer;
 }
 
 .icon-sending {
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
 }
 
 .icon-sent, .icon-delivered, .icon-read {
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
 }
 
 .sender .icon-sent, .sender .icon-delivered, .sender .icon-read {
@@ -466,19 +464,19 @@ const formatTime = (timestamp) => {
   display: flex;
   align-items: center;
   padding: 4px 8px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  background-color: var(--ios-bg-primary);
+  border: 0.5px solid var(--ios-border-color);
+  border-radius: 16px;
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--ios-text-secondary);
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-base);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .action-btn:hover {
-  background-color: var(--hover-color);
-  color: var(--text-primary);
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-primary);
 }
 
 .icon-revoke {

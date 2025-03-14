@@ -383,29 +383,33 @@ onMounted(() => {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
-  color: var(--text-primary);
+  color: var(--ios-text-primary);
+  background-color: var(--ios-bg-primary);
+  height: 100%;
+  overflow-y: auto;
 }
 
 .settings-title {
   font-size: 24px;
   margin-bottom: 24px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--ios-text-primary);
 }
 
 .settings-section {
   margin-bottom: 32px;
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
+  background-color: var(--ios-bg-secondary);
+  border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid var(--ios-border-color);
 }
 
 .section-title {
   font-size: 18px;
   margin-bottom: 16px;
   font-weight: 500;
-  color: var(--primary-color);
+  color: var(--ios-accent-color);
 }
 
 .setting-item {
@@ -413,7 +417,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 0.5px solid var(--ios-border-color);
 }
 
 .setting-item:last-child {
@@ -423,11 +427,12 @@ onMounted(() => {
 .setting-label {
   display: flex;
   flex-direction: column;
+  color: var(--ios-text-primary);
 }
 
 .setting-desc {
   font-size: 12px;
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
   margin-top: 4px;
 }
 
@@ -451,7 +456,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--bg-tertiary);
+  background-color: var(--ios-bg-tertiary);
   border-radius: 24px;
   transition: all .4s ease;
 }
@@ -465,10 +470,11 @@ onMounted(() => {
   bottom: 3px;
   background-color: white;
   transition: all .4s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 input:checked + .toggle-slider {
-  background-color: var(--primary-color);
+  background-color: var(--ios-accent-color);
 }
 
 input:checked + .toggle-slider:before {
@@ -478,30 +484,78 @@ input:checked + .toggle-slider:before {
 .action-button {
   width: 100%;
   padding: 10px;
-  background-color: var(--primary-color);
+  background-color: var(--ios-accent-color);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .action-button:hover {
-  background-color: var(--primary-dark);
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .logout-button {
-  background-color: var(--error-color);
+  background-color: #FF3B30;
 }
 
 .logout-button:hover {
-  background-color: var(--error-color);
+  background-color: #FF3B30;
   opacity: 0.9;
 }
 
 .about-info {
   padding: 10px 0;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--ios-text-secondary);
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0.5px solid var(--ios-border-color);
+  background-color: var(--ios-bg-primary);
+  color: var(--ios-text-primary);
+  font-size: 14px;
+  outline: none;
+  min-width: 120px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 30px;
+}
+
+select:focus {
+  border-color: var(--ios-accent-color);
+  box-shadow: 0 0 0 2px var(--ios-accent-color-light);
+}
+
+/* 滚动条样式 */
+.settings-page::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-page::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings-page::-webkit-scrollbar-thumb {
+  background-color: var(--ios-text-quaternary);
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 16px;
+  }
+  
+  .settings-section {
+    padding: 12px;
+  }
 }
 </style>

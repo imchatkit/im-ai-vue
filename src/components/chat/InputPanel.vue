@@ -472,145 +472,117 @@ onUnmounted(() => {
 
 <style scoped>
 .input-panel {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   position: relative;
-  background-color: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  padding: 4px;
 }
 
-.toolbar {
+.input-container {
   display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 4px;
-  padding: 0 4px;
+  align-items: flex-end;
+  position: relative;
+  padding: 0 8px;
+}
+
+.tools-container {
+  display: flex;
+  gap: 8px;
+  margin-right: 8px;
 }
 
 .tool-button {
   width: 32px;
   height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
   background-color: transparent;
+  color: var(--ios-text-tertiary);
   border: none;
-  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s var(--easing-standard);
-  padding: 0;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  flex-shrink: 0;
 }
 
 .tool-button:hover {
-  background-color: var(--hover-color);
-  color: var(--text-primary);
-  transform: translateZ(0);
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-secondary);
 }
 
 .tool-button:active {
   transform: scale(0.95);
 }
 
-.tool-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background-color: var(--hover-color);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
-}
-
-.tool-button:hover::before {
-  width: 120%;
-  height: 120%;
-  opacity: 0.15;
-}
-
 .tool-button .icon {
   width: 20px;
   height: 20px;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.2s var(--easing-standard);
 }
 
-.tool-button:hover .icon {
-  transform: scale(1.1);
-}
-
-.input-container {
+.input-wrapper {
+  flex: 1;
   position: relative;
-  display: flex;
+  min-width: 0;
 }
 
 .input-area {
-  flex: 1;
+  width: 100%;
   min-height: 40px;
   max-height: 120px;
-  padding: 10px 12px;
-  padding-right: 40px;
-  border-radius: var(--radius-lg);
-  background-color: var(--bg-tertiary);
-  border: 1px solid transparent;
+  padding: 10px 40px 10px 12px;
+  border-radius: 20px;
+  background-color: var(--ios-bg-tertiary);
+  border: none;
+  outline: none;
   resize: none;
-  font-family: inherit;
   font-size: 14px;
-  line-height: 1.5;
-  color: var(--text-primary);
-  transition: all 0.2s var(--easing-standard);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+  line-height: 1.4;
+  color: var(--ios-text-primary);
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ios-text-quaternary) transparent;
+}
+
+.input-area::-webkit-scrollbar {
+  width: 4px;
+}
+
+.input-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.input-area::-webkit-scrollbar-thumb {
+  background-color: var(--ios-text-quaternary);
+  border-radius: 2px;
 }
 
 .input-area:focus {
-  background-color: var(--bg-quaternary);
-  border-color: var(--primary-color);
-  outline: none;
-  box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.2), 0 1px 3px rgba(0, 0, 0, 0.05) inset;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .input-area::placeholder {
-  color: var(--text-tertiary);
+  color: var(--ios-text-tertiary);
+  opacity: 0.7;
 }
 
 .send-button {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
+  right: 8px;
+  bottom: 8px;
   width: 28px;
   height: 28px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  background-color: var(--primary-color);
+  background-color: var(--ios-accent-color);
   color: white;
   border: none;
   cursor: pointer;
-  padding: 0;
-  transition: all 0.2s var(--easing-standard);
-  transform-origin: center;
-  opacity: 0;
-  transform: scale(0.8);
-  pointer-events: none;
-}
-
-.send-button.active {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .send-button:hover {
-  background-color: var(--primary-dark);
   transform: scale(1.05);
 }
 
@@ -621,68 +593,47 @@ onUnmounted(() => {
 .send-button .icon {
   width: 16px;
   height: 16px;
-  transition: transform 0.2s var(--easing-standard);
 }
 
-.send-button:hover .icon {
-  transform: translateX(1px);
-}
-
-.character-counter {
-  position: absolute;
-  right: 10px;
-  bottom: -20px;
-  font-size: 12px;
-  color: var(--text-tertiary);
-  transition: color 0.2s var(--easing-standard);
-}
-
-.character-counter.warning {
-  color: var(--warning-color);
-}
-
-.character-counter.error {
-  color: var(--error-color);
+.send-button.disabled {
+  background-color: var(--ios-text-quaternary);
+  cursor: not-allowed;
 }
 
 .emoji-picker {
   position: absolute;
-  bottom: 38px;
-  right: 0;
-  z-index: 10;
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  box-shadow: var(--shadow-lg);
-  animation: scaleIn 0.2s var(--easing-standard);
-  transform-origin: bottom right;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  background-color: var(--ios-bg-primary);
+  border-radius: 16px;
+  border: 0.5px solid var(--ios-border-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  z-index: 100;
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .emoji-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  max-height: 200px;
-  overflow-y: auto;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
 }
 
 .emoji-item {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: all 0.2s var(--easing-standard);
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .emoji-item:hover {
-  background-color: var(--hover-color);
+  background-color: var(--ios-bg-tertiary);
   transform: scale(1.1);
 }
 
@@ -690,20 +641,20 @@ onUnmounted(() => {
   transform: scale(0.95);
 }
 
-/* 更多面板 */
 .more-panel {
   position: absolute;
-  bottom: 40px;
+  bottom: 100%;
   left: 0;
   right: 0;
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
+  margin-bottom: 8px;
+  background-color: var(--ios-bg-primary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 0.5px solid var(--ios-border-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   padding: 12px;
-  animation: slideUp 0.3s var(--easing-decelerate);
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .more-grid {
@@ -717,13 +668,13 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 12px 8px;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s var(--easing-standard);
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .more-item:hover {
-  background-color: var(--hover-color);
+  background-color: var(--ios-bg-tertiary);
   transform: translateY(-2px);
 }
 
@@ -737,11 +688,11 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   margin-bottom: 8px;
   color: white;
-  background: linear-gradient(120deg, var(--primary-color), var(--primary-dark));
-  transition: transform 0.2s var(--easing-standard);
+  background: linear-gradient(120deg, var(--ios-accent-color), #34C759);
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .more-item:hover .more-item-icon {
@@ -750,8 +701,13 @@ onUnmounted(() => {
 
 .more-item-text {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--ios-text-secondary);
   text-align: center;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @media screen and (max-width: 768px) {
