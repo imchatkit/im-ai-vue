@@ -408,9 +408,8 @@ const handleAvatarClick = () => {
 .main-container {
   display: flex;
   height: 100vh;
-  background-color: var(--bg-primary);
+  background-color: #FFFFFF;
   position: relative;
-  padding-top: 0;
   overflow: hidden;
 }
 
@@ -418,25 +417,21 @@ const handleAvatarClick = () => {
 .content-wrapper {
   display: flex;
   flex: 1;
-  margin-left: 0; /* 取消左侧边距，因为我们现在使用TopNavigationSidebar */
+  margin-left: 0;
 }
 
 /* 中间联系人列表区 */
 .middle-panel {
   width: 300px;
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border-right: 1px solid var(--border-color);
+  background-color: #FFFFFF;
+  border-right: 0.5px solid #E5E5EA;
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s var(--easing-standard), 
-              width 0.3s var(--easing-standard),
-              box-shadow 0.3s var(--easing-standard);
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* 右侧聊天主区域 */
@@ -444,13 +439,10 @@ const handleAvatarClick = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-primary);
+  background-color: #FFFFFF;
   height: 100vh;
   overflow: hidden;
-  border-left: none;
   position: relative;
-  box-shadow: var(--shadow-xs);
-  transition: box-shadow 0.3s var(--easing-standard);
 }
 
 /* 欢迎界面 */
@@ -459,7 +451,7 @@ const handleAvatarClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-primary);
+  background-color: #FFFFFF;
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -468,19 +460,17 @@ const handleAvatarClick = () => {
 
 .welcome-content {
   text-align: center;
-  max-width: 480px;
-  padding: 40px 20px;
+  max-width: 460px;
+  padding: 40px 30px;
   border-radius: 16px;
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-  animation: fadeIn 0.5s ease;
+  background-color: #F9F9F9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 0.5px solid #E5E5EA;
+  animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .welcome-image {
-  width: 180px;
+  width: 160px;
   height: auto;
   margin-bottom: 24px;
   animation: float 6s ease-in-out infinite;
@@ -489,14 +479,16 @@ const handleAvatarClick = () => {
 .welcome-content h2 {
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000;
   margin-bottom: 12px;
+  letter-spacing: -0.4px;
 }
 
 .welcome-content p {
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 15px;
+  color: #8E8E93;
   line-height: 1.5;
+  letter-spacing: -0.2px;
 }
 
 @keyframes fadeIn {
@@ -517,23 +509,22 @@ const handleAvatarClick = () => {
   top: 12px;
   left: 12px;
   z-index: 1001;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: var(--shadow-md);
-  color: var(--text-primary);
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border: 1px solid var(--border-color-light);
-  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #000000;
+  background-color: rgba(249, 249, 249, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 0.5px solid #E5E5EA;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .hamburger-menu:hover {
-  background-color: var(--bg-glass-secondary);
   transform: scale(1.05);
 }
 
@@ -544,7 +535,7 @@ const handleAvatarClick = () => {
 .settings-container {
   width: 100%;
   height: 100%;
-  background-color: var(--bg-primary);
+  background-color: #FFFFFF;
   overflow-y: auto;
   padding: 20px;
 }
@@ -559,7 +550,7 @@ const handleAvatarClick = () => {
 @media screen and (max-width: 768px) {
   .main-container {
     position: relative;
-    padding-bottom: 60px; /* 为底部导航栏预留空间 */
+    padding-bottom: 54px; /* 为底部导航栏预留空间 */
   }
 
   .hamburger-menu {
@@ -574,13 +565,12 @@ const handleAvatarClick = () => {
     position: fixed;
     left: 0;
     top: 0;
-    height: calc(100% - 60px);
+    height: calc(100% - 54px);
     width: 100%;
     z-index: 50;
     transform: translateX(-100%);
-    transition: transform 0.3s var(--easing-decelerate);
-    border-radius: 0;
-    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   }
   
   .middle-panel.active {
@@ -589,25 +579,25 @@ const handleAvatarClick = () => {
 
   .main-chat {
     margin-left: 0;
-    margin-bottom: 60px;
-    border-radius: 0;
+    margin-bottom: 54px;
   }
   
   .welcome-container {
-    margin-bottom: 60px;
-    padding: 10px;
+    margin-bottom: 54px;
+    padding: 16px;
   }
   
   .welcome-content {
-    padding: 30px 16px;
+    padding: 30px 20px;
+    max-width: 100%;
   }
   
   .welcome-image {
-    width: 140px;
+    width: 120px;
   }
   
   .settings-container {
-    padding-bottom: 70px;
+    padding-bottom: 64px;
   }
 }
 </style>

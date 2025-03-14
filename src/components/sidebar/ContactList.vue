@@ -170,7 +170,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--text-tertiary);
+  color: #8E8E93;
   padding: 40px 0;
 }
 
@@ -181,31 +181,32 @@ export default {
 }
 
 .empty-text {
-  font-size: 14px;
+  font-size: 15px;
+  letter-spacing: -0.2px;
 }
 
 .contact-groups {
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
 .contact-group {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .group-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 9px 16px;
   cursor: pointer;
   user-select: none;
-  border-radius: 6px;
-  margin: 0 8px;
-  transition: background-color 0.2s ease;
+  background-color: #F9F9F9;
+  margin: 0;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .group-header:hover {
-  background-color: var(--hover-color);
+  background-color: #F2F2F7;
 }
 
 .group-title {
@@ -215,20 +216,22 @@ export default {
 
 .group-icon {
   margin-right: 8px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .group-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   margin: 0;
-  color: var(--text-primary);
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
 }
 
 .toggle-icon {
-  font-size: 12px;
-  color: var(--text-tertiary);
-  transition: transform 0.2s ease;
+  font-size: 10px;
+  color: #8E8E93;
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .group-header.collapsed .toggle-icon {
@@ -237,25 +240,34 @@ export default {
 
 .group-content {
   padding: 4px 0;
-  animation: slideDown 0.2s ease;
+  animation: slideDown 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 10px 16px;
   cursor: pointer;
-  border-radius: 6px;
-  margin: 2px 8px;
-  transition: background-color 0.2s ease;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.contact-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 64px;
+  right: 16px;
+  bottom: 0;
+  height: 0.5px;
+  background-color: #E5E5EA;
 }
 
 .contact-item:hover {
-  background-color: var(--hover-color);
+  background-color: #F2F2F7;
 }
 
 .contact-item.active {
-  background-color: var(--active-item-bg);
+  background-color: rgba(0, 122, 255, 0.08);
 }
 
 .avatar-container {
@@ -264,10 +276,11 @@ export default {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 0.5px solid rgba(0, 0, 0, 0.05);
 }
 
 .status-indicator {
@@ -277,19 +290,19 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--bg-primary);
+  border: 2px solid #FFFFFF;
 }
 
 .status-indicator.online {
-  background-color: var(--status-online);
+  background-color: #34C759;
 }
 
 .status-indicator.offline {
-  background-color: var(--status-offline);
+  background-color: #8E8E93;
 }
 
 .status-indicator.busy {
-  background-color: var(--status-busy);
+  background-color: #FF9500;
 }
 
 .content {
@@ -305,28 +318,30 @@ export default {
 }
 
 .name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   margin: 0;
-  color: var(--text-primary);
+  color: #000000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.2px;
 }
 
 .description {
   margin: 0;
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 13px;
+  color: #8E8E93;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.1px;
 }
 
 .empty-group {
-  padding: 8px 16px;
+  padding: 10px 16px;
   text-align: center;
-  color: var(--text-tertiary);
+  color: #8E8E93;
   font-size: 13px;
   font-style: italic;
 }
@@ -334,7 +349,7 @@ export default {
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;

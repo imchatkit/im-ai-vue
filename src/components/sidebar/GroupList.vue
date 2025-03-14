@@ -174,7 +174,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--text-tertiary);
+  color: #8E8E93;
   padding: 40px 0;
 }
 
@@ -185,31 +185,32 @@ export default {
 }
 
 .empty-text {
-  font-size: 14px;
+  font-size: 15px;
+  letter-spacing: -0.2px;
 }
 
 .group-categories {
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
 .group-category {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .category-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 9px 16px;
   cursor: pointer;
   user-select: none;
-  border-radius: 6px;
-  margin: 0 8px;
-  transition: background-color 0.2s ease;
+  background-color: #F9F9F9;
+  margin: 0;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .category-header:hover {
-  background-color: var(--hover-color);
+  background-color: #F2F2F7;
 }
 
 .category-title {
@@ -219,20 +220,22 @@ export default {
 
 .category-icon {
   margin-right: 8px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .category-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   margin: 0;
-  color: var(--text-primary);
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
 }
 
 .toggle-icon {
-  font-size: 12px;
-  color: var(--text-tertiary);
-  transition: transform 0.2s ease;
+  font-size: 10px;
+  color: #8E8E93;
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .category-header.collapsed .toggle-icon {
@@ -241,25 +244,34 @@ export default {
 
 .category-content {
   padding: 4px 0;
-  animation: slideDown 0.2s ease;
+  animation: slideDown 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .group-item {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 10px 16px;
   cursor: pointer;
-  border-radius: 6px;
-  margin: 2px 8px;
-  transition: background-color 0.2s ease;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.group-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 64px;
+  right: 16px;
+  bottom: 0;
+  height: 0.5px;
+  background-color: #E5E5EA;
 }
 
 .group-item:hover {
-  background-color: var(--hover-color);
+  background-color: #F2F2F7;
 }
 
 .group-item.active {
-  background-color: var(--active-item-bg);
+  background-color: rgba(0, 122, 255, 0.08);
 }
 
 .avatar-container {
@@ -268,17 +280,18 @@ export default {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 0.5px solid rgba(0, 0, 0, 0.05);
 }
 
 .badge {
   position: absolute;
   bottom: -2px;
   right: -2px;
-  background-color: var(--primary-color);
+  background-color: #007AFF;
   color: white;
   font-size: 10px;
   min-width: 16px;
@@ -288,8 +301,8 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 0 4px;
-  font-weight: 600;
-  border: 2px solid var(--bg-primary);
+  font-weight: 500;
+  border: 1.5px solid #FFFFFF;
 }
 
 .content {
@@ -306,34 +319,36 @@ export default {
 }
 
 .name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   margin: 0;
-  color: var(--text-primary);
+  color: #000000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.2px;
 }
 
 .member-count {
   font-size: 12px;
-  color: var(--text-tertiary);
+  color: #8E8E93;
   white-space: nowrap;
 }
 
 .description {
   margin: 0;
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 13px;
+  color: #8E8E93;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.1px;
 }
 
 .empty-category {
-  padding: 8px 16px;
+  padding: 10px 16px;
   text-align: center;
-  color: var(--text-tertiary);
+  color: #8E8E93;
   font-size: 13px;
   font-style: italic;
 }
@@ -341,7 +356,7 @@ export default {
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;

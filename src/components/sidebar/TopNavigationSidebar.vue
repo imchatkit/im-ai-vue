@@ -75,10 +75,8 @@ export default {
 .top-navigation-sidebar {
   width: 68px;
   height: 100%;
-  background-color: var(--bg-glass-secondary);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border-right: 1px solid var(--border-color);
+  background-color: #F9F9F9;
+  border-right: 0.5px solid #E5E5EA;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,8 +84,8 @@ export default {
   padding: 16px 0;
   position: relative;
   z-index: 100;
-  box-shadow: 1px 0 0 0 var(--border-color-light);
-  transition: all 0.3s ease;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .nav-items {
@@ -101,16 +99,16 @@ export default {
 .nav-item {
   width: 100%;
   height: 52px;
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 8px;
-  color: var(--text-secondary);
+  color: #8E8E93;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
   overflow: hidden;
   flex-direction: column;
@@ -118,15 +116,14 @@ export default {
 }
 
 .nav-item:hover {
-  background-color: var(--hover-color);
-  color: var(--text-primary);
-  transform: translateY(-2px);
+  background-color: #F2F2F7;
+  color: #3C3C43;
+  transform: translateY(-1px);
 }
 
 .nav-item.active {
-  background-color: var(--primary-color);
-  color: white;
-  box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.3);
+  background-color: rgba(0, 122, 255, 0.1);
+  color: #007AFF;
 }
 
 .nav-item.active::before {
@@ -136,25 +133,26 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0));
   border-radius: inherit;
   pointer-events: none;
 }
 
 .nav-icon {
-  font-size: 24px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
+  margin-bottom: 1px;
 }
 
 .nav-item:hover .nav-icon {
-  transform: scale(1.15);
+  transform: scale(1.1);
 }
 
 .nav-item.active .nav-icon {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .icon-chat::before {
@@ -174,15 +172,15 @@ export default {
 }
 
 .nav-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  margin-top: 2px;
-  opacity: 0.95;
+  letter-spacing: -0.2px;
+  margin-top: 1px;
+  opacity: 0.9;
   transition: transform 0.2s ease;
 }
 
 .nav-item:hover .nav-label {
-  transform: translateY(1px);
   opacity: 1;
 }
 
@@ -195,20 +193,19 @@ export default {
 }
 
 .user-avatar {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid var(--border-color);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
+  border: 0.5px solid #E5E5EA;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .user-avatar:hover {
-  transform: scale(1.08);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-color);
+  transform: scale(1.05);
+  border-color: #007AFF;
 }
 
 .avatar-img {
@@ -225,10 +222,13 @@ export default {
     left: 0;
     top: auto;
     width: 100%;
-    height: 60px;
+    height: 54px;
     flex-direction: row;
     padding: 0 12px;
-    box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -0.5px 0 #E5E5EA;
+    background-color: rgba(249, 249, 249, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 200;
   }
 
@@ -240,7 +240,7 @@ export default {
   }
 
   .nav-item {
-    height: 48px;
+    height: 44px;
     border-radius: 8px;
   }
 
@@ -248,6 +248,11 @@ export default {
     margin-top: 0;
     margin-left: 8px;
     padding: 0;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
   }
 }
 </style> 

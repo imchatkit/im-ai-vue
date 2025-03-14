@@ -224,32 +224,37 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-glass-primary);
-  backdrop-filter: blur(var(--blur-sm));
-  -webkit-backdrop-filter: blur(var(--blur-sm));
-  box-shadow: inset 0 0 0 1px var(--border-color);
-  transition: all 0.3s var(--easing-standard);
+  background-color: #FFFFFF;
+  border-right: 0.5px solid #E5E5EA;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .sidebar-header {
-  height: 56px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-glass-primary);
-  transition: padding 0.3s var(--easing-standard), height 0.3s var(--easing-standard);
+  border-bottom: 0.5px solid #E5E5EA;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              padding 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .panel-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: -0.4px;
 }
 
 .panel-title::before {
@@ -257,35 +262,36 @@ export default {
   display: inline-block;
   width: 3px;
   height: 16px;
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  transition: height 0.2s var(--easing-standard), width 0.2s var(--easing-standard);
+  background-color: #007AFF;
+  border-radius: 1.5px;
+  transition: height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .icon-button {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #8E8E93;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .icon-button:hover {
-  color: var(--text-primary);
-  background-color: var(--hover-color);
+  color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.08);
   transform: rotate(90deg);
 }
 
 .sidebar-search {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color);
-  transition: padding 0.3s var(--easing-standard);
+  padding: 10px 16px;
+  border-bottom: 0.5px solid #E5E5EA;
+  transition: padding 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .search-input-wrapper {
@@ -293,62 +299,64 @@ export default {
   align-items: center;
   position: relative;
   width: 100%;
-  background-color: var(--bg-input);
+  background-color: #F2F2F7;
   border-radius: 10px;
   padding: 0 10px;
-  border: 1px solid var(--border-color-light);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid transparent;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
 }
 
 .search-input-wrapper:focus-within {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
-  transform: translateY(-1px);
+  background-color: #FFFFFF;
+  border-color: #C7C7CC;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .search-icon {
   font-size: 14px;
-  color: var(--text-tertiary);
-  margin-right: 8px;
+  color: #8E8E93;
+  margin-right: 6px;
 }
 
 .search-input {
   flex: 1;
   border: none;
   background: transparent;
-  height: 34px;
+  height: 32px;
   padding: 0;
-  font-size: 14px;
-  color: var(--text-primary);
+  font-size: 15px;
+  color: #000000;
   outline: none;
+  font-weight: 400;
 }
 
 .search-input::placeholder {
-  color: var(--text-tertiary);
+  color: #8E8E93;
   opacity: 0.7;
+  font-weight: 400;
 }
 
 .clear-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border: none;
   border-radius: 50%;
-  background-color: var(--text-quaternary);
+  background-color: #C7C7CC;
   color: white;
   font-size: 10px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0.7;
+  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  opacity: 0.8;
 }
 
 .clear-button:hover {
   opacity: 1;
-  background-color: var(--text-tertiary);
-  transform: scale(1.1);
+  background-color: #8E8E93;
+  transform: scale(1.05);
 }
 
 .sidebar-content {
@@ -356,7 +364,8 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: var(--text-quaternary) transparent;
+  scrollbar-color: #C7C7CC transparent;
+  padding-bottom: 8px;
 }
 
 .sidebar-content::-webkit-scrollbar {
@@ -368,8 +377,8 @@ export default {
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-  background-color: var(--text-quaternary);
-  border-radius: 4px;
+  background-color: #C7C7CC;
+  border-radius: 2px;
 }
 
 /* 响应式适配 */
@@ -380,11 +389,11 @@ export default {
   }
   
   .sidebar-header {
-    padding: 0 20px;
+    padding: 0 18px;
   }
   
   .sidebar-search {
-    padding: 12px 20px;
+    padding: 10px 18px;
   }
 }
 </style> 
