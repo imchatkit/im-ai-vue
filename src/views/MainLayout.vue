@@ -452,7 +452,7 @@ const handleResize = () => {
   justify-content: space-between;
   padding: 0 16px;
   border-bottom: 1px solid var(--border-color);
-  background-color: rgba(250, 250, 252, 0.8);
+  background-color: var(--bg-glass-primary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
 }

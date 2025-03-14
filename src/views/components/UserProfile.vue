@@ -110,7 +110,7 @@ const openSettings = () => {
 .user-profile {
   padding: 10px 16px;
   border-bottom: 1px solid var(--border-color);
-  background-color: rgba(250, 250, 252, var(--blur-opacity));
+  background-color: var(--bg-glass-primary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
 }
@@ -156,7 +156,7 @@ const openSettings = () => {
   top: 100%;
   left: 0;
   width: 120px;
-  background-color: rgba(255, 255, 255, var(--blur-opacity));
+  background-color: var(--bg-glass-primary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
   border-radius: var(--radius-lg);
