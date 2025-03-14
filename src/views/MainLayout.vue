@@ -11,6 +11,31 @@ import FilePreviewPanel from './components/FilePreviewPanel.vue'
 import SystemStatusBar from './components/SystemStatusBar.vue'
 import ContactList from './ContactList.vue'
 import ChatWindow from './ChatWindow.vue'
+// import ThemeToggle from '../components/ThemeToggle.vue'
+
+// 主题设置
+const isDarkTheme = ref(false)
+
+// 切换主题
+const toggleTheme = () => {
+  isDarkTheme.value = !isDarkTheme.value
+  const newTheme = isDarkTheme.value ? 'dark' : 'light'
+  document.documentElement.classList.remove('light-theme', 'dark-theme')
+  document.documentElement.classList.add(`${newTheme}-theme`)
+  localStorage.setItem('theme-preference', newTheme)
+}
+
+// 初始化主题
+onMounted(() => {
+  // 从本地存储加载主题偏好
+  const savedTheme = localStorage.getItem('theme-preference')
+  if (savedTheme === 'dark') {
+    isDarkTheme.value = true
+    document.documentElement.classList.add('dark-theme')
+  } else {
+    document.documentElement.classList.add('light-theme')
+  }
+})
 
 // 生成默认头像
 const getDefaultAvatar = (name = 'User', id = '') => {
@@ -143,8 +168,21 @@ onUnmounted(() => {
         </button>
       </div>
       
-      <div class="user-avatar" title="个人资料">
-        <img :src="currentUser.avatar" alt="用户头像" class="avatar-img" />
+      <div class="bottom-nav">
+        <div class="bottom-nav-inner">
+          <button class="theme-toggle-btn" @click="toggleTheme" title="切换主题" style="margin-bottom: 10px;">
+            <svg v-if="isDarkTheme" class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>
+            </svg>
+            <svg v-else class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M9.37 5.51c-.18.64-.27 1.31-.27 1.99 0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27C17.45 17.19 14.93 19 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49zM12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+            </svg>
+          </button>
+          
+          <div class="user-avatar" title="个人资料">
+            <img :src="currentUser.avatar" alt="用户头像" class="avatar-img" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -286,6 +324,54 @@ onUnmounted(() => {
   transition: all 0.3s var(--easing-decelerate);
 }
 
+.bottom-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  position: relative;
+}
+
+.bottom-nav-inner {
+  display: flex !important; /* 使用!important确保不被覆盖 */
+  flex-direction: column !important;
+  align-items: center;
+  gap: 10px;
+  width: 36px;
+}
+
+.theme-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s var(--easing-standard);
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--hover-color);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
 .user-avatar {
   width: 36px;
   height: 36px;
@@ -410,12 +496,27 @@ onUnmounted(() => {
   .nav-button {
     padding: 0 16px;
   }
+  
+  .bottom-nav {
+    width: 100%;
+  }
+  
+  .bottom-nav-inner {
+    flex-direction: column !important;
+    gap: 10px;
+  }
 }
 
 /* 平板设备 (768px-1199px) */
 @media screen and (max-width: 1199px) and (min-width: 769px) {
   .middle-panel {
     width: 240px;
+  }
+  
+  .bottom-nav-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px;
   }
 }
 
@@ -441,8 +542,8 @@ onUnmounted(() => {
     width: 100%;
     height: 60px;
     flex-direction: row;
-    justify-content: space-around;
-    padding: 0;
+    justify-content: space-between;
+    padding: 0 10px;
     z-index: 100;
     box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.1);
   }
@@ -451,7 +552,8 @@ onUnmounted(() => {
     flex-direction: row;
     padding: 8px;
     gap: 8px;
-    justify-content: center;
+    justify-content: flex-start;
+    flex: 1;
   }
   
   .nav-button {
@@ -461,8 +563,33 @@ onUnmounted(() => {
     padding: 0 16px;
   }
   
+  .bottom-nav {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: auto;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+  }
+  
+  .bottom-nav-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .theme-toggle-btn {
+    margin-bottom: 5px;
+    width: 36px;
+    height: 36px;
+  }
+  
   .user-avatar {
-    display: none;
+    width: 36px;
+    height: 36px;
   }
   
   .content-wrapper {
