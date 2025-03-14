@@ -280,7 +280,7 @@ onMounted(() => {
       </div>
       
       <!-- 消息分组 -->
-      <div v-for="group in groupedMessages" :key="group.date" class="message-group">
+      <div v-for="(group, index) in groupedMessages" :key="group.date" class="message-group">
         <!-- 日期分隔线 -->
         <div v-if="showDateDivider" class="date-divider">
           <div class="date-line"></div>
@@ -289,7 +289,7 @@ onMounted(() => {
         </div>
         
         <!-- 消息气泡 -->
-        <div v-for="message in group.messages" :key="message.id" class="message-container">
+        <div v-for="(message, msgIndex) in group.messages" :key="message.id" class="message-container" :style="{ 'animation-delay': `${msgIndex * 0.05}s` }">
           <MessageBubble
             :message="message"
             :isSender="isSender(message)"
@@ -405,35 +405,52 @@ onMounted(() => {
   border-radius: 10px;
 }
 
-.load-more {
+.load-more-container {
   display: flex;
   justify-content: center;
-  padding: 8px 0;
+  align-items: center;
+  padding: 12px 0;
   margin-bottom: 8px;
+  width: 100%;
 }
 
-.load-more-button {
+.load-more-btn {
   background-color: var(--ios-bg-tertiary);
   color: var(--ios-text-secondary);
   border: none;
   padding: 6px 12px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.load-more-button:hover {
+.load-more-btn:hover {
   background-color: var(--ios-accent-color-light);
   color: var(--ios-accent-color);
+  transform: scale(1.05);
 }
 
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
-  color: var(--ios-text-tertiary);
-  font-size: 12px;
+.load-more-btn:active {
+  transform: scale(0.95);
+}
+
+.load-more-btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .input-container {
@@ -559,6 +576,24 @@ onMounted(() => {
   
   .no-contact-content {
     padding: 16px;
+  }
+}
+
+.message-container {
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: slideIn 0.3s ease forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

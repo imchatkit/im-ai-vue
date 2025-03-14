@@ -102,7 +102,7 @@ const scrollToBottom = () => {
         </div>
         
         <!-- 消息气泡 -->
-        <div v-for="(message, index) in group.messages" :key="message.id" class="message-item">
+        <div v-for="(message, index) in group.messages" :key="message.id" class="message-item" :style="{ 'animation-delay': `${index * 0.05}s` }">
           <MessageBubble 
             :message="message"
             :is-sender="isSender(message)"
@@ -135,6 +135,7 @@ const scrollToBottom = () => {
   color: #8E8E93;
   padding: 20px;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  animation: fadeIn 0.5s ease;
 }
 
 .empty-icon {
@@ -143,7 +144,7 @@ const scrollToBottom = () => {
   margin-bottom: 16px;
   background-color: #F2F2F7;
   border-radius: 50%;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
 .empty-messages:hover .empty-icon {
@@ -161,6 +162,7 @@ const scrollToBottom = () => {
   justify-content: center;
   margin: 24px 0;
   position: relative;
+  animation: fadeIn 0.5s ease;
 }
 
 .date-divider::before,
@@ -188,6 +190,7 @@ const scrollToBottom = () => {
   margin-bottom: 8px;
   opacity: 0;
   animation: slideIn 0.3s ease forwards;
+  will-change: transform, opacity;
 }
 
 @keyframes fadeIn {

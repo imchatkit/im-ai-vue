@@ -231,6 +231,7 @@ const formatTime = (timestamp) => {
   overflow: hidden;
   margin: 0 8px;
   flex-shrink: 0;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .avatar-placeholder {
@@ -241,14 +242,20 @@ const formatTime = (timestamp) => {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  border: 0.5px solid var(--ios-border-color);
+  overflow: hidden;
 }
 
-.message-content {
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.content {
   display: flex;
   flex-direction: column;
   position: relative;
