@@ -132,6 +132,22 @@
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.15);
+  
+  /* 确保搜索框在暗黑模式下正确显示 */
+  color-scheme: dark;
+}
+
+/* 确保所有搜索框在暗黑模式下正确显示 */
+.dark-theme input[type="search"],
+.dark-theme input[type="text"] {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dark-theme input[type="search"]::placeholder,
+.dark-theme input[type="text"]::placeholder {
+  color: var(--text-tertiary);
 }
 
 /* 链接样式 */
@@ -499,4 +515,28 @@ input:checked + .theme-toggle-slider:before {
     font-size: 12px;
     padding: 6px 10px;
   }
+}
+
+/* 确保glass-container在暗黑模式下正确显示 */
+.dark-theme .glass-container {
+  background-color: var(--bg-glass-primary);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border-color: var(--border-color);
+}
+
+/* 确保所有面板在暗黑模式下正确显示 */
+.dark-theme .panel-header,
+.dark-theme .user-profile,
+.dark-theme .settings-header {
+  background-color: var(--bg-glass-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* 修复搜索框在暗黑模式下的样式 */
+.dark-theme .search-box input {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
 }

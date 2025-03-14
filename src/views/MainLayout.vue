@@ -9,7 +9,7 @@ import MessageInputPanel from '../components/chat/InputPanel.vue'
 import ChatToolsPanel from './components/ChatToolsPanel.vue'
 import FilePreviewPanel from './components/FilePreviewPanel.vue'
 import SystemStatusBar from './components/SystemStatusBar.vue'
-import ContactList from './ContactList.vue'
+import Sidebar from '../components/sidebar/Sidebar.vue'
 import ChatWindow from './ChatWindow.vue'
 import Settings from './Settings.vue'
 // import ThemeToggle from '../components/ThemeToggle.vue'
@@ -117,6 +117,121 @@ const isSidebarActive = ref(false)
 // 当前屏幕宽度
 const screenWidth = ref(window.innerWidth)
 
+// 联系人数据
+const contactsData = ref([
+  {
+    id: '1',
+    name: '张三',
+    status: 'online',
+    type: 'friend',
+    description: '前端开发工程师'
+  },
+  {
+    id: '2',
+    name: '李四',
+    status: 'busy',
+    type: 'friend',
+    description: '产品经理'
+  },
+  {
+    id: '3',
+    name: '王五',
+    status: 'offline',
+    type: 'stranger',
+    description: '后端开发工程师'
+  },
+  {
+    id: '4',
+    name: '赵六',
+    status: 'online',
+    type: 'friend',
+    description: 'UI设计师'
+  },
+  {
+    id: '5',
+    name: '钱七',
+    status: 'offline',
+    type: 'stranger',
+    description: '产品运营'
+  }
+])
+
+// 群组数据
+const groupsData = ref([
+  {
+    id: '101',
+    name: '研发部',
+    isCreator: true,
+    memberCount: 8,
+    unreadCount: 5,
+    description: '研发部技术交流群'
+  },
+  {
+    id: '102',
+    name: '市场部',
+    isCreator: false,
+    memberCount: 12,
+    unreadCount: 3,
+    description: '市场部日常沟通'
+  },
+  {
+    id: '103',
+    name: '项目A组',
+    isCreator: true,
+    memberCount: 5,
+    description: '项目A开发小组'
+  },
+  {
+    id: '104',
+    name: '设计部',
+    isCreator: false,
+    memberCount: 6,
+    description: '设计部交流群'
+  }
+])
+
+// 最近会话数据
+const recentChatsData = ref([
+  {
+    id: '1',
+    name: '张三',
+    lastMessage: '你好，最近怎么样？',
+    lastMessageTime: Date.now() - 1000 * 60 * 5, // 5分钟前
+    status: 'online',
+    unreadCount: 2,
+    isGroup: false
+  },
+  {
+    id: '101',
+    name: '研发部',
+    lastMessage: '明天开会讨论新功能',
+    lastMessageSender: '李四',
+    lastMessageTime: Date.now() - 1000 * 60 * 30, // 30分钟前
+    unreadCount: 5,
+    isGroup: true,
+    memberCount: 8
+  },
+  {
+    id: '3',
+    name: '王五',
+    lastMessage: '文件已发送',
+    lastMessageTime: Date.now() - 1000 * 60 * 60 * 2, // 2小时前
+    status: 'offline',
+    unreadCount: 0,
+    isGroup: false
+  },
+  {
+    id: '102',
+    name: '市场部',
+    lastMessage: '新的营销方案已经上传',
+    lastMessageSender: '赵六',
+    lastMessageTime: Date.now() - 1000 * 60 * 60, // 1小时前
+    unreadCount: 3,
+    isGroup: true,
+    memberCount: 12
+  }
+])
+
 // 处理选择联系人
 const handleSelectContact = (contact) => {
   currentContact.value = contact
@@ -138,6 +253,47 @@ const handleSelectContact = (contact) => {
       status: 'read'
     }
   ]
+}
+
+// 处理选择群组
+const handleSelectGroup = (group) => {
+  currentContact.value = {
+    ...group,
+    isGroup: true
+  }
+  // 在移动端选择群组后自动关闭侧边栏
+  if (screenWidth.value < 768) {
+    isSidebarActive.value = false
+  }
+  // 清空当前消息列表
+  messages.value = []
+  // 模拟添加示例消息
+  messages.value = [
+    {
+      id: Date.now().toString(),
+      senderId: 'system',
+      receiverId: 'group',
+      content: `欢迎加入${group.name}`,
+      type: 'system',
+      timestamp: Date.now() - 1000 * 60 * 60 * 24 * 7,
+      status: 'read'
+    }
+  ]
+}
+
+// 处理选择最近会话
+const handleSelectChat = (chat) => {
+  if (chat.isGroup) {
+    const group = groupsData.value.find(g => g.id === chat.id);
+    if (group) {
+      handleSelectGroup(group);
+    }
+  } else {
+    const contact = contactsData.value.find(c => c.id === chat.id);
+    if (contact) {
+      handleSelectContact(contact);
+    }
+  }
 }
 
 // 处理发送消息
@@ -250,7 +406,15 @@ const handleResize = () => {
             </button>
           </div>
           
-          <ContactList @select="handleSelectContact" />
+          <!-- 替换ContactList为新的Sidebar组件 -->
+          <Sidebar 
+            :recent-chats-data="recentChatsData" 
+            :contacts-data="contactsData"
+            :groups-data="groupsData"
+            @select-contact="handleSelectContact"
+            @select-group="handleSelectGroup"
+            @select-chat="handleSelectChat"
+          />
         </div>
 
         <!-- 右侧聊天主区域 -->
