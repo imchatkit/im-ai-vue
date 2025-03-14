@@ -11,30 +11,85 @@ import FilePreviewPanel from './components/FilePreviewPanel.vue'
 import SystemStatusBar from './components/SystemStatusBar.vue'
 import ContactList from './ContactList.vue'
 import ChatWindow from './ChatWindow.vue'
+import Settings from './Settings.vue'
 // import ThemeToggle from '../components/ThemeToggle.vue'
 
 // 主题设置
 const isDarkTheme = ref(false)
 
+// 是否显示设置页面
+const showSettings = ref(false)
+
+// 主题管理函数
+const themeManager = {
+  // 应用主题到DOM
+  applyTheme(isDark) {
+    console.log('应用主题:', isDark ? '深色' : '浅色');
+    
+    // 移除所有主题相关的类
+    document.documentElement.classList.remove('dark-theme', 'light-theme');
+    
+    // 添加当前主题类
+    const themeName = isDark ? 'dark-theme' : 'light-theme';
+    document.documentElement.classList.add(themeName);
+    
+    // 保存到本地存储
+    localStorage.setItem('theme-preference', isDark ? 'dark' : 'light');
+  },
+  
+  // 从本地存储加载主题
+  loadTheme() {
+    const savedTheme = localStorage.getItem('theme-preference');
+    console.log('从存储加载主题:', savedTheme);
+    return savedTheme === 'dark';
+  },
+  
+  // 初始化主题
+  initTheme() {
+    const isDark = this.loadTheme();
+    isDarkTheme.value = isDark;
+    this.applyTheme(isDark);
+    console.log('主题初始化完成:', isDark ? '深色' : '浅色');
+  }
+};
+
 // 切换主题
-const toggleTheme = () => {
-  isDarkTheme.value = !isDarkTheme.value
-  const newTheme = isDarkTheme.value ? 'dark' : 'light'
-  document.documentElement.classList.remove('light-theme', 'dark-theme')
-  document.documentElement.classList.add(`${newTheme}-theme`)
-  localStorage.setItem('theme-preference', newTheme)
+const toggleTheme = (themeValue) => {
+  console.log('MainLayout received theme change:', themeValue);
+  
+  // 如果提供了主题值参数，直接使用
+  if (themeValue) {
+    isDarkTheme.value = themeValue === 'dark';
+  } else {
+    // 对于直接调用（不应该发生，因为我们已经移除了左侧栏的直接切换功能）
+    isDarkTheme.value = !isDarkTheme.value;
+  }
+  
+  // 应用主题
+  themeManager.applyTheme(isDarkTheme.value);
+  
+  console.log('Theme updated to:', isDarkTheme.value ? 'dark' : 'light');
+}
+
+// 切换设置页面显示状态
+const toggleSettings = () => {
+  showSettings.value = !showSettings.value
 }
 
 // 初始化主题
 onMounted(() => {
-  // 从本地存储加载主题偏好
-  const savedTheme = localStorage.getItem('theme-preference')
-  if (savedTheme === 'dark') {
-    isDarkTheme.value = true
-    document.documentElement.classList.add('dark-theme')
-  } else {
-    document.documentElement.classList.add('light-theme')
-  }
+  // 初始化主题
+  themeManager.initTheme();
+  
+  // 设置默认头像
+  currentUser.value.avatar = getDefaultAvatar(currentUser.value.name, currentUser.value.id);
+  
+  // 添加事件监听器
+  window.addEventListener('resize', handleResize);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
 })
 
 // 生成默认头像
@@ -48,11 +103,6 @@ const currentUser = ref({
   id: 'current-user-id',
   name: '当前用户',
   avatar: ''
-})
-
-// 设置默认头像
-onMounted(() => {
-  currentUser.value.avatar = getDefaultAvatar(currentUser.value.name, currentUser.value.id)
 })
 
 // 当前选中的联系人
@@ -119,14 +169,6 @@ const handleResize = () => {
     isSidebarActive.value = false
   }
 }
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
 </script>
 
 <template>
@@ -150,7 +192,7 @@ onUnmounted(() => {
         </button>
         <button class="nav-button">
           <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
-            <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
           </svg>
           <span class="nav-label">联系人</span>
         </button>
@@ -160,7 +202,7 @@ onUnmounted(() => {
           </svg>
           <span class="nav-label">搜索</span>
         </button>
-        <button class="nav-button">
+        <button class="nav-button" @click="toggleSettings">
           <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
             <path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
           </svg>
@@ -169,16 +211,7 @@ onUnmounted(() => {
       </div>
       
       <div class="bottom-nav">
-        <div class="bottom-nav-inner">
-          <button class="theme-toggle-btn" @click="toggleTheme" title="切换主题" style="margin-bottom: 10px;">
-            <svg v-if="isDarkTheme" class="icon" viewBox="0 0 24 24" width="16" height="16">
-              <path fill="currentColor" d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>
-            </svg>
-            <svg v-else class="icon" viewBox="0 0 24 24" width="16" height="16">
-              <path fill="currentColor" d="M9.37 5.51c-.18.64-.27 1.31-.27 1.99 0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27C17.45 17.19 14.93 19 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49zM12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
-            </svg>
-          </button>
-          
+        <div class="profile-controls">
           <div class="user-avatar" title="个人资料">
             <img :src="currentUser.avatar" alt="用户头像" class="avatar-img" />
           </div>
@@ -188,27 +221,44 @@ onUnmounted(() => {
 
     <!-- 内容区域包装器 -->
     <div class="content-wrapper">
-      <!-- 中间联系人列表区 -->
-      <div class="middle-panel glass-container" :class="{ 'active': isSidebarActive }">
-        <UserProfile />
-        
-        <div class="panel-header">
-          <h2 class="panel-title">消息</h2>
-          <button class="icon-button">
-            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
-              <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-          </button>
+      <!-- 显示设置页面或聊天内容 -->
+      <template v-if="showSettings">
+        <div class="settings-container">
+          <div class="settings-header">
+            <button class="back-button" @click="toggleSettings">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+              </svg>
+              <span>返回</span>
+            </button>
+            <h1>设置</h1>
+          </div>
+          <Settings @theme-change="toggleTheme" />
         </div>
-        
-        <ContactList @select="handleSelectContact" />
-      </div>
+      </template>
+      <template v-else>
+        <!-- 中间联系人列表区 -->
+        <div class="middle-panel glass-container" :class="{ 'active': isSidebarActive }">
+          <UserProfile />
+          
+          <div class="panel-header">
+            <h2 class="panel-title">消息</h2>
+            <button class="icon-button">
+              <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+                <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+            </button>
+          </div>
+          
+          <ContactList @select="handleSelectContact" />
+        </div>
 
-      <!-- 右侧聊天主区域 -->
-      <div class="main-chat">
-        <ChatHeader :current-contact="currentContact" @toggle-sidebar="toggleSidebar" />
-        <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
-      </div>
+        <!-- 右侧聊天主区域 -->
+        <div class="main-chat">
+          <ChatHeader :current-contact="currentContact" @toggle-sidebar="toggleSidebar" />
+          <ChatWindow :contact="currentContact" :messages="messages" @send="handleSend" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -226,12 +276,14 @@ onUnmounted(() => {
 .content-wrapper {
   display: flex;
   flex: 1;
-  margin-left: var(--sidebar-width);
+  margin-left: var(--sidebar-min-width);
 }
 
 /* 左侧导航栏 - macOS风格 */
 .left-sidebar {
   width: var(--sidebar-width);
+  min-width: var(--sidebar-min-width);
+  max-width: var(--sidebar-max-width);
   background-color: var(--bg-glass-secondary);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
@@ -328,48 +380,18 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
   width: 100%;
-  position: relative;
+  margin-top: auto;
+  padding-bottom: 16px;
 }
 
-.bottom-nav-inner {
-  display: flex !important; /* 使用!important确保不被覆盖 */
-  flex-direction: column !important;
-  align-items: center;
-  gap: 10px;
-  width: 36px;
-}
-
-.theme-toggle-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.profile-controls {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: var(--bg-tertiary);
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.2s var(--easing-standard);
-}
-
-.theme-toggle-btn:hover {
-  background-color: var(--hover-color);
-  color: var(--text-primary);
-  transform: scale(1.05);
-}
-
-.theme-toggle-btn:active {
-  transform: scale(0.95);
-}
-
-.theme-toggle-btn .icon {
-  width: 18px;
-  height: 18px;
+  gap: 12px;
+  width: 100%;
+  max-width: 48px;
 }
 
 .user-avatar {
@@ -385,6 +407,25 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.theme-indicator {
+  font-size: 10px;
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.theme-indicator.dark {
+  background-color: #3A3A3C;
+  color: #EBEBF5;
+}
+
+.theme-indicator.light {
+  background-color: #E5E5EA;
+  color: #4D4D4D;
 }
 
 /* 中间联系人列表区 */
@@ -482,7 +523,7 @@ onUnmounted(() => {
   }
   
   .left-sidebar {
-    width: 160px;
+    width: var(--sidebar-max-width);
   }
   
   .middle-panel {
@@ -490,7 +531,7 @@ onUnmounted(() => {
   }
   
   .content-wrapper {
-    margin-left: 160px;
+    margin-left: var(--sidebar-max-width);
   }
   
   .nav-button {
@@ -500,11 +541,6 @@ onUnmounted(() => {
   .bottom-nav {
     width: 100%;
   }
-  
-  .bottom-nav-inner {
-    flex-direction: column !important;
-    gap: 10px;
-  }
 }
 
 /* 平板设备 (768px-1199px) */
@@ -513,9 +549,8 @@ onUnmounted(() => {
     width: 240px;
   }
   
-  .bottom-nav-inner {
-    display: flex !important;
-    flex-direction: column !important;
+  .profile-controls {
+    flex-direction: column;
     gap: 10px;
   }
 }
@@ -565,8 +600,7 @@ onUnmounted(() => {
   
   .bottom-nav {
     display: flex;
-    flex-direction: column;
-    position: relative;
+    flex-direction: row;
     width: auto;
     height: 100%;
     margin: 0;
@@ -574,22 +608,17 @@ onUnmounted(() => {
     justify-content: center;
   }
   
-  .bottom-nav-inner {
+  .profile-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 5px;
+    justify-content: flex-end;
+    gap: 12px;
+    max-width: none;
   }
   
-  .theme-toggle-btn {
-    margin-bottom: 5px;
-    width: 36px;
-    height: 36px;
-  }
-  
-  .user-avatar {
-    width: 36px;
-    height: 36px;
+  .theme-indicator {
+    display: none;
   }
   
   .content-wrapper {
@@ -619,5 +648,60 @@ onUnmounted(() => {
     margin-bottom: 60px;
     border-radius: 0;
   }
+  
+  .settings-container {
+    padding-bottom: 60px;
+  }
+}
+
+.settings-container {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  overflow-y: auto;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-glass-primary);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.settings-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: var(--transition-base);
+}
+
+.back-button:hover {
+  background-color: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.back-button .icon {
+  width: 20px;
+  height: 20px;
 }
 </style>

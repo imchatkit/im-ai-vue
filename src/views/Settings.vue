@@ -1,7 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { isElectron } from '../modules/electron-bridge'
 import { isWeb, PWASupport } from '../modules/web-adapter'
+
+// 定义emit
+const emit = defineEmits(['theme-change'])
 
 // 主题设置
 const darkMode = ref(false)
@@ -49,11 +52,31 @@ if (isWebEnv.value) {
 
 // 切换主题
 const toggleTheme = () => {
-  darkMode.value = !darkMode.value
-  document.documentElement.classList.toggle('dark-theme', darkMode.value)
+  // 记录当前状态
+  console.log('Settings toggleTheme called, before toggle darkMode:', darkMode.value);
+  
+  // 切换深色模式状态
+  darkMode.value = !darkMode.value;
+  
+  // 记录切换后的状态
+  console.log('After toggle, darkMode is now:', darkMode.value);
+  
+  // 应用主题到DOM
+  const themeValue = darkMode.value ? 'dark' : 'light';
+  
+  // 移除所有主题相关的类
+  document.documentElement.classList.remove('dark-theme', 'light-theme');
+  
+  // 添加当前主题类
+  document.documentElement.classList.add(`${themeValue}-theme`);
   
   // 保存设置到本地存储
-  localStorage.setItem('darkMode', darkMode.value ? 'true' : 'false')
+  localStorage.setItem('theme-preference', themeValue);
+  console.log('Saved theme to localStorage:', themeValue);
+  
+  // 通知父组件主题变化
+  console.log('Emitting theme-change event with value:', themeValue);
+  emit('theme-change', themeValue);
 }
 
 // 切换语言
@@ -94,6 +117,27 @@ const logout = () => {
   // 跳转到登录页
   // router.push('/login')
 }
+
+// 初始化函数
+const initSettings = () => {
+  console.log('Settings组件初始化');
+  
+  // 从本地存储加载主题偏好
+  const savedTheme = localStorage.getItem('theme-preference');
+  console.log('从存储加载主题:', savedTheme);
+  
+  // 设置darkMode状态
+  darkMode.value = savedTheme === 'dark';
+  console.log('初始化darkMode状态:', darkMode.value);
+  
+  // 不在这里修改DOM，避免与MainLayout中的逻辑冲突
+  // 主题的DOM更新由MainLayout统一管理
+}
+
+// 组件挂载时初始化设置
+onMounted(() => {
+  initSettings()
+})
 </script>
 
 <template>
@@ -111,7 +155,11 @@ const logout = () => {
         </div>
         <div class="setting-control">
           <label class="toggle-switch">
-            <input type="checkbox" v-model="darkMode" @change="toggleTheme">
+            <input 
+              type="checkbox" 
+              :checked="darkMode" 
+              @change="toggleTheme"
+            >
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -324,7 +372,7 @@ const logout = () => {
       <div class="about-info">
         <p>IM-AI 即时通讯</p>
         <p>版本: 1.0.0</p>
-        <p>© 2023 IM-AI Team</p>
+        <p>© 2025 IM-AI Team </p>
       </div>
     </section>
   </div>
@@ -335,18 +383,19 @@ const logout = () => {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .settings-title {
   font-size: 24px;
   margin-bottom: 24px;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .settings-section {
   margin-bottom: 32px;
-  background-color: var(--bg-color);
+  background-color: var(--bg-secondary);
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -378,7 +427,7 @@ const logout = () => {
 
 .setting-desc {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
   margin-top: 4px;
 }
 
@@ -402,7 +451,7 @@ const logout = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--border-color);
+  background-color: var(--bg-tertiary);
   border-radius: 24px;
   transition: all .4s ease;
 }
@@ -417,3 +466,42 @@ const logout = () => {
   background-color: white;
   transition: all .4s ease;
 }
+
+input:checked + .toggle-slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(18px);
+}
+
+.action-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.action-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.logout-button {
+  background-color: var(--error-color);
+}
+
+.logout-button:hover {
+  background-color: var(--error-color);
+  opacity: 0.9;
+}
+
+.about-info {
+  padding: 10px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
+</style>

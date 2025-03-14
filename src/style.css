@@ -64,6 +64,8 @@
   
   /* 布局变量 */
   --sidebar-width: 68px;
+  --sidebar-min-width: 68px;
+  --sidebar-max-width: 160px;
   --contact-list-width: 280px;
   --header-height: 48px;
   --footer-height: 48px;
@@ -479,7 +481,11 @@ input:checked + .theme-toggle-slider:before {
 /* 响应式调整 */
 @media screen and (max-width: 768px) {
   :root {
-    --safe-area-inset: 12px;
+    --sidebar-width: 100%;
+    --sidebar-min-width: 100%;
+    --sidebar-max-width: 100%;
+    --safe-area-inset: 8px;
+    --grid-gap: 12px;
     --header-height: 44px;
     --footer-height: 44px;
   }

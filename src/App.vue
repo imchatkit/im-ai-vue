@@ -45,6 +45,8 @@ onMounted(() => {
     // 初始化Web特有功能
     initWebFeatures()
   }
+  
+  // 不再在App.vue中初始化主题，由MainLayout统一管理
 })
 
 // 初始化Electron特有功能
@@ -61,7 +63,7 @@ const initWebFeatures = () => {
 </script>
 
 <template>
-  <div class="app-container" :class="[runningEnvironment, { 'dark-theme': isDarkTheme }]">
+  <div class="app-container" :class="[runningEnvironment]">
     <!-- 主布局 -->
     <main class="main-content">
       <MainLayout />
