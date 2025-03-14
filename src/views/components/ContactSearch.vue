@@ -62,7 +62,7 @@ const clearSearch = () => {
 .icon-search {
   position: absolute;
   left: 10px;
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 .search-input {
@@ -70,7 +70,8 @@ const clearSearch = () => {
   padding: 8px 12px 8px 32px;
   border-radius: 16px;
   border: 1px solid var(--border-color);
-  background-color: #fff;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 14px;
   outline: none;
   transition: border-color 0.3s;
@@ -82,7 +83,7 @@ const clearSearch = () => {
 
 .icon-search,
 .icon-clear {
-  color: #666;
+  color: var(--text-tertiary);
 }
 
 /* 响应式适配 */
