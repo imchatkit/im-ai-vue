@@ -170,7 +170,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   padding: 40px 0;
 }
 
@@ -200,13 +200,13 @@ export default {
   padding: 9px 16px;
   cursor: pointer;
   user-select: none;
-  background-color: #F9F9F9;
+  background-color: var(--ios-bg-secondary);
   margin: 0;
   transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .group-header:hover {
-  background-color: #F2F2F7;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .group-title {
@@ -223,14 +223,14 @@ export default {
   font-size: 13px;
   font-weight: 600;
   margin: 0;
-  color: #000000;
+  color: var(--ios-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.2px;
 }
 
 .toggle-icon {
   font-size: 10px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -259,15 +259,15 @@ export default {
   right: 16px;
   bottom: 0;
   height: 0.5px;
-  background-color: #E5E5EA;
+  background-color: var(--ios-border-color);
 }
 
 .contact-item:hover {
-  background-color: #F2F2F7;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .contact-item.active {
-  background-color: rgba(0, 122, 255, 0.08);
+  background-color: var(--ios-accent-color-light);
 }
 
 .avatar-container {
@@ -280,7 +280,7 @@ export default {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 0.5px solid rgba(0, 0, 0, 0.05);
+  border: 0.5px solid var(--ios-border-color);
 }
 
 .status-indicator {
@@ -290,7 +290,7 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid #FFFFFF;
+  border: 2px solid var(--ios-bg-primary);
 }
 
 .status-indicator.online {
@@ -298,7 +298,7 @@ export default {
 }
 
 .status-indicator.offline {
-  background-color: #8E8E93;
+  background-color: var(--ios-text-tertiary);
 }
 
 .status-indicator.busy {
@@ -321,7 +321,7 @@ export default {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
-  color: #000000;
+  color: var(--ios-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -331,7 +331,7 @@ export default {
 .description {
   margin: 0;
   font-size: 13px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -341,7 +341,7 @@ export default {
 .empty-group {
   padding: 10px 16px;
   text-align: center;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   font-size: 13px;
   font-style: italic;
 }

@@ -224,8 +224,8 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
-  border-right: 0.5px solid #E5E5EA;
+  background-color: var(--ios-bg-primary);
+  border-right: 0.5px solid var(--ios-border-color);
   transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -235,8 +235,8 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 0.5px solid #E5E5EA;
-  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom: 0.5px solid var(--ios-border-color);
+  background-color: var(--ios-bg-primary-translucent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   position: sticky;
@@ -249,7 +249,7 @@ export default {
 .panel-title {
   font-size: 17px;
   font-weight: 600;
-  color: #000000;
+  color: var(--ios-text-primary);
   margin: 0;
   display: flex;
   align-items: center;
@@ -262,7 +262,7 @@ export default {
   display: inline-block;
   width: 3px;
   height: 16px;
-  background-color: #007AFF;
+  background-color: var(--ios-accent-color);
   border-radius: 1.5px;
   transition: height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), 
               width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -278,19 +278,19 @@ export default {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .icon-button:hover {
-  color: #007AFF;
-  background-color: rgba(0, 122, 255, 0.08);
+  color: var(--ios-accent-color);
+  background-color: var(--ios-accent-color-light);
   transform: rotate(90deg);
 }
 
 .sidebar-search {
   padding: 10px 16px;
-  border-bottom: 0.5px solid #E5E5EA;
+  border-bottom: 0.5px solid var(--ios-border-color);
   transition: padding 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -299,7 +299,7 @@ export default {
   align-items: center;
   position: relative;
   width: 100%;
-  background-color: #F2F2F7;
+  background-color: var(--ios-bg-tertiary);
   border-radius: 10px;
   padding: 0 10px;
   border: 0.5px solid transparent;
@@ -308,14 +308,14 @@ export default {
 }
 
 .search-input-wrapper:focus-within {
-  background-color: #FFFFFF;
-  border-color: #C7C7CC;
+  background-color: var(--ios-bg-primary);
+  border-color: var(--ios-border-color-strong);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .search-icon {
   font-size: 14px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   margin-right: 6px;
 }
 
@@ -326,13 +326,13 @@ export default {
   height: 32px;
   padding: 0;
   font-size: 15px;
-  color: #000000;
+  color: var(--ios-text-primary);
   outline: none;
   font-weight: 400;
 }
 
 .search-input::placeholder {
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   opacity: 0.7;
   font-weight: 400;
 }
@@ -345,7 +345,7 @@ export default {
   height: 16px;
   border: none;
   border-radius: 50%;
-  background-color: #C7C7CC;
+  background-color: var(--ios-text-quaternary);
   color: white;
   font-size: 10px;
   cursor: pointer;
@@ -355,7 +355,7 @@ export default {
 
 .clear-button:hover {
   opacity: 1;
-  background-color: #8E8E93;
+  background-color: var(--ios-text-tertiary);
   transform: scale(1.05);
 }
 
@@ -364,7 +364,7 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: #C7C7CC transparent;
+  scrollbar-color: var(--ios-text-quaternary) transparent;
   padding-bottom: 8px;
 }
 
@@ -377,7 +377,7 @@ export default {
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-  background-color: #C7C7CC;
+  background-color: var(--ios-text-quaternary);
   border-radius: 2px;
 }
 
@@ -395,5 +395,35 @@ export default {
   .sidebar-search {
     padding: 10px 18px;
   }
+}
+
+:root {
+  --ios-bg-primary: #FFFFFF;
+  --ios-bg-primary-translucent: rgba(255, 255, 255, 0.8);
+  --ios-bg-secondary: #F9F9F9;
+  --ios-bg-tertiary: #F2F2F7;
+  --ios-text-primary: #000000;
+  --ios-text-secondary: #3C3C43;
+  --ios-text-tertiary: #8E8E93;
+  --ios-text-quaternary: #C7C7CC;
+  --ios-border-color: #E5E5EA;
+  --ios-border-color-strong: #C7C7CC;
+  --ios-accent-color: #007AFF;
+  --ios-accent-color-light: rgba(0, 122, 255, 0.08);
+}
+
+:root.dark-theme {
+  --ios-bg-primary: #1C1C1E;
+  --ios-bg-primary-translucent: rgba(28, 28, 30, 0.8);
+  --ios-bg-secondary: #2C2C2E;
+  --ios-bg-tertiary: #3A3A3C;
+  --ios-text-primary: #FFFFFF;
+  --ios-text-secondary: #EBEBF5;
+  --ios-text-tertiary: #8E8E93;
+  --ios-text-quaternary: #636366;
+  --ios-border-color: #38383A;
+  --ios-border-color-strong: #48484A;
+  --ios-accent-color: #0A84FF;
+  --ios-accent-color-light: rgba(10, 132, 255, 0.15);
 }
 </style> 

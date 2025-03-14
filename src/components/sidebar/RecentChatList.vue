@@ -124,7 +124,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   padding: 40px 0;
 }
 
@@ -160,15 +160,15 @@ export default {
   right: 16px;
   bottom: 0;
   height: 0.5px;
-  background-color: #E5E5EA;
+  background-color: var(--ios-border-color);
 }
 
 .chat-item:hover {
-  background-color: #F2F2F7;
+  background-color: var(--ios-bg-tertiary);
 }
 
 .chat-item.active {
-  background-color: rgba(0, 122, 255, 0.08);
+  background-color: var(--ios-accent-color-light);
 }
 
 .avatar-container {
@@ -181,7 +181,7 @@ export default {
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 0.5px solid rgba(0, 0, 0, 0.05);
+  border: 0.5px solid var(--ios-border-color);
 }
 
 .status-indicator {
@@ -191,7 +191,7 @@ export default {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 2px solid #FFFFFF;
+  border: 2px solid var(--ios-bg-primary);
 }
 
 .status-indicator.online {
@@ -199,7 +199,7 @@ export default {
 }
 
 .status-indicator.offline {
-  background-color: #8E8E93;
+  background-color: var(--ios-text-tertiary);
 }
 
 .status-indicator.busy {
@@ -223,7 +223,7 @@ export default {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
-  color: #000000;
+  color: var(--ios-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -232,12 +232,12 @@ export default {
 
 .name.has-unread {
   font-weight: 600;
-  color: #000000;
+  color: var(--ios-text-primary);
 }
 
 .time {
   font-size: 12px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   white-space: nowrap;
   margin-left: 8px;
 }
@@ -251,7 +251,7 @@ export default {
 .message-preview {
   margin: 0;
   font-size: 13px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -260,17 +260,17 @@ export default {
 }
 
 .message-preview.has-unread {
-  color: #000000;
+  color: var(--ios-text-primary);
   font-weight: 500;
 }
 
 .message-sender {
-  color: #007AFF;
+  color: var(--ios-accent-color);
   font-weight: 500;
 }
 
 .badge {
-  background-color: #007AFF;
+  background-color: var(--ios-accent-color);
   color: white;
   font-size: 12px;
   min-width: 18px;

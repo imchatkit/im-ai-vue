@@ -75,8 +75,8 @@ export default {
 .top-navigation-sidebar {
   width: 68px;
   height: 100%;
-  background-color: #F9F9F9;
-  border-right: 0.5px solid #E5E5EA;
+  background-color: var(--ios-bg-secondary);
+  border-right: 0.5px solid var(--ios-border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,7 +104,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 0 8px;
-  color: #8E8E93;
+  color: var(--ios-text-tertiary);
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -116,14 +116,14 @@ export default {
 }
 
 .nav-item:hover {
-  background-color: #F2F2F7;
-  color: #3C3C43;
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-secondary);
   transform: translateY(-1px);
 }
 
 .nav-item.active {
-  background-color: rgba(0, 122, 255, 0.1);
-  color: #007AFF;
+  background-color: var(--ios-accent-color-light);
+  color: var(--ios-accent-color);
 }
 
 .nav-item.active::before {
@@ -198,14 +198,14 @@ export default {
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  border: 0.5px solid #E5E5EA;
+  border: 0.5px solid var(--ios-border-color);
   transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .user-avatar:hover {
   transform: scale(1.05);
-  border-color: #007AFF;
+  border-color: var(--ios-accent-color);
 }
 
 .avatar-img {
@@ -225,8 +225,8 @@ export default {
     height: 54px;
     flex-direction: row;
     padding: 0 12px;
-    box-shadow: 0 -0.5px 0 #E5E5EA;
-    background-color: rgba(249, 249, 249, 0.94);
+    box-shadow: 0 -0.5px 0 var(--ios-border-color);
+    background-color: var(--ios-bg-secondary-translucent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 200;
@@ -254,5 +254,31 @@ export default {
     width: 32px;
     height: 32px;
   }
+}
+
+:root {
+  --ios-bg-primary: #FFFFFF;
+  --ios-bg-secondary: #F9F9F9;
+  --ios-bg-tertiary: #F2F2F7;
+  --ios-bg-secondary-translucent: rgba(249, 249, 249, 0.94);
+  --ios-text-primary: #000000;
+  --ios-text-secondary: #3C3C43;
+  --ios-text-tertiary: #8E8E93;
+  --ios-border-color: #E5E5EA;
+  --ios-accent-color: #007AFF;
+  --ios-accent-color-light: rgba(0, 122, 255, 0.1);
+}
+
+:root.dark-theme {
+  --ios-bg-primary: #1C1C1E;
+  --ios-bg-secondary: #2C2C2E;
+  --ios-bg-tertiary: #3A3A3C;
+  --ios-bg-secondary-translucent: rgba(44, 44, 46, 0.94);
+  --ios-text-primary: #FFFFFF;
+  --ios-text-secondary: #EBEBF5;
+  --ios-text-tertiary: #8E8E93;
+  --ios-border-color: #38383A;
+  --ios-accent-color: #0A84FF;
+  --ios-accent-color-light: rgba(10, 132, 255, 0.15);
 }
 </style> 
