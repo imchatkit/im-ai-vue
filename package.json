@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "electron:serve": "concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\""
+    "electron:serve": "concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "vite build && electron-builder",
+    "electron:build:win": "vite build && electron-builder --win"
   },
   "dependencies": {
     "vue": "^3.5.13"
@@ -25,5 +27,34 @@
     "tailwindcss": "latest",
     "vite": "^6.2.0",
     "wait-on": "^8.0.2"
+  },
+  "build": {
+    "appId": "com.imai.app",
+    "productName": "IM AI",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "IM AI"
+    }
   }
 }
