@@ -313,13 +313,11 @@ onMounted(() => {
     </div>
     
     <!-- 输入面板 -->
-    <div class="input-container">
-      <InputPanel 
-        :placeholder="`发送消息给 ${contact.name}...`"
-        :maxLength="2000"
-        @send="handleSend"
-      />
-    </div>
+    <InputPanel 
+      :placeholder="`发送消息给 ${contact.name}...`"
+      :maxLength="2000"
+      @send="handleSend"
+    />
   </div>
   
   <!-- 未选择联系人 -->
@@ -341,18 +339,13 @@ onMounted(() => {
   height: 100%;
   background-color: var(--ios-bg-primary);
   position: relative;
-}
-
-.message-list-container {
-  flex: 1;
   overflow: hidden;
-  position: relative;
 }
 
 .message-list {
-  height: 100%;
+  flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 16px 16px 8px 16px;
   display: flex;
   flex-direction: column;
   scrollbar-width: thin;
@@ -384,59 +377,50 @@ onMounted(() => {
   position: relative;
 }
 
-.date-divider::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 0.5px;
+.date-line {
+  flex: 1;
+  height: 1px;
   background-color: var(--ios-border-color);
-  z-index: 1;
 }
 
 .date-text {
-  background-color: var(--ios-bg-primary);
-  padding: 0 12px;
   font-size: 12px;
   color: var(--ios-text-tertiary);
-  position: relative;
-  z-index: 2;
+  margin: 0 10px;
+  padding: 2px 8px;
+  background-color: var(--ios-bg-secondary);
   border-radius: 10px;
+}
+
+.message-container {
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: slideIn 0.3s ease forwards;
+  will-change: transform, opacity;
 }
 
 .load-more-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 12px 0;
-  margin-bottom: 8px;
-  width: 100%;
+  margin-bottom: 16px;
 }
 
 .load-more-btn {
-  background-color: var(--ios-bg-tertiary);
-  color: var(--ios-text-secondary);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  padding: 6px 12px;
+  background-color: var(--ios-bg-secondary);
+  border: 1px solid var(--ios-border-color);
+  border-radius: 14px;
+  font-size: 12px;
+  color: var(--ios-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .load-more-btn:hover {
-  background-color: var(--ios-accent-color-light);
-  color: var(--ios-accent-color);
-  transform: scale(1.05);
-}
-
-.load-more-btn:active {
-  transform: scale(0.95);
+  background-color: var(--ios-bg-tertiary);
 }
 
 .load-more-btn.loading {
@@ -446,19 +430,12 @@ onMounted(() => {
 
 .loading-icon {
   animation: spin 1s linear infinite;
+  margin-right: 6px;
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-.input-container {
-  padding: 8px 16px 16px;
-  border-top: 0.5px solid var(--ios-border-color);
-  background-color: var(--ios-bg-primary);
-  position: relative;
-  z-index: 10;
 }
 
 /* 空状态 */
@@ -560,32 +537,6 @@ onMounted(() => {
   100% { transform: scale(1); opacity: 0.5; }
 }
 
-/* 响应式适配 */
-@media screen and (max-width: 768px) {
-  .message-list {
-    padding: 8px;
-  }
-  
-  .input-container {
-    padding: 4px 8px 8px;
-  }
-  
-  .empty-state {
-    padding: 16px;
-  }
-  
-  .no-contact-content {
-    padding: 16px;
-  }
-}
-
-.message-container {
-  margin-bottom: 8px;
-  opacity: 0;
-  animation: slideIn 0.3s ease forwards;
-  will-change: transform, opacity;
-}
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -594,6 +545,39 @@ onMounted(() => {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 768px) {
+  .message-list {
+    padding: 12px 12px 6px 12px;
+  }
+  
+  .date-divider {
+    margin: 12px 0;
+  }
+  
+  .date-text {
+    font-size: 11px;
+    padding: 1px 6px;
+  }
+  
+  .message-container {
+    margin-bottom: 6px;
+  }
+  
+  .load-more-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  
+  .empty-state {
+    padding: 16px;
+  }
+  
+  .no-contact-content {
+    padding: 16px;
   }
 }
 </style>

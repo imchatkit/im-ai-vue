@@ -274,37 +274,40 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="input-panel">
-    <div class="input-toolbar">
-      <div class="toolbar-left">
+  <div class="chat-input-panel">
+    <!-- 表情包和图标工具栏 -->
+    <div class="icons-toolbar">
+      <div class="icons-group">
         <button 
-          class="toolbar-btn emoji-btn" 
+          class="icon-btn emoji-btn" 
           title="表情"
           @click="toggleEmojiPicker"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
             <line x1="9" y1="9" x2="9.01" y2="9"></line>
             <line x1="15" y1="9" x2="15.01" y2="9"></line>
           </svg>
         </button>
+        
         <button 
-          class="toolbar-btn history-btn" 
+          class="icon-btn history-btn" 
           title="历史记录"
           @click="toggleHistoryPanel"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
         </button>
+        
         <button 
-          class="toolbar-btn file-btn" 
+          class="icon-btn file-btn" 
           title="发送文件"
           @click="selectFile"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
             <polyline points="13 2 13 9 20 9"></polyline>
           </svg>
@@ -312,8 +315,9 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="input-container">
-      <div class="input-wrapper">
+    <!-- 聊天输入区域 -->
+    <div class="input-area">
+      <div class="input-container">
         <textarea
           ref="messageInput"
           v-model="messageText"
@@ -367,7 +371,7 @@ onUnmounted(() => {
       <div class="history-header">
         <h3>历史记录</h3>
         <button class="close-btn" @click="toggleHistoryPanel">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -402,79 +406,107 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.input-panel {
+.chat-input-panel {
   width: 100%;
   position: relative;
   background-color: var(--ios-bg-primary);
-  border-top: 0.5px solid var(--ios-border-color);
-  padding: 8px 0;
+  border-top: 1px solid var(--ios-border-color);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.input-toolbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 12px 8px;
+/* 表情包和图标工具栏 */
+.icons-toolbar {
+  width: 100%;
+  margin-bottom: 8px;
 }
 
-.toolbar-left {
+.icons-group {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.toolbar-btn {
-  width: 32px;
-  height: 32px;
+.icon-btn {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  color: var(--ios-text-tertiary);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.toolbar-btn:hover {
   background-color: var(--ios-bg-tertiary);
   color: var(--ios-text-secondary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.toolbar-btn:active {
+.icon-btn:hover {
+  background-color: var(--ios-bg-quaternary);
+  color: var(--ios-text-primary);
+  transform: translateY(-1px);
+}
+
+.icon-btn:active {
   transform: scale(0.95);
 }
 
-.input-container {
+/* 聊天输入区域 */
+.input-area {
+  width: 100%;
   display: flex;
   align-items: flex-end;
-  padding: 0 12px;
+  gap: 8px;
+}
+
+.input-container {
+  flex: 1;
   position: relative;
 }
 
-.input-wrapper {
-  flex: 1;
-  position: relative;
-  margin-right: 10px;
+.input-container::after {
+  content: "可拖动调整高度";
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  font-size: 10px;
+  color: var(--ios-text-tertiary);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.input-container:hover::after {
+  opacity: 1;
 }
 
 .message-input {
   width: 100%;
   min-height: 36px;
   max-height: 120px;
-  padding: 8px 12px;
+  padding: 8px 12px 18px 12px;
   border-radius: 18px;
   background-color: var(--ios-bg-tertiary);
-  border: none;
+  border: 1px solid var(--ios-border-color);
   outline: none;
-  resize: none;
+  resize: vertical;
   font-size: 14px;
   line-height: 1.4;
   color: var(--ios-text-primary);
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ios-text-quaternary) transparent;
-  box-shadow: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.message-input:focus {
+  border-color: var(--ios-accent-color-lighter);
+  box-shadow: 0 1px 5px rgba(var(--ios-accent-color-rgb), 0.2);
 }
 
 .message-input::-webkit-scrollbar {
@@ -490,12 +522,6 @@ onUnmounted(() => {
   border-radius: 2px;
 }
 
-.message-input:focus {
-  background-color: var(--ios-bg-tertiary);
-  border: none;
-  box-shadow: none;
-}
-
 .message-input::placeholder {
   color: var(--ios-text-tertiary);
   opacity: 0.7;
@@ -504,6 +530,7 @@ onUnmounted(() => {
 .send-button {
   width: 36px;
   height: 36px;
+  min-width: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -512,11 +539,11 @@ onUnmounted(() => {
   color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: all 0.2s ease;
   opacity: 0.5;
   pointer-events: none;
-  margin-bottom: 0;
-  align-self: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1px;
 }
 
 .send-button.active {
@@ -526,43 +553,56 @@ onUnmounted(() => {
 
 .send-button.active:hover {
   transform: scale(1.05);
-}
-
-.send-button.active:active {
-  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(var(--ios-accent-color-rgb), 0.3);
 }
 
 /* 表情选择器 */
 .emoji-picker {
   position: absolute;
-  bottom: 100%;
+  top: 46px;
   left: 12px;
-  margin-bottom: 8px;
   background-color: var(--ios-bg-primary);
-  border-radius: 16px;
-  border: 0.5px solid var(--ios-border-color);
+  border-radius: 12px;
+  border: 1px solid var(--ios-border-color);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  padding: 12px;
+  padding: 10px;
   z-index: 100;
-  animation: slideUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation: fadeIn 0.2s ease;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ios-text-quaternary) transparent;
+}
+
+.emoji-picker::-webkit-scrollbar {
+  width: 4px;
+}
+
+.emoji-picker::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.emoji-picker::-webkit-scrollbar-thumb {
+  background-color: var(--ios-text-quaternary);
+  border-radius: 2px;
 }
 
 .emoji-grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
 }
 
 .emoji-item {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 18px;
   cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .emoji-item:hover {
@@ -577,56 +617,55 @@ onUnmounted(() => {
 /* 历史记录面板 */
 .history-panel {
   position: absolute;
-  bottom: 100%;
-  left: 12px;
-  margin-bottom: 8px;
+  top: 46px;
+  left: 50px;
   background-color: var(--ios-bg-primary);
-  border-radius: 16px;
-  border: 0.5px solid var(--ios-border-color);
+  border-radius: 12px;
+  border: 1px solid var(--ios-border-color);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  max-height: 400px;
+  width: 260px;
+  max-height: 280px;
   z-index: 100;
-  animation: slideUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   overflow: hidden;
+  animation: fadeIn 0.2s ease;
 }
 
 .history-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 0.5px solid var(--ios-border-color);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ios-border-color);
 }
 
 .history-header h3 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--ios-text-primary);
   margin: 0;
 }
 
 .close-btn {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  background-color: var(--ios-bg-tertiary);
   color: var(--ios-text-tertiary);
   border: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: all 0.2s ease;
 }
 
 .close-btn:hover {
-  background-color: var(--ios-bg-tertiary);
-  color: var(--ios-text-secondary);
+  background-color: var(--ios-bg-quaternary);
+  color: var(--ios-text-primary);
 }
 
 .history-content {
-  max-height: 350px;
+  max-height: 230px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--ios-text-quaternary) transparent;
@@ -646,19 +685,19 @@ onUnmounted(() => {
 }
 
 .empty-history {
-  padding: 24px 16px;
+  padding: 16px 12px;
   text-align: center;
   color: var(--ios-text-tertiary);
 }
 
 .history-list {
-  padding: 8px 0;
+  padding: 6px 0;
 }
 
 .history-item {
-  padding: 10px 16px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: all 0.2s ease;
 }
 
 .history-item:hover {
@@ -666,8 +705,9 @@ onUnmounted(() => {
 }
 
 .history-text {
-  margin: 0 0 4px;
-  font-size: 14px;
+  margin: 0 0 3px;
+  font-size: 13px;
+  line-height: 1.4;
   color: var(--ios-text-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -675,54 +715,81 @@ onUnmounted(() => {
 }
 
 .history-time {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ios-text-tertiary);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
-  .input-toolbar {
-    padding: 0 8px 6px;
+  .chat-input-panel {
+    padding: 6px 10px;
   }
   
-  .toolbar-btn {
+  .icons-toolbar {
+    margin-bottom: 6px;
+  }
+  
+  .icons-group {
+    gap: 10px;
+  }
+  
+  .icon-btn {
     width: 28px;
     height: 28px;
   }
   
-  .input-container {
-    padding: 0 8px;
+  .icon-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .input-area {
+    gap: 6px;
   }
   
   .message-input {
-    min-height: 32px;
-    padding: 6px 10px;
-    font-size: 13px;
+    min-height: 34px;
+    max-height: 100px;
+    padding: 7px 10px 16px 10px;
+    font-size: 14px;
   }
   
   .send-button {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+  
+  .send-button svg {
+    width: 18px;
+    height: 18px;
   }
   
   .emoji-grid {
     grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
   }
   
   .emoji-item {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
   
   .history-panel {
-    width: calc(100% - 24px);
-    max-height: 300px;
+    width: 240px;
+    left: 40px;
+  }
+  
+  .emoji-picker,
+  .history-panel {
+    top: 42px;
+    max-height: 240px;
   }
 }
 </style>
