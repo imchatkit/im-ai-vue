@@ -6,7 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+dist_electron
+dist_electron_new
 node_modules
 dist
 dist-ssr

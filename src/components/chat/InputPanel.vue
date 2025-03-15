@@ -2,7 +2,7 @@
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { MessageType } from '../../modules/im-core'
 import { isElectron } from '../../modules/electron-bridge'
-import { isWeb, FileSystemAccess as WebFileAccess } from '../../modules/web-adapter'
+import { isWeb } from '../../modules/web-adapter'
 
 // 定义组件属性
 const props = defineProps({

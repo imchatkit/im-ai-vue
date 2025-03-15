@@ -1,13 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';" />
+    <title>IM AI</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <div id="app">
+      <!-- 加载指示器 -->
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
+        <h1 style="margin-bottom: 20px;">IM AI 正在加载...</h1>
+        <div style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+      </div>
+    </div>
+    <script>
+      // 添加加载动画的样式
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // 记录加载时间
+      console.log('HTML文档加载时间:', new Date().toISOString());
+    </script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

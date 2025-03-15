@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
 import { isElectron } from '../../modules/electron-bridge'
-import { WindowManager } from '../../modules/electron-bridge'
 
 // 生成默认头像的函数
 const getDefaultAvatar = (name = '', id = '', isGroup = false) => {
@@ -84,11 +83,13 @@ const openMoreOptions = () => {
 // 在新窗口打开聊天（仅Electron环境）
 const openInNewWindow = () => {
   if (isElectron() && props.currentContact) {
-    WindowManager.createNewWindow(`/chat/${props.currentContact.id}`, {
-      width: 800,
-      height: 600,
-      title: `聊天 - ${props.currentContact.name}`
-    })
+    // 暂时注释掉这个功能，因为WindowManager未定义
+    console.log('在新窗口打开聊天功能暂未实现');
+    // WindowManager.createNewWindow(`/chat/${props.currentContact.id}`, {
+    //   width: 800,
+    //   height: 600,
+    //   title: `聊天 - ${props.currentContact.name}`
+    // })
   }
 }
 </script>

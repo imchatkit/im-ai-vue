@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { isElectron } from '../modules/electron-bridge'
-import { isWeb, PWASupport } from '../modules/web-adapter'
+import { isWeb, isPwaSupported, isPwaInstallable } from '../modules/web-adapter'
 
 // 定义emit
 const emit = defineEmits(['theme-change'])
@@ -45,9 +45,15 @@ const isElectronEnv = computed(() => isElectron())
 const isWebEnv = computed(() => isWeb())
 
 // PWA支持
-const pwaSupport = ref(null)
+const pwaSupport = ref({
+  supported: false,
+  installable: false
+})
+
+// 检查PWA支持
 if (isWebEnv.value) {
-  pwaSupport.value = new PWASupport()
+  pwaSupport.value.supported = isPwaSupported()
+  pwaSupport.value.installable = isPwaInstallable()
 }
 
 // 切换主题

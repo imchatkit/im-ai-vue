@@ -12,5 +12,5 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 
 ```
 
-npm run electron:build:win
+npm run electron:build:win:no-publish
 ```

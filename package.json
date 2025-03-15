@@ -4,13 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "main": "electron/main.cjs",
+  "author": "IM AI Team",
+  "description": "IM AI - 智能聊天应用",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "electron:serve": "concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\"",
     "electron:build": "vite build && electron-builder",
-    "electron:build:win": "vite build && electron-builder --win"
+    "electron:build:win": "vite build && electron-builder --win",
+    "electron:build:win:clean": "rimraf dist_electron && vite build && electron-builder --win",
+    "electron:build:win:no-publish": "vite build && electron-builder --win --publish never",
+    "electron:build:win:debug": "set DEBUG=electron-builder && vite build && electron-builder --win --publish never",
+    "electron:build:win:simple": "vite build && cross-env NODE_ENV=production electron-builder --win --dir --publish never"
   },
   "dependencies": {
     "vue": "^3.5.13"
@@ -21,9 +27,11 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "electron": "^35.0.1",
     "electron-builder": "^25.1.8",
     "postcss": "^8.5.3",
+    "rimraf": "^6.0.1",
     "tailwindcss": "latest",
     "vite": "^6.2.0",
     "wait-on": "^8.0.2"
@@ -32,12 +40,21 @@
     "appId": "com.imai.app",
     "productName": "IM AI",
     "directories": {
-      "output": "dist_electron"
+      "output": "dist_electron_new"
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "electron/**/*",
+      "package.json"
     ],
+    "extraResources": [
+      {
+        "from": "dist",
+        "to": "dist"
+      }
+    ],
+    "asar": false,
+    "removePackageScripts": true,
     "win": {
       "target": [
         {
@@ -47,14 +64,23 @@
           ]
         }
       ],
-      "icon": "public/icon.ico"
+      "icon": "public/icon.ico",
+      "forceCodeSigning": false,
+      "artifactName": "${productName}-Setup-${version}.${ext}",
+      "publisherName": "IM AI Team",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "IM AI"
+      "shortcutName": "IM AI",
+      "perMachine": false,
+      "differentialPackage": false
+    },
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
     }
   }
 }

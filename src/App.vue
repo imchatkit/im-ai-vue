@@ -1,74 +1,66 @@
 <script setup>
-import MainLayout from './views/MainLayout.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { isElectron } from './modules/electron-bridge'
 import { isWeb } from './modules/web-adapter'
 
 // 检测运行环境
 const runningEnvironment = ref('web')
-
-// 计算窗口控制按钮的可见性
-const showWindowControls = computed(() => {
-  return runningEnvironment.value === 'electron'
+const message = ref('欢迎使用IM AI应用')
+const debugInfo = ref({
+  isElectron: false,
+  electronDebug: null,
+  windowSize: '',
+  userAgent: ''
 })
 
-
-// 窗口控制函数
-const minimizeWindow = () => {
-  if (isElectron()) {
-    window.electronAPI.minimizeWindow()
-  }
-}
-
-const maximizeWindow = () => {
-  if (isElectron()) {
-    window.electronAPI.maximizeWindow()
-  }
-}
-
-const closeWindow = () => {
-  if (isElectron()) {
-    window.electronAPI.closeWindow()
-  }
-}
-
 onMounted(() => {
+  console.log('App.vue组件已挂载')
+  
+  // 收集调试信息
+  if (typeof window !== 'undefined') {
+    debugInfo.value.windowSize = `${window.innerWidth}x${window.innerHeight}`
+    debugInfo.value.userAgent = navigator.userAgent
+    
+    if (window.electronDebug) {
+      debugInfo.value.electronDebug = window.electronDebug
+    }
+  }
+  
   // 根据运行环境设置相应的配置
   if (isElectron()) {
     runningEnvironment.value = 'electron'
+    message.value = '当前在Electron环境中运行'
+    debugInfo.value.isElectron = true
     console.log('Running in Electron environment')
-    // 初始化Electron特有功能
-    initElectronFeatures()
+    
+    // 如果electron对象存在，获取版本信息
+    if (window.electron && window.electron.versions) {
+      debugInfo.value.versions = window.electron.versions
+    }
   } else if (isWeb()) {
     runningEnvironment.value = 'web'
+    message.value = '当前在Web环境中运行'
     console.log('Running in Web environment')
-    // 初始化Web特有功能
-    initWebFeatures()
   }
-  
-  // 不再在App.vue中初始化主题，由MainLayout统一管理
 })
-
-// 初始化Electron特有功能
-const initElectronFeatures = () => {
-  // 这里可以初始化托盘、窗口管理等Electron特有功能
-  // 实际项目中应该从electron-bridge模块导入相关功能
-}
-
-// 初始化Web特有功能
-const initWebFeatures = () => {
-  // 这里可以初始化PWA、通知等Web特有功能
-  // 实际项目中应该从web-adapter模块导入相关功能
-}
 </script>
 
 <template>
   <div class="app-container" :class="[runningEnvironment]">
-    <!-- 主布局 -->
-    <main class="main-content">
-      <MainLayout />
-    </main>
-  
+    <div class="test-content">
+      <h1>IM AI 应用</h1>
+      <p>{{ message }}</p>
+      <div class="environment-info">
+        <p>运行环境: {{ runningEnvironment }}</p>
+        <p>版本: 0.0.0</p>
+      </div>
+      
+      <!-- 调试信息 -->
+      <div class="debug-section">
+        <h2>调试信息</h2>
+        <pre>{{ JSON.stringify(debugInfo, null, 2) }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -84,122 +76,102 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--ios-text-primary);
-  background-color: var(--ios-bg-primary);
+  color: #333;
+  background-color: #f5f5f5;
 }
 
 .app-container {
   width: 100%;
   height: 100vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: var(--ios-bg-primary);
-  position: relative;
-}
-
-/* 主内容区域 */
-.main-content {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-/* 主题切换按钮 */
-.theme-toggle-btn {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--ios-bg-tertiary);
-  color: var(--ios-text-secondary);
-  border: none;
-  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  background-color: #f5f5f5;
+  position: relative;
 }
 
-.theme-toggle-btn:hover {
-  background-color: var(--ios-accent-color-light);
-  color: var(--ios-accent-color);
-  transform: scale(1.05);
+.test-content {
+  text-align: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 90%;
 }
 
-/* 图标样式 */
-.icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  color: currentColor;
+h1 {
+  margin-bottom: 1rem;
+  color: #007aff;
 }
 
-/* 响应式适配 */
-@media (max-width: 768px) {
-  .theme-toggle-btn {
-    bottom: 70px; /* 避免与底部导航栏重叠 */
+h2 {
+  margin: 1.5rem 0 0.5rem;
+  color: #007aff;
+  font-size: 1.2rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+.environment-info {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.debug-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  text-align: left;
+}
+
+pre {
+  background-color: #f0f0f0;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #f5f5f5;
+    background-color: #333;
   }
-}
-
-/* iOS风格的CSS变量 - 全局定义 */
-:root {
-  --ios-bg-primary: #FFFFFF;
-  --ios-bg-primary-translucent: rgba(255, 255, 255, 0.8);
-  --ios-bg-secondary: #F9F9F9;
-  --ios-bg-tertiary: #F2F2F7;
-  --ios-text-primary: #000000;
-  --ios-text-secondary: #3C3C43;
-  --ios-text-tertiary: #8E8E93;
-  --ios-text-quaternary: #C7C7CC;
-  --ios-border-color: #E5E5EA;
-  --ios-border-color-strong: #C7C7CC;
-  --ios-accent-color: #007AFF;
-  --ios-accent-color-light: rgba(0, 122, 255, 0.08);
   
-  /* 兼容旧变量 */
-  --bg-primary: var(--ios-bg-primary);
-  --bg-secondary: var(--ios-bg-secondary);
-  --bg-tertiary: var(--ios-bg-tertiary);
-  --bg-quaternary: var(--ios-bg-tertiary);
-  --text-primary: var(--ios-text-primary);
-  --text-secondary: var(--ios-text-secondary);
-  --text-tertiary: var(--ios-text-tertiary);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --transition-base: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-:root.dark-theme {
-  --ios-bg-primary: #1C1C1E;
-  --ios-bg-primary-translucent: rgba(28, 28, 30, 0.8);
-  --ios-bg-secondary: #2C2C2E;
-  --ios-bg-tertiary: #3A3A3C;
-  --ios-text-primary: #FFFFFF;
-  --ios-text-secondary: #EBEBF5;
-  --ios-text-tertiary: #8E8E93;
-  --ios-text-quaternary: #636366;
-  --ios-border-color: #38383A;
-  --ios-border-color-strong: #48484A;
-  --ios-accent-color: #0A84FF;
-  --ios-accent-color-light: rgba(10, 132, 255, 0.15);
+  .app-container {
+    background-color: #333;
+  }
   
-  /* 兼容旧变量 */
-  --bg-primary: var(--ios-bg-primary);
-  --bg-secondary: var(--ios-bg-secondary);
-  --bg-tertiary: var(--ios-bg-tertiary);
-  --bg-quaternary: var(--ios-bg-tertiary);
-  --text-primary: var(--ios-text-primary);
-  --text-secondary: var(--ios-text-secondary);
-  --text-tertiary: var(--ios-text-tertiary);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* 平滑过渡效果 */
-body, .app-container, * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  .test-content {
+    background-color: #444;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  h1, h2 {
+    color: #0a84ff;
+  }
+  
+  .environment-info {
+    border-top: 1px solid #555;
+    color: #aaa;
+  }
+  
+  .debug-section {
+    border-top: 1px solid #555;
+  }
+  
+  pre {
+    background-color: #333;
+    color: #f5f5f5;
+  }
 }
 </style>
