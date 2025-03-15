@@ -75,13 +75,6 @@ const sendTextMessage = () => {
   messageText.value = ''
   // 重置状态
   isTyping.value = false
-  
-  // 重置输入框高度
-  nextTick(() => {
-    if (messageInput.value) {
-      messageInput.value.style.height = 'auto'
-    }
-  })
 }
 
 // 保存消息到历史记录
@@ -147,8 +140,8 @@ const handleInput = () => {
 const autoResizeTextarea = () => {
   if (!messageInput.value) return
   
-  messageInput.value.style.height = 'auto'
-  messageInput.value.style.height = `${Math.min(messageInput.value.scrollHeight, 120)}px`
+  // 不再调整高度，只处理输入事件
+  // 高度已固定，只需确保滚动条正常工作
 }
 
 // 处理按键事件
@@ -411,7 +404,7 @@ onUnmounted(() => {
   position: relative;
   background-color: var(--ios-bg-primary);
   border-top: 1px solid var(--ios-border-color);
-  padding: 8px 12px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -420,7 +413,7 @@ onUnmounted(() => {
 /* 表情包和图标工具栏 */
 .icons-toolbar {
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .icons-group {
@@ -466,37 +459,17 @@ onUnmounted(() => {
   position: relative;
 }
 
-.input-container::after {
-  content: "可拖动调整高度";
-  position: absolute;
-  right: 8px;
-  bottom: 4px;
-  font-size: 10px;
-  color: var(--ios-text-tertiary);
-  opacity: 0.6;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 1px 3px;
-  border-radius: 3px;
-}
-
-.input-container:hover::after {
-  opacity: 1;
-}
-
 .message-input {
   width: 100%;
-  min-height: 36px;
-  max-height: 120px;
-  padding: 8px 12px 18px 12px;
+  height: 120px;
+  padding: 12px 15px;
   border-radius: 18px;
   background-color: var(--ios-bg-tertiary);
   border: 1px solid var(--ios-border-color);
   outline: none;
-  resize: vertical;
-  font-size: 14px;
-  line-height: 1.4;
+  resize: none;
+  font-size: 15px;
+  line-height: 1.5;
   color: var(--ios-text-primary);
   overflow-y: auto;
   transition: all 0.2s ease;
@@ -528,9 +501,9 @@ onUnmounted(() => {
 }
 
 .send-button {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -543,7 +516,7 @@ onUnmounted(() => {
   opacity: 0.5;
   pointer-events: none;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1px;
+  margin-bottom: 10px;
 }
 
 .send-button.active {
@@ -559,7 +532,7 @@ onUnmounted(() => {
 /* 表情选择器 */
 .emoji-picker {
   position: absolute;
-  top: 46px;
+  top: 50px;
   left: 12px;
   background-color: var(--ios-bg-primary);
   border-radius: 12px;
@@ -617,7 +590,7 @@ onUnmounted(() => {
 /* 历史记录面板 */
 .history-panel {
   position: absolute;
-  top: 46px;
+  top: 50px;
   left: 50px;
   background-color: var(--ios-bg-primary);
   border-radius: 12px;
@@ -727,11 +700,11 @@ onUnmounted(() => {
 /* 响应式适配 */
 @media screen and (max-width: 768px) {
   .chat-input-panel {
-    padding: 6px 10px;
+    padding: 8px 10px;
   }
   
   .icons-toolbar {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   
   .icons-group {
@@ -753,16 +726,16 @@ onUnmounted(() => {
   }
   
   .message-input {
-    min-height: 34px;
-    max-height: 100px;
-    padding: 7px 10px 16px 10px;
+    height: 50px;
+    padding: 10px 12px;
     font-size: 14px;
   }
   
   .send-button {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    margin-bottom: 7px;
   }
   
   .send-button svg {
@@ -788,7 +761,7 @@ onUnmounted(() => {
   
   .emoji-picker,
   .history-panel {
-    top: 42px;
+    top: 45px;
     max-height: 240px;
   }
 }
