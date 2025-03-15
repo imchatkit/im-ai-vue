@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "electron:serve": "concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\""
+    "electron:serve": "cross-env NODE_ENV=development concurrently -k \"vite dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "vite build && electron-builder",
+    "electron:build:win": "cross-env NODE_ENV=production ELECTRON_NODE_ENV=production ELECTRON_CACHE=./electron_cache ELECTRON_BUILDER_CACHE=./electron_cache vite build && electron-builder --win"
   },
   "dependencies": {
     "vue": "^3.5.13"
@@ -19,6 +21,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "electron": "^35.0.1",
     "electron-builder": "latest",
     "electron-builder-squirrel-windows": "^25.1.8",
@@ -26,5 +29,33 @@
     "tailwindcss": "latest",
     "vite": "^6.2.0",
     "wait-on": "^8.0.2"
+  },
+  "build": {
+    "appId": "com.imai.app",
+    "productName": "IM-AI",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
