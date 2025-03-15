@@ -3,8 +3,8 @@ const path = require('path')
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 840,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -20,7 +20,7 @@ function createWindow() {
 
   // 在开发环境下打开开发者工具
   if (process.env.NODE_ENV === 'development') {
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   }
 }
 
