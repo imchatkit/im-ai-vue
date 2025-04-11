@@ -9,7 +9,7 @@ on:
 env:
   DOCKER_REGISTRY: useccr.ccs.tencentyun.com
   DOCKER_NAMESPACE: vue-im-ai
-  NODE_VERSION: '16'
+  NODE_VERSION: '22'
 
 jobs:
   build:
