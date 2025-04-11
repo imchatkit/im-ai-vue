@@ -1,5 +1,4 @@
 <script setup>
-import MainLayout from './views/MainLayout.vue'
 import { ref, onMounted, computed } from 'vue'
 import { isElectron } from './modules/electron-bridge'
 import { isWeb } from './modules/web-adapter'
@@ -66,7 +65,7 @@ const initWebFeatures = () => {
   <div class="app-container" :class="[runningEnvironment]">
     <!-- 主布局 -->
     <main class="main-content">
-      <MainLayout />
+      <router-view />
     </main>
   
   </div>

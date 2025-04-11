@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  im-ai-vue:
+    image: ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/im-ai-vue:latest
+    container_name: im-ai-vue
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - im-network
+
+networks:
+  im-network:
+    external: true 

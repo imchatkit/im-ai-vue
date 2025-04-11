@@ -1,0 +1,10 @@
+# Docker镜像仓库配置
+DOCKER_REGISTRY=useccr.ccs.tencentyun.com
+DOCKER_NAMESPACE=vue-im-ai
+
+# 后端服务地址配置
+API_BASE_URL=http://im-core-server:8080
+API_APP_KEY=keyAbcd123
+
+# 时区设置
+TZ=Asia/Shanghai 

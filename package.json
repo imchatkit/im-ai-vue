@@ -13,7 +13,9 @@
     "electron:build:win": "cross-env NODE_ENV=production ELECTRON_NODE_ENV=production ELECTRON_CACHE=./electron_cache ELECTRON_BUILDER_CACHE=./electron_cache vite build && electron-builder --win"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "axios": "^1.6.7",
+    "vue": "^3.5.13",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@electron/remote": "^2.1.2",
