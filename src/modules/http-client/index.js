@@ -66,10 +66,10 @@ export class ApiService {
   /**
    * 用户登录
    * @param {string} userId - 用户ID
-   * @param {string} device - 设备类型，默认为im_app_web
+   * @param {string} device - 设备类型，默认为im_web
    * @returns {Promise<Object>} - 登录结果，包含用户信息和token
    */
-  static async login(userId, device = 'im_app_web') {
+  static async login(userId, device = 'im_web') {
     const result = await httpClient.post('/openapi/v1/user/login', {
       userId,
       device
