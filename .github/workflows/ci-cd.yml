@@ -161,34 +161,36 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "===开始执行部署脚本==="
             cd /home/${{ secrets.SSH_USERNAME }}/im-ai-vue-deploy
             chmod +x deploy.sh
-            
-            # 确保Docker Compose已安装
-            if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-              echo "正在安装Docker Compose..."
-              sudo curl -L "https://github.com/docker/compose/releases/download/v2.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-            fi
             
             # 设置环境变量
             export DOCKER_REGISTRY=${{ env.DOCKER_REGISTRY }}
             export DOCKER_NAMESPACE=${{ env.DOCKER_NAMESPACE }}
             export REGISTRY_USERNAME=${{ secrets.TENCENT_REGISTRY_USERNAME }}
             export REGISTRY_PASSWORD=${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+            export IMAGE_TAG=${{ github.sha }}
             
-            # 登录到腾讯云容器服务
-            echo $REGISTRY_PASSWORD | docker login $DOCKER_REGISTRY -u $REGISTRY_USERNAME --password-stdin
+            echo "登录到腾讯云容器服务..."
+            # 使用-p而不是--password-stdin以避免管道问题
+            docker login $DOCKER_REGISTRY -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
             
-            # 拉取最新镜像
-            docker pull $DOCKER_REGISTRY/$DOCKER_NAMESPACE/im-ai-vue:${{ github.sha }}
+            echo "拉取最新镜像: $DOCKER_REGISTRY/$DOCKER_NAMESPACE/im-ai-vue:$IMAGE_TAG"
+            docker pull $DOCKER_REGISTRY/$DOCKER_NAMESPACE/im-ai-vue:$IMAGE_TAG
+            
+            if [ $? -ne 0 ]; then
+              echo "❌ 镜像拉取失败，退出部署"
+              exit 1
+            fi
             
             # 使用Docker Compose部署
+            echo "创建docker-compose.override.yml..."
             cat > docker-compose.override.yml << EOF
             version: '3'
             services:
               im-ai-vue:
-                image: $DOCKER_REGISTRY/$DOCKER_NAMESPACE/im-ai-vue:${{ github.sha }}
+                image: $DOCKER_REGISTRY/$DOCKER_NAMESPACE/im-ai-vue:$IMAGE_TAG
                 restart: always
                 ports:
                   - "80:80"
@@ -196,13 +198,14 @@ jobs:
                   - TZ=Asia/Shanghai
             EOF
             
-            # 启动服务
-            docker-compose up -d
+            # 执行部署脚本
+            echo "执行部署脚本..."
+            bash ./deploy.sh
             
-            # 清理旧镜像，保留最近3个版本
-            echo "清理旧镜像..."
-            image_ids=$(docker images ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/im-ai-vue --format "{{.ID}}" | tail -n +4)
-            if [ ! -z "$image_ids" ]; then
-              echo "清理im-ai-vue的旧镜像: $image_ids"
-              docker rmi $image_ids 2>/dev/null || true
+            # 确认部署状态
+            if [ $? -eq 0 ]; then
+              echo "✅ 部署成功完成"
+            else
+              echo "❌ 部署失败"
+              exit 1
             fi 
